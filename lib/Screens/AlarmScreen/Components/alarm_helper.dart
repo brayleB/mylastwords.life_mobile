@@ -13,6 +13,7 @@ final String colId = 'id';
 final String colTitle = 'title';
 final String colDateTime = 'alarmDateTime';
 final String colalarmOnOff = 'alarmOnOff';
+final String colRepeat = 'repeat';
 
 
 class AlarmHelper {
@@ -28,16 +29,16 @@ class AlarmHelper {
   }
 
   Future<Database?> get database async {
-    if (_database == null) {
+    if (_database == null) { 
       _database = await initializaDatabase();
-    }
+    }   
     return _database;
   }
 
   Future<Database?> initializaDatabase() async {
    
     var dir = await getDatabasesPath();
-    var path = dir + "alarm.db";
+    var path = dir + "/alarm.db";
     var database = await openDatabase(
       path,
       version: 1,
@@ -48,7 +49,8 @@ class AlarmHelper {
             $colId INTEGER PRIMARY KEY,
             $colTitle TEXT NOT NULL,
             $colDateTime TEXT NOT NULL,
-            $colalarmOnOff TEXT NOT NULL
+            $colalarmOnOff TEXT NOT NULL,
+            $colRepeat TEXT NOT NULL
           )
         ''');
       },
@@ -59,7 +61,7 @@ class AlarmHelper {
   void insertAlarm(AlarmInfo alarmInfo) async {
     var db = await this.database;
     var result = await db!.insert(tblAlarm, alarmInfo.toMap());      
-    ToastMessage().toastMsgLight('Successfully Added Alarm with id : ' + alarmInfo.id.toString());   
+    ToastMessage().toastMsgLight('Successfully Added Alarm');   
     print('result : $result');
   }
 
