@@ -78,7 +78,7 @@ class _BodyState extends State<Body> {
   void initState() {
     title = "Title";
     txtRepeat = "No Repeat";
-    txtSoundDisplay = "No Repeat";
+    txtSoundDisplay = "Sound";
     txtSound = "Sound";
     _alarmTime = DateTime.now();
     _alarmHelper.initializaDatabase().then((value) {      
@@ -292,7 +292,7 @@ class _BodyState extends State<Body> {
                                                     txtSound = selectedValue!;
                                                     selectedValue = _alarmSoundList[0];
                                                     txtSoundDisplay = "Sound";
-                                                    });
+                                                    });                                                   
                                                     player.stop();
                                                     Navigator.pop(context);                                                                                                    
                                                    },                                                 
@@ -330,7 +330,15 @@ class _BodyState extends State<Body> {
                                       TextButton(
                                         onPressed: () {
                                             setModalState(() {
-                                                       title = txtInputTitle.text;  });
+                                            if(txtInputTitle.text=="")
+                                            {
+                                              title="Title";
+                                            }
+                                            else
+                                            {
+                                              title = txtInputTitle.text; 
+                                            }                                             
+                                            });
                                            Navigator.pop(context);
                                         },
                                         child: Text(
@@ -361,8 +369,13 @@ class _BodyState extends State<Body> {
                             _alarmHelper.insertAlarm(alarmInfo);
                             _alarmHelper.scheduleAlarm(
                                 _alarmTime!, alarmInfo);
-                            Navigator.pop(context);
+                            Navigator.pop(context);                            
                             loadAlarms();
+                            setState(() {
+                              title = "Title";
+                              txtRepeat = "Repeat";
+                              txtSoundDisplay = "Sound";
+                            });
                           },
                           icon: Icon(Icons.alarm),
                           label: Text('Save Alarm'),
@@ -554,14 +567,14 @@ class _BodyState extends State<Body> {
                                     value: onOff,
                                     onChanged: (bool value) {                                    
                                       if(alarm.alarmOnOff=='true'){                                                                            
-                                         _alarmHelper.updateOnOff(AlarmInfo(id: alarm.id, title: alarm.title, alarmDateTime: alarm.alarmDateTime, alarmOnOff: 'false', repeat: alarm.repeat));  
+                                         _alarmHelper.updateOnOff(AlarmInfo(id: alarm.id, title: alarm.title, alarmDateTime: alarm.alarmDateTime, alarmOnOff: 'false', repeat: alarm.repeat, sound: alarm.sound));  
                                          loadAlarms();
                                          _alarmHelper.unScheduleAlarm(AlarmInfo(id: alarm.id));
                                       }
                                       else if(alarm.alarmOnOff=='false'){                                        
-                                          _alarmHelper.updateOnOff(AlarmInfo(id: alarm.id, title: alarm.title, alarmDateTime: alarm.alarmDateTime, alarmOnOff: 'true', repeat: alarm.repeat)); 
+                                          _alarmHelper.updateOnOff(AlarmInfo(id: alarm.id, title: alarm.title, alarmDateTime: alarm.alarmDateTime, alarmOnOff: 'true', repeat: alarm.repeat, sound: alarm.sound)); 
                                           loadAlarms();
-                                       _alarmHelper.scheduleAlarm(_alarmTime!, AlarmInfo(id: alarm.id, title: alarm.title, alarmDateTime: alarm.alarmDateTime, alarmOnOff: alarm.alarmOnOff, repeat: alarm.repeat));
+                                       _alarmHelper.scheduleAlarm(_alarmTime!, AlarmInfo(id: alarm.id, title: alarm.title, alarmDateTime: alarm.alarmDateTime, alarmOnOff: alarm.alarmOnOff, repeat: alarm.repeat, sound: alarm.sound));
                                         
                                       }
                                     print(alarm.alarmOnOff)                                   ;
@@ -598,9 +611,7 @@ class _BodyState extends State<Body> {
                                     onPressed: () {
                                       _alarmHelper.delete(alarm.id!);
                                       loadAlarms();
-                                    }),],),
-                              
-                                
+                                    }),],),                                                              
                               ],
                             ),                            
                           ],
