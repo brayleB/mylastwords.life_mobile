@@ -9,6 +9,7 @@ const txtColorWhite = Color.fromARGB(255, 255, 255, 255);
 const darkBackground = Color.fromARGB(255, 40, 40, 32);
 const lightBackground = Color.fromARGB(255, 253, 253, 235);
 const headerBackgroundColor = Color.fromARGB(255, 117, 117, 88);
+const ringToneBaseUrl = "AlarmRingtones/";
 
 //User API Endpoints
 
@@ -31,3 +32,4 @@ const addUserLogURL = baseURL + '/api/addlog';
 
 //Gallery API Endpoints
 const uploadImageURL = baseURL + '/api/uploadImage';
+

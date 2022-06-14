@@ -27,4 +27,15 @@ class ToastMessage {
         textColor: txtColorDark,
         fontSize: 15.0);
   }
+
+  void toastMsgError(String msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 2,
+        backgroundColor: Colors.white,
+        textColor: Colors.red[900],
+        fontSize: 15.0);
+  }
 }

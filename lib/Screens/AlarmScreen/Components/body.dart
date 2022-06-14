@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use, unused_field, must_be_immutable
 
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mylastwords/Screens/AlarmScreen/Components/alarm_helper.dart';
@@ -8,14 +9,10 @@ import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/components/header_tab.dart';
-import 'package:mylastwords/main.dart';
-import 'package:path/path.dart';
-
-import '../../../data.dart';
 import 'package:mylastwords/models/alarm_info.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
-
+import 'package:audioplayers/audioplayers.dart';
 // import 'package:flutter_svg/svg.dart';
 
 class Body extends StatefulWidget {
@@ -30,6 +27,8 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   List<String> _days = [];
   List<bool> _isChecked = [false, false, false, false, false, false, false]; 
+  List<String> fileExtensions = ['.wav','.mp3'];
+  
   List<String> _texts = [
     "Mon",
     "Teu",
@@ -39,30 +38,47 @@ class _BodyState extends State<Body> {
     "Sat",
     "Sun",
   ];
+    List<String> alarmSoundFiles = [
+    "longcold.wav",
+    "rainyday.wav",
+    "electronic.wav",
+    "fantasy.wav",
+    "niceday.wav",
+    "latin.wav",
+    "synergetic.wav",
+    "wakeup.wav",   
+    "positive.wav",  
+  ];
   List<String> _alarmSoundList = [
-    "Deep",
-    "Tick",
-    "Buzzer",
-    "Siren",
-    "Clock Bell",
-    "Horn",   
+    "Cold",
+    "Rainy Day",
+    "Electronic",
+    "Fantasy",
+    "Nice Day",
+    "Latin",
+    "Synergetic",   
+    "Wake Up",
+    "Positive",
   ];
   final TextEditingController txtInputTitle = TextEditingController();
   String title = "";
   String txtRepeat = "";
   String txtSound = "";
+  String txtSoundDisplay = "";
   DateTime? _alarmTime;
   String? _alarmTimeString;
   AlarmHelper _alarmHelper = AlarmHelper();
   Future<List<AlarmInfo>>? _alarms;
   List<AlarmInfo>? _currentAlarms;
-  var generateId = Uuid();
   String? selectedValue;
-
+  AudioCache cache = new AudioCache(); 
+  AudioPlayer player = AudioPlayer();
+  String? editAlarmString, editTxtTitle, editTxtRepeat, editTxtSound;  
   @override
   void initState() {
     title = "Title";
     txtRepeat = "No Repeat";
+    txtSoundDisplay = "No Repeat";
     txtSound = "Sound";
     _alarmTime = DateTime.now();
     _alarmHelper.initializaDatabase().then((value) {      
@@ -77,6 +93,9 @@ class _BodyState extends State<Body> {
     if (mounted) setState(() {});
   }
 
+  
+
+  
   
   @override
   Widget build(BuildContext context) {
@@ -101,7 +120,7 @@ class _BodyState extends State<Body> {
               return StatefulBuilder(
                 builder: (context, setModalState) {
                   return Container(
-                    padding: const EdgeInsets.all(32),
+                    padding: const EdgeInsets.all(30),
                     child: Column(
                       children: [
                         FlatButton(
@@ -212,14 +231,14 @@ class _BodyState extends State<Body> {
                         ),
                         ListTile(
                           title:  Text(
-                                  txtSound,
+                                  txtSoundDisplay,
                                   style: TextStyle(
                                       color: txtColorDark,
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500),
                                 ),
                           trailing: Icon(Icons.arrow_forward_ios),
-                          onTap: (){
+                          onTap: () {                                                                   
                               showDialog(    
                                     barrierDismissible: false,
                                     context: context,
@@ -242,12 +261,17 @@ class _BodyState extends State<Body> {
                                                         itemBuilder: (_, index) {
                                                           return RadioListTile(
                                                         title: Text(_alarmSoundList[index].toString()),
-                                                        value: _alarmSoundList[index],
+                                                        value: alarmSoundFiles[index],
                                                         groupValue: selectedValue,
-                                                        selected: selectedValue == _alarmSoundList[index],
-                                                        onChanged: (val) {
+                                                        selected: selectedValue == alarmSoundFiles[index],
+                                                        onChanged: (val) async {
+                                                          player.stop();
+                                                          player =  await cache.play((ringToneBaseUrl + alarmSoundFiles[index]));
                                                           setSoundState(() {
                                                             selectedValue = val.toString();
+                                                          });
+                                                          setModalState((){                                                    
+                                                            txtSoundDisplay = _alarmSoundList[index];
                                                           });
                                                         },
                                                           );
@@ -263,11 +287,14 @@ class _BodyState extends State<Body> {
                                               width: MediaQuery.of(context).size.width,
                                               child: RaisedButton(
                                                 color: Colors.blue,
-                                                onPressed: (){                 
-                                                  setModalState((){
+                                                onPressed: (){                                                                   
+                                                  setSoundState((){
                                                     txtSound = selectedValue!;
-                                                  });
-                                                  Navigator.pop(context);                                                 
+                                                    selectedValue = _alarmSoundList[0];
+                                                    txtSoundDisplay = "Sound";
+                                                    });
+                                                    player.stop();
+                                                    Navigator.pop(context);                                                                                                    
                                                    },                                                 
                                                 child: Text('Select'),
                                               ))
@@ -328,7 +355,8 @@ class _BodyState extends State<Body> {
                                 title: title,
                                 alarmDateTime: _alarmTime,
                                 alarmOnOff: "true",
-                                repeat: txtRepeat);
+                                repeat: txtRepeat,
+                                sound: txtSound);
 
                             _alarmHelper.insertAlarm(alarmInfo);
                             _alarmHelper.scheduleAlarm(
@@ -352,7 +380,7 @@ class _BodyState extends State<Body> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: 30),
+          SizedBox(height: 25),
           Expanded(
             child: FutureBuilder<List<AlarmInfo>>(
               future: _alarms,
@@ -379,15 +407,111 @@ class _BodyState extends State<Body> {
                           DateFormat('hh:mm aa').format(alarm.alarmDateTime!);
                       bool onOff=true;
                       Color? txtColors;
+                      Color? bgColors;
                       if(alarm.alarmOnOff=='true'){
                         onOff=true;
                         txtColors = txtColorDark;
+                        bgColors = lightBackground;
                         }
                         else if( alarm.alarmOnOff=='false'){
                            onOff=false;
-                           txtColors = Colors.grey;
-                        }                                         
-                      return Container(
+                           txtColors = Colors.black.withOpacity(0.7);
+                           bgColors = headerBackgroundColor;
+                        }         
+
+                        return GestureDetector(
+                        onTap: () {
+                          editAlarmString = DateFormat('hh:mm aa').format(alarm.alarmDateTime!);
+                          showModalBottomSheet(
+                                        useRootNavigator: true,
+                                        context: context,
+                                        clipBehavior: Clip.antiAlias,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(24),
+                                          ),
+                                        ),
+                                        builder: (context) {
+                                          return StatefulBuilder(
+                                            builder: (context, setModalState) {
+                                              return Container(
+                                                padding:
+                                                    const EdgeInsets.all(32),
+                                                child: Column(
+                                                  children: [
+                                                    FlatButton(
+                                                      onPressed: () async {
+                                                        var selectedTime =
+                                                            await showTimePicker(
+                                                          context: context,
+                                                          initialTime:
+                                                              TimeOfDay.now(),
+                                                        );
+                                                        if (selectedTime !=
+                                                            null) {
+                                                          final now =
+                                                              DateTime.now();
+                                                          var selectedDateTime =
+                                                              DateTime(
+                                                                  now.year,
+                                                                  now.month,
+                                                                  now.day,
+                                                                  selectedTime
+                                                                      .hour,
+                                                                  selectedTime
+                                                                      .minute);
+                                                          _alarmTime =
+                                                              selectedDateTime;
+                                                          setModalState(() {
+                                                            _alarmTimeString =
+                                                                DateFormat(
+                                                                        'hh:mm aa')
+                                                                    .format(
+                                                                        selectedDateTime);
+                                                          });
+                                                        }
+                                                      },
+                                                      child: Text(
+                                                        editAlarmString!,
+                                                        style: TextStyle(
+                                                            fontSize: 32),
+                                                      ),
+                                                    ),
+                                                    ListTile(
+                                                      title: Text(alarm.repeat!),
+                                                      trailing: Icon(Icons
+                                                          .arrow_forward_ios),
+                                                    ),
+                                                    ListTile(
+                                                      title: Text('Sound'),
+                                                      trailing: Icon(Icons
+                                                          .arrow_forward_ios),
+                                                    ),
+                                                    ListTile(
+                                                      title: Text(title),
+                                                      trailing: Icon(Icons
+                                                          .arrow_forward_ios),
+                                                    ),
+                                                    FloatingActionButton
+                                                        .extended(
+                                                      backgroundColor:
+                                                          darkBackground,
+                                                      onPressed: () async {
+                                                        ToastMessage().toastMsgError("Not yet implemented");
+                                                        Navigator.pop(context);
+                                                      },
+                                                      icon: Icon(Icons.alarm),
+                                                      label: Text('Save Alarm'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      );
+                        },
+                        child: Container(
                         margin: const EdgeInsets.only(
                             bottom: 12, left: 15, right: 15),
                         padding: EdgeInsets.symmetric(
@@ -395,7 +519,7 @@ class _BodyState extends State<Body> {
                         ),
                         decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [kPrimaryLightColor, lightBackground],
+                              colors: [bgColors!, bgColors],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
@@ -467,99 +591,7 @@ class _BodyState extends State<Body> {
                                       fontWeight: FontWeight.w500),
                                 ),],),
                                 Row(mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [IconButton(
-                                    icon: Icon(Icons.edit),
-                                    color: txtColors,
-                                    alignment: Alignment.centerRight,
-                                    onPressed: () {
-                                      showModalBottomSheet(
-                                        useRootNavigator: true,
-                                        context: context,
-                                        clipBehavior: Clip.antiAlias,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(24),
-                                          ),
-                                        ),
-                                        builder: (context) {
-                                          return StatefulBuilder(
-                                            builder: (context, setModalState) {
-                                              return Container(
-                                                padding:
-                                                    const EdgeInsets.all(32),
-                                                child: Column(
-                                                  children: [
-                                                    FlatButton(
-                                                      onPressed: () async {
-                                                        var selectedTime =
-                                                            await showTimePicker(
-                                                          context: context,
-                                                          initialTime:
-                                                              TimeOfDay.now(),
-                                                        );
-                                                        if (selectedTime !=
-                                                            null) {
-                                                          final now =
-                                                              DateTime.now();
-                                                          var selectedDateTime =
-                                                              DateTime(
-                                                                  now.year,
-                                                                  now.month,
-                                                                  now.day,
-                                                                  selectedTime
-                                                                      .hour,
-                                                                  selectedTime
-                                                                      .minute);
-                                                          _alarmTime =
-                                                              selectedDateTime;
-                                                          setModalState(() {
-                                                            _alarmTimeString =
-                                                                DateFormat(
-                                                                        'hh:mm aa')
-                                                                    .format(
-                                                                        selectedDateTime);
-                                                          });
-                                                        }
-                                                      },
-                                                      child: Text(
-                                                        _alarmTimeString!,
-                                                        style: TextStyle(
-                                                            fontSize: 32),
-                                                      ),
-                                                    ),
-                                                    ListTile(
-                                                      title: Text('Repeat'),
-                                                      trailing: Icon(Icons
-                                                          .arrow_forward_ios),
-                                                    ),
-                                                    ListTile(
-                                                      title: Text('Sound'),
-                                                      trailing: Icon(Icons
-                                                          .arrow_forward_ios),
-                                                    ),
-                                                    ListTile(
-                                                      title: Text(title),
-                                                      trailing: Icon(Icons
-                                                          .arrow_forward_ios),
-                                                    ),
-                                                    FloatingActionButton
-                                                        .extended(
-                                                      backgroundColor:
-                                                          darkBackground,
-                                                      onPressed: () async {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      icon: Icon(Icons.alarm),
-                                                      label: Text('Save Alarm'),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                      );
-                                    }),
+                                  children: [
                                 IconButton(
                                     icon: Icon(Icons.delete),
                                     color: txtColors,
@@ -573,7 +605,8 @@ class _BodyState extends State<Body> {
                             ),                            
                           ],
                         ),
-                      );
+                      ),
+                        );
                     }).toList(),
                   );
                 }

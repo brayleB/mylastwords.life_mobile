@@ -14,6 +14,7 @@ final String colTitle = 'title';
 final String colDateTime = 'alarmDateTime';
 final String colalarmOnOff = 'alarmOnOff';
 final String colRepeat = 'repeat';
+final String colSound = 'sound';
 
 
 class AlarmHelper {
@@ -50,7 +51,8 @@ class AlarmHelper {
             $colTitle TEXT NOT NULL,
             $colDateTime TEXT NOT NULL,
             $colalarmOnOff TEXT NOT NULL,
-            $colRepeat TEXT NOT NULL
+            $colRepeat TEXT NOT NULL,
+            $colSound TEXT NOT NULL
           )
         ''');
       },
@@ -62,7 +64,7 @@ class AlarmHelper {
     var db = await this.database;
     var result = await db!.insert(tblAlarm, alarmInfo.toMap());      
     ToastMessage().toastMsgLight('Successfully Added Alarm');   
-    print('result : $result');
+    print('result : '+result.toString());
   }
 
   Future<List<AlarmInfo>> getAlarms() async {
@@ -77,9 +79,11 @@ class AlarmHelper {
   }
 
   Future<int> delete(int id) async {
-     var db = await this.database;
-        ToastMessage().toastMsgLight("Successfully Deleted Alarm");
+    var db = await this.database;
+    ToastMessage().toastMsgLight("Successfully Deleted Alarm");
+    unScheduleAlarm(AlarmInfo(id: id));
     return await db!.delete(tblAlarm, where: '$colId=?',whereArgs: [id]);
+    
   }
 
   Future<int> updateOnOff(AlarmInfo alarmInfo) async {
@@ -87,7 +91,10 @@ class AlarmHelper {
     return await db!.update(tblAlarm, alarmInfo.toMap(), where: 'id=?',whereArgs: [alarmInfo.id]);    
   }
 
-   
+  Future<int> updateAlarm(AlarmInfo alarmInfo) async {
+    var db  = await this.database;          
+    return await db!.update(tblAlarm, alarmInfo.toMap(), where: 'id=?',whereArgs: [alarmInfo.id]);    
+  }   
 
   void scheduleAlarm(
       DateTime scheduledNotificationDateTime, AlarmInfo alarmInfo) async {
@@ -101,10 +108,12 @@ class AlarmHelper {
     );
 
     var iOSPlatformChannelSpecifics = IOSNotificationDetails(
-        sound: 'a_long_cold_sting.wav',        
+        sound: alarmInfo.sound,               
         presentAlert: true,
         presentBadge: true,
-        presentSound: true,);
+        presentSound: true,          
+    );
+
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
