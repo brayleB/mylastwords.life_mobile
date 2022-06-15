@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mylastwords/constants.dart';
 
-class HeaderTabSave extends StatelessWidget implements PreferredSizeWidget {
+class HeaderTabAdd extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
-  final void Function() saveFunc;
-  final void Function()? delFunc;
+  final void Function() saveFunc; 
   final Color? backgroundcolor;
 
-  const HeaderTabSave({
+  const HeaderTabAdd({
     Key? key,
     this.title,
     this.backgroundcolor,
     required this.saveFunc,
-    this.delFunc,
   }) : super(key: key);
 
   @override
@@ -33,16 +31,7 @@ class HeaderTabSave extends StatelessWidget implements PreferredSizeWidget {
             style: TextStyle(
                 color: Colors.white, fontSize: 19, fontWeight: FontWeight.w400),
           ),
-        ), 
-        
-        TextButton(
-          onPressed: delFunc,
-          child: Text(
-            "Delete",
-            style: TextStyle(
-                color: Colors.white, fontSize: 19, fontWeight: FontWeight.w400),
-          ),
-        ),             
+        ),                
       ],
     );
   }

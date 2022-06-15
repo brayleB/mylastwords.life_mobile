@@ -31,5 +31,5 @@ const deleteNotesUrl = baseURL + '/api/deletenote';
 const addUserLogURL = baseURL + '/api/addlog';
 
 //Gallery API Endpoints
-const uploadImageURL = baseURL + '/api/uploadImage';
+const uploadImageURL = baseURL + '/api/store-file';
 

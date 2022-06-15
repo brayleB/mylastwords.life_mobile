@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
@@ -5,6 +7,7 @@ import 'package:mylastwords/Screens/NoteScreen/note_screen.dart';
 import 'package:mylastwords/Services/notes_services.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/header_tab_save.dart';
+import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/components/header_tab.dart';
 import 'package:mylastwords/data.dart';
@@ -14,10 +17,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:flutter_svg/svg.dart';
 
 class PreviewEditNote extends StatefulWidget {
+  final int id;
   final String keyTitle;
   final String keyNote;
   const PreviewEditNote(
-      {Key? key, required this.keyTitle, required this.keyNote})
+      {Key? key, required this.id, required this.keyTitle, required this.keyNote})
       : super(
           key: key,
         );
@@ -85,9 +89,51 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
       appBar: HeaderTabSave(
         backgroundcolor: headerBackgroundColor,
         title: '',
-        press: () {
-          // _validateAddNote();
+        saveFunc: () {
+          ToastMessage().toastMsgError('Not yet implented');
         },
+        delFunc: () {
+          showDialog(                            
+              context: context,
+              barrierDismissible: false,
+              barrierColor: Colors.black.withOpacity(.4),
+              builder: (context) {
+                return AlertDialog(
+                        title: Text('Are you sure you want to remove this note?'),                                      
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () async {
+                                  ApiResponse apiResponse = await deleteNote(widget.id);
+                                  if(apiResponse.error==null){
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return NoteScreen();
+                                        },
+                                      ),
+                                    );
+                                  }  
+                            },
+                            child: Text(
+                              'Yes',
+                              style: TextStyle(color: txtColorDark, fontSize: 15),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(color: txtColorDark, fontSize: 15),
+                            ),
+                          ),
+                        ],
+                      );
+              },
+            );            
+      },
       ),
       backgroundColor: darkBackground,
       body: Column(
