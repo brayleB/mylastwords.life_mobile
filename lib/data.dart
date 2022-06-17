@@ -72,96 +72,96 @@ List<Note> sampleNotesData = [
   ),
 ];
 
-//Sample note data
-List<Gallery> sampleGalleryData = [
-  Gallery(
-    id: 1,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/1/200/300',
-  ),
-  Gallery(
-    id: 2,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/2/200/300',
-  ),
-  Gallery(
-    id: 3,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/3/200/300',
-  ),
-  Gallery(
-    id: 4,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/4/200/300',
-  ),
-  Gallery(
-    id: 5,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/5/200/300',
-  ),
-  Gallery(
-    id: 6,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/6/200/300',
-  ),
-  Gallery(
-    id: 7,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/7/200/300',
-  ),
-  Gallery(
-    id: 8,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/8/200/300',
-  ),
-  Gallery(
-    id: 9,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/9/200/300',
-  ),
-  Gallery(
-    id: 10,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/11/200/300',
-  ),
-  Gallery(
-    id: 11,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/12/200/300',
-  ),
-  Gallery(
-    id: 12,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/13/200/300',
-  ),
-  Gallery(
-    id: 13,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/14/200/300',
-  ),
-  Gallery(
-    id: 14,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/15/200/300',
-  ),
-  Gallery(
-    id: 15,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/16/200/300',
-  ),
-  Gallery(
-    id: 16,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/17/200/300',
-  ),
-  Gallery(
-    id: 17,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/18/200/300',
-  ),
-  Gallery(
-    id: 18,
-    userId: 5,
-    imageUrl: 'https://picsum.photos/id/19/200/300',
-  ),
-];
+// //Sample note data
+// List<Gallery> sampleGalleryData = [
+//   Gallery(
+//     id: 1,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/1/200/300',
+//   ),
+//   Gallery(
+//     id: 2,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/2/200/300',
+//   ),
+//   Gallery(
+//     id: 3,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/3/200/300',
+//   ),
+//   Gallery(
+//     id: 4,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/4/200/300',
+//   ),
+//   Gallery(
+//     id: 5,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/5/200/300',
+//   ),
+//   Gallery(
+//     id: 6,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/6/200/300',
+//   ),
+//   Gallery(
+//     id: 7,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/7/200/300',
+//   ),
+//   Gallery(
+//     id: 8,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/8/200/300',
+//   ),
+//   Gallery(
+//     id: 9,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/9/200/300',
+//   ),
+//   Gallery(
+//     id: 10,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/11/200/300',
+//   ),
+//   Gallery(
+//     id: 11,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/12/200/300',
+//   ),
+//   Gallery(
+//     id: 12,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/13/200/300',
+//   ),
+//   Gallery(
+//     id: 13,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/14/200/300',
+//   ),
+//   Gallery(
+//     id: 14,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/15/200/300',
+//   ),
+//   Gallery(
+//     id: 15,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/16/200/300',
+//   ),
+//   Gallery(
+//     id: 16,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/17/200/300',
+//   ),
+//   Gallery(
+//     id: 17,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/18/200/300',
+//   ),
+//   Gallery(
+//     id: 18,
+//     userId: 5,
+//     imageUrl: 'https://picsum.photos/id/19/200/300',
+//   ),
+// ];

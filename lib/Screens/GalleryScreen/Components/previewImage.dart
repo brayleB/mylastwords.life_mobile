@@ -37,7 +37,7 @@ class PreviewImage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return GalleryScreen();
+                return DashBoard();
               },
             ),
           );

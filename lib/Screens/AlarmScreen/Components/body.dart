@@ -349,35 +349,44 @@ class _BodyState extends State<Body> {
                                   );
                           },
                         );},
-                        ),                     
-                        FloatingActionButton.extended(
-                          backgroundColor: darkBackground,
-                          onPressed: () async {
-                       
-                            var idStr = DateFormat('MMddHHmmss')
-                                    .format(DateTime.now());
-                            var alarmInfo = AlarmInfo(                              
-                                id: int.parse(idStr),
-                                title: title,
-                                alarmDateTime: _alarmTime,
-                                alarmOnOff: "true",
-                                repeat: txtRepeat,
-                                sound: txtSound);
+                        ),   
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                             FloatingActionButton.extended(
+                              backgroundColor: headerBackgroundColor,
+                              onPressed: () async {                          
+                                var idStr = DateFormat('MMddHHmmss')
+                                        .format(DateTime.now());
+                                var alarmInfo = AlarmInfo(                              
+                                    id: int.parse(idStr),
+                                    title: title,
+                                    alarmDateTime: _alarmTime,
+                                    alarmOnOff: "true",
+                                    repeat: txtRepeat,
+                                    sound: txtSound);
 
-                            _alarmHelper.insertAlarm(alarmInfo);
-                            _alarmHelper.scheduleAlarm(
-                                _alarmTime!, alarmInfo);
-                            Navigator.pop(context);                            
-                            loadAlarms();
-                            setState(() {
-                              title = "Title";
-                              txtRepeat = "Repeat";
-                              txtSoundDisplay = "Sound";
-                            });
-                          },
-                          icon: Icon(Icons.alarm),
-                          label: Text('Save Alarm'),
-                        ),
+                                _alarmHelper.insertAlarm(alarmInfo);
+                                _alarmHelper.scheduleAlarm(
+                                    _alarmTime!, alarmInfo);
+                                Navigator.pop(context);                            
+                                loadAlarms();
+                                setState(() {
+                                  title = "Title";
+                                  txtRepeat = "Repeat";
+                                  txtSoundDisplay = "Sound";
+                                });
+                              },
+                              icon: Icon(Icons.alarm),
+                              label: Text('Add Alarm'),
+                            ),
+                            FloatingActionButton.extended(
+                              backgroundColor: headerBackgroundColor,
+                              onPressed: () {Navigator.pop(context);}  ,
+                              icon: Icon(Icons.cancel),
+                              label: Text('Cancel'),
+                            ),
+                        ],),                                    
                       ],
                     ),
                   );

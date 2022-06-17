@@ -1,15 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
-import 'package:mylastwords/models/note.dart';
+import 'package:mylastwords/models/gallery.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:image_picker/image_picker.dart';
 
 Future<ApiResponse> uploadImage(File img) async {
 
@@ -32,6 +29,25 @@ Future<ApiResponse> uploadImage(File img) async {
     ToastMessage().toastMsgError('Error uploading photo');
   }
   return apiResponse;
+}
+
+Future<List<GalleryModel>> fetchPhotos() async {
+  int id = await getuserId();
+  String token = await getToken();
+  final response = await http.get(Uri.parse(getImagesURL + '/$id'), headers: {
+    'content-type': 'application/json',
+    'Authorization': 'Bearer $token'
+  });
+
+  if (response.statusCode == 200) {
+    print(response.body);
+    Map<String, dynamic> map = json.decode(response.body);
+    List<dynamic> data = map["gallery"];
+    print(data);
+    return data.map((image) => new GalleryModel.fromJson(image)).toList();
+  } else {
+    throw Exception('Failed to load images from API');
+  }
 }
 
 

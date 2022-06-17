@@ -1,6 +1,5 @@
 //@dart=2.9
 import 'package:flutter/material.dart';
-import 'package:mylastwords/Screens/Welcome/welcome_screen.dart';
 import 'package:mylastwords/Screens/splash_screen.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
