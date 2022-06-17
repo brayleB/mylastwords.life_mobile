@@ -1,16 +1,15 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mylastwords/Screens/GalleryScreen/Components/previewImage.dart';
 import 'package:mylastwords/Screens/GalleryScreen/Components/viewImage.dart';
 import 'package:mylastwords/Services/gallery_services.dart';
-import 'package:mylastwords/components/header_tab_gallery.dart';
+import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/components/header_tab.dart';
-import 'package:mylastwords/data.dart';
-import 'package:mylastwords/models/gallery.dart';
+
 
 class Body extends StatefulWidget {
   const Body({
@@ -23,77 +22,52 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   File? fileImage;
-  final picker = ImagePicker();
+  final picker = new ImagePicker();  
 
   Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        fileImage = File(pickedFile.path);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PreviewImage(fileImage: fileImage)));
-      } else {
-        print('No image selected.');
-      }
-    });
+    try{
+      final pickedFile = await picker.getImage(source: ImageSource.gallery, maxHeight: 500, maxWidth: 500);    
+          setState(() {
+            if (pickedFile != null) {       
+              fileImage = File(pickedFile.path);              
+              print('Image selected : '+fileImage.toString());
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PreviewImage(fileImage: fileImage)));
+            } else {
+              ToastMessage().toastMsgError('No image selected');
+            }
+          });
+    }catch(e){
+      ToastMessage().toastMsgError(e.toString());
+    }    
   }
 
   Future takeImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-
-    setState(() {
-      if (pickedFile != null) {
-        fileImage = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
-  }
+     try{
+        final pickedFile = await picker.getImage(source: ImageSource.camera, maxHeight: 500, maxWidth: 400, preferredCameraDevice: CameraDevice.rear);
+          setState(() {
+            if (pickedFile != null) {
+              fileImage = File(pickedFile.path);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PreviewImage(fileImage: fileImage)));
+            } else {
+              print('No image selected.');
+            }
+          });        
+     }catch(e){
+        ToastMessage().toastMsgError(e.toString());
+     }
+}    
 
   @override
   void initState() {
     super.initState();
   }
-  ListView _galleryListView(data) {     
-    return ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (context, index) { 
-          print(baseURL+data[index].title.toString());  
-           return GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  // crossAxisSpacing: 10,
-                  // mainAxisSpacing: 10,
-                ),
-                itemBuilder: (context, snapshot) {                  
-                  return RawMaterialButton(
-                    onPressed: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => ViewImage(
-                      //             img: data[index].title.toString())));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2),
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                baseURL+data[index].title.toString()),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-                  );
-                },
-                itemCount: data.length,
-              
-        );
-      }
-    );
-  }
+
 
          
      
@@ -162,7 +136,15 @@ class _BodyState extends State<Body> {
                             BorderRadius.all(Radius.circular(5.0))),
                         clipBehavior: Clip.antiAlias,
                         margin: const EdgeInsets.all(8.0),
-                        child: Container(
+                        child: GestureDetector(
+                          onTap: (){
+                             Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ViewImage(
+                                      img: baseURL+listData.data[position].title)));
+                          }, 
+                          child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(2),
                               image: DecorationImage(
@@ -172,7 +154,7 @@ class _BodyState extends State<Body> {
                             ),
                             height: 120,
                             width: size.width*0.3,
-                          ),                        
+                          ),   )                     
                       ),                      
                     ],
                   );

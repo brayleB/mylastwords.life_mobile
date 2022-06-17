@@ -4,16 +4,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
-import 'package:mylastwords/Screens/GalleryScreen/gallery_screen.dart';
 import 'package:mylastwords/Services/gallery_services.dart';
-import 'package:mylastwords/Services/notes_services.dart';
+
 import 'package:mylastwords/components/header_tab_add.dart';
-import 'package:mylastwords/components/header_tab_save.dart';
+
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
-import 'package:mylastwords/models/gallery.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart';
+
+
 
 class PreviewImage extends StatelessWidget {
   final File? fileImage;
@@ -21,7 +19,7 @@ class PreviewImage extends StatelessWidget {
   PreviewImage({Key? key, required this.fileImage}) : super(key: key);
 
   void _saveImage() async {
-    ApiResponse response = await uploadImage(fileImage!);
+    ApiResponse response = await uploadImage(fileImage!);   
     print(response.error.toString());
   }
 
@@ -43,12 +41,12 @@ class PreviewImage extends StatelessWidget {
           );
         },       
       ),      
-      body: SingleChildScrollView(
-        child: Card(
-            child: Column(
-          children: <Widget>[Image.file(File(fileImage!.path))],
-        )),
-      ),
+      body: Container(  
+            padding: const EdgeInsets.all(10.0),   
+            decoration: BoxDecoration(image: DecorationImage(
+                                  image: FileImage(File(fileImage!.path)),
+                                  fit: BoxFit.contain), ),                  
+           ),      
     );
   }
 }

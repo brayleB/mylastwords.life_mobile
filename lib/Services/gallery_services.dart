@@ -9,19 +9,19 @@ import 'package:mylastwords/models/gallery.dart';
 import 'package:http/http.dart' as http;
 
 Future<ApiResponse> uploadImage(File img) async {
-
-  print(img);
+  
   ApiResponse apiResponse = ApiResponse();
   String token = await getToken();
   int id = await getuserId();  
   var stream = http.ByteStream(img.openRead());
   stream.cast();
-  var length = await img.length();
+  // var length = await img.length();
   var request = http.MultipartRequest('POST', Uri.parse(uploadImageURL));
   request.fields['user_id'] = id.toString();  
   request.headers.addAll({'Authorization': 'Bearer $token'});
   request.files.add(http.MultipartFile.fromBytes('file', File(img.path).readAsBytesSync(),filename: img.path));
-  var response = await request.send();   
+  var response = await request.send();  
+  print(request.headers);
   if (response.statusCode == 200) {
     ToastMessage().toastMsgDark('Photo uploaded successfully');
   } 
@@ -39,11 +39,9 @@ Future<List<GalleryModel>> fetchPhotos() async {
     'Authorization': 'Bearer $token'
   });
 
-  if (response.statusCode == 200) {
-    print(response.body);
+  if (response.statusCode == 200) {   
     Map<String, dynamic> map = json.decode(response.body);
     List<dynamic> data = map["gallery"];
-    print(data);
     return data.map((image) => new GalleryModel.fromJson(image)).toList();
   } else {
     throw Exception('Failed to load images from API');
