@@ -31,55 +31,44 @@ class PreviewEditNote extends StatefulWidget {
 }
 
 class _PreviewEditNoteState extends State<PreviewEditNote> {
-  final TextEditingController txtNote = TextEditingController();
+  final TextEditingController txtBody = TextEditingController();
   final TextEditingController txtTitle = TextEditingController();
-
   void _validateAddNote() async {
     var errmsg = "";
-    if (txtNote.text == "") {
+    if (txtBody.text == "") {
       errmsg = "Please enter a note";
     }
-    if (txtTitle.text == "") {
+    else if (txtTitle.text == "") {
       errmsg = "Please enter a Title";
     } else {
-      ApiResponse response = await addNote(txtTitle.text, txtNote.text);
-      if (response.error == null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return DashBoard();
-            },
-          ),
-        );
-        Fluttertoast.showToast(
-            msg: 'Adding Notes Successfull',
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 2,
-            backgroundColor: lightBackground,
-            textColor: txtColorDark,
-            fontSize: 15.0);
-      } else {
-        Fluttertoast.showToast(
-            msg: '${response.error}',
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 2,
-            backgroundColor: darkBackground,
-            textColor: txtColorLight,
-            fontSize: 15.0);
-      }
+          ApiResponse response = await updateNote(widget.id, txtTitle.text, txtBody.text);
+          if(response.error==null){
+            ToastMessage().toastMsgDark('Note updated');    
+               Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return NoteScreen();
+                    },
+                  ),
+                );                    
+          }
+          else{
+            ToastMessage().toastMsgError('Note updating error');
+          }
     }
-    if (errmsg == "") {}
+    if (errmsg != "") {
+      ToastMessage().toastMsgDark(errmsg);
+    }
   }
 
   @override
   void initState() {
     txtTitle.text = widget.keyTitle;
-    txtNote.text = widget.keyNote;
+    txtBody.text = widget.keyNote;
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +79,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
         backgroundcolor: headerBackgroundColor,
         title: '',
         saveFunc: () {
-          ToastMessage().toastMsgError('Not yet implented');
+          _validateAddNote();
         },
         delFunc: () {
           showDialog(                            
@@ -171,7 +160,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
             child: Padding(
               padding: EdgeInsets.all(15.0),
               child: TextField(
-                controller: txtNote,
+                controller: txtBody,
                 maxLines: 20,
                 maxLength: 1000,
                 keyboardType: TextInputType.multiline,

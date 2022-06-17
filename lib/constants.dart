@@ -26,6 +26,7 @@ const userURL = baseURL + 'api/getUser';
 //Notes API Endpoints
 const addNoteURL = baseURL + 'api/addnote';
 const getNotesURL = baseURL + 'api/getnotes';
+const updateNotesURL = baseURL + 'api/editnote';
 const deleteNotesUrl = baseURL + 'api/deletenote';
 
 //Logs API Endpoints

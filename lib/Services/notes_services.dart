@@ -25,8 +25,7 @@ Future<ApiResponse> addNote(String title, String body) async {
         }));
 
     switch (response.statusCode) {
-      case 200:
-        print(response.body);
+      case 200:      
         apiResponse.data = Note.fromJson(jsonDecode(response.body));
         break;
       case 422:
@@ -84,7 +83,7 @@ Future<List<NotesModel>> fetchNotes() async {
   if (response.statusCode == 200) {
     // print(response.body);
     Map<String, dynamic> map = json.decode(response.body);
-    List<dynamic> data = map["notes"];
+    List<dynamic> data = map["notes"];  
     print(data);
     return data.map((note) => new NotesModel.fromJson(note)).toList();
   } else {
@@ -148,3 +147,40 @@ Future<ApiResponse> deleteNote(int id) async {
   }
   return apiResponse;
 }
+
+Future<ApiResponse> updateNote(int id, String title, String body) async {
+  ApiResponse apiResponse = ApiResponse();
+  String token = await getToken();
+  try {
+    final response = await http.post(
+      Uri.parse(updateNotesURL + '/$id'),
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },    
+        body: json.encode({          
+          'title': title,
+          'body': body,
+        }));    
+      print(response.statusCode);
+    switch (response.statusCode) {
+      case 200:
+        print(response.body);
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['errors'];
+        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
+        break;
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {    
+    apiResponse.error = '$e' + '. Server Error.';
+  }
+  return apiResponse;
+}
+
+

@@ -152,7 +152,7 @@ class _BodyState extends State<Body> {
                                       baseURL+listData.data[position].title),
                                   fit: BoxFit.cover),                                  
                             ),
-                            height: 120,
+                            height: 100,
                             width: size.width*0.3,
                           ),   )                     
                       ),                      
