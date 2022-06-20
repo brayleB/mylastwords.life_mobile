@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
@@ -14,7 +15,11 @@ import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/models/api_response.dart';
 import 'package:mylastwords/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
+
+import 'or_divider.dart';
+import 'social_icon.dart';
 // import 'package:flutter_svg/svg.dart';
 
 class Body extends StatefulWidget {
@@ -26,8 +31,9 @@ class Body extends StatefulWidget {
   _BodyState createState() => _BodyState();
 }
 
+
 class _BodyState extends State<Body> {
-  
+  AccessToken? fbToken;   
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtPass = TextEditingController();
@@ -67,12 +73,42 @@ class _BodyState extends State<Body> {
     }
   }
 
+  void _loginWithFB() async {
+    final res = await FacebookAuth.instance.login(
+      permissions: ['public_profile','email']
+    );
+    if(res.status == LoginStatus.success){      
+      final reqData = await FacebookAuth.instance.getUserData(
+        fields:"email, name, picture",        
+      );  
+      fbToken = res.accessToken;
+      var img1 = reqData['picture'];
+      var img2 = img1['data'];
+      SharedPreferences pref = await SharedPreferences.getInstance();   
+      await pref.setString('name', reqData['name'] ?? '');      
+      await pref.setString('token', fbToken!.token);
+      await pref.setString('email', reqData['email'] ?? '');
+      await pref.setString('userImage', img2['url'] ?? '');
+      await pref.setInt('userId', int.parse(reqData['id'])); 
+      Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return DashBoard();
+        },
+      ),
+    );             
+    }     
+  }
+
   void _saveAndRedirectToHome(User user) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString('name', user.name ?? '');
     await pref.setString('token', user.token ?? '');
     await pref.setString('email', user.email ?? '');    
+    await pref.setString('userImage', user.userImage ?? '');
     await pref.setInt('userId', user.id ?? 0);
+    
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -82,6 +118,8 @@ class _BodyState extends State<Body> {
       ),
     );
   }
+
+
 
 
   // @override
@@ -149,6 +187,29 @@ class _BodyState extends State<Body> {
                 );
               },
             ),
+              OrDivider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Material(elevation: 5.0, color: Colors.red),
+                SocalIcon(
+                  iconSrc: "assets/icons/facebook.svg",
+                  press: () {
+                    _loginWithFB();
+                  },
+                ),
+                SocalIcon(
+                  iconSrc: "assets/icons/gmail.svg",
+                  press: () {
+                    ToastMessage().toastMsgError('Not yet implemented');
+                  },
+                ),
+                 SocalIcon(
+                  iconSrc: "assets/icons/apple.svg",
+                  press: () {  ToastMessage().toastMsgError('Not yet implemented');},
+                ),
+              ],
+            )
           ],
         ),
       ),

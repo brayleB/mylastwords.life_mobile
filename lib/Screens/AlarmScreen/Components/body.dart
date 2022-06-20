@@ -69,8 +69,7 @@ class _BodyState extends State<Body> {
   Future<List<AlarmInfo>>? _alarms;
   List<AlarmInfo>? _currentAlarms;
   String? selectedValue;
-  AudioCache cache = new AudioCache(); 
-  AudioPlayer player = AudioPlayer();
+  final player = AudioPlayer();
   String? editAlarmString, editTxtTitle, editTxtRepeat, editTxtSound;  
   @override
   void initState() {
@@ -262,16 +261,15 @@ class _BodyState extends State<Body> {
                                                         value: alarmSoundFiles[index],
                                                         groupValue: selectedValue,
                                                         selected: selectedValue == alarmSoundFiles[index],
-                                                        onChanged: (val) async {
-                                                          player.stop();
-                                                          player =  await cache.play((ringToneBaseUrl + alarmSoundFiles[index]));
+                                                        onChanged: (val) async {                                                                
+                                                          await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index]));
                                                           setSoundState(() {
                                                             selectedValue = val.toString();
                                                           });
                                                           setModalState((){                                                    
                                                             txtSoundDisplay = _alarmSoundList[index];
                                                           });
-                                                        },
+                                                          },
                                                           );
                                                         },
                                                       ),

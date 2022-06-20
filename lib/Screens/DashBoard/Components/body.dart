@@ -19,6 +19,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   String userName = '';
+  String userImage = '';
 
   @override
   void initState() {
@@ -33,12 +34,14 @@ class _BodyState extends State<Body> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       userName = (prefs.getString('name') ?? '');
+      userImage = (prefs.getString('userImage') ?? '');      
     });
+    
   }
 
   loadDetails() async {
     int id = await getuserId();
-    String token = await getToken();
+    String token = await getToken();    
     print('User Id : ' + id.toString() + ' Token : ' + token);
   }
 
@@ -65,14 +68,15 @@ class _BodyState extends State<Body> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         CircleAvatar(
-                          backgroundImage: AssetImage(
-                              "assets/images/placeholder.png"),
+                          backgroundImage: NetworkImage(
+                              userImage),
                         ),
                         SizedBox(width: 10),
                         Text(
                           '$userName',
                           style: TextStyle(color: txtColorLight, fontSize: 25),
                           textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),

@@ -23,7 +23,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-
+  String? userImg;
   bool lockInBackground = true;
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtPass = TextEditingController();
@@ -40,6 +40,8 @@ class _BodyState extends State<Body> {
   loadDetails()async{
       txtName.text = await getName();    
       txtEmail.text = await getEmail();
+      userImg = await getUserImgURL();  
+      print('this: ' + userImg.toString());
   }
 
   @override
@@ -74,8 +76,8 @@ class _BodyState extends State<Body> {
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                   fit: BoxFit.contain,
-                                  image: AssetImage(
-                                      'assets/images/placeholder.png'))),
+                                  image: NetworkImage(
+                                      userImg!,scale: 1.0))),
                         ),
                         Positioned(
                           bottom: 0,

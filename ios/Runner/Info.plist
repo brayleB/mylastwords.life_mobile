@@ -2,6 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<!-- Facebook Login -->
+	<key>CFBundleURLTypes</key>
+	<array>
+	<dict>
+		<key>CFBundleURLSchemes</key>
+		<array>
+		<string>fb759294372151899</string>
+		</array>
+	</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>759294372151899</string>
+	<key>FacebookClientToken</key>
+	<string>2ff0da71d5c69f86065825fe871f23f2</string>
+	<key>FacebookDisplayName</key>
+	<string>mylastwords.life</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>fbapi</string>
+	<string>fb-messenger-share-api</string>
+	<string>fbauth2</string>
+	<string>fbshareextension</string>
+	</array>
+<!-- Facebook Login -->
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -42,6 +66,10 @@
 	<string>This app requires access to image files</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>This app requires to send user data to Apple speech recognition servers</string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<string>TRUE</string>
+	<key>FacebookAdvertiserIDCollectionEnabled</key>
+	<string>TRUE</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
