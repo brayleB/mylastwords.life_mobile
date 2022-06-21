@@ -68,8 +68,8 @@ class _BodyState extends State<Body> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              userImage),
+                          backgroundImage: AssetImage(
+                              'assets/images/placeholder.png'),
                         ),
                         SizedBox(width: 10),
                         Text(

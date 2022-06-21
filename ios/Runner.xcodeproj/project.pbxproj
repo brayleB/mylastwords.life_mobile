@@ -11,6 +11,7 @@
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		5A39C76E285871B100D28B1D /* rainyday.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5A39C76D285871B100D28B1D /* rainyday.wav */; };
 		5A39C7822858761500D28B1D /* longcold.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5A39C7812858761500D28B1D /* longcold.wav */; };
+		5A85D36928614A6B00059249 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A85D36828614A6B00059249 /* GoogleService-Info.plist */; };
 		5A94670628588F1A00470479 /* electronic.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5A94670528588F1A00470479 /* electronic.wav */; };
 		5A94670D2858918A00470479 /* fantasy.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5A9467072858917600470479 /* fantasy.wav */; };
 		5A94670E2858918A00470479 /* niceday.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5A9467082858917B00470479 /* niceday.wav */; };
@@ -45,6 +46,7 @@
 		4F028BBC35DDF9F4BD15CD0E /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		5A39C76D285871B100D28B1D /* rainyday.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = rainyday.wav; path = ../../../Downloads/rainyday.wav; sourceTree = "<group>"; };
 		5A39C7812858761500D28B1D /* longcold.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = longcold.wav; path = ../../alarmringtones/longcold.wav; sourceTree = "<group>"; };
+		5A85D36828614A6B00059249 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5A94670528588F1A00470479 /* electronic.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = electronic.wav; sourceTree = "<group>"; };
 		5A9467072858917600470479 /* fantasy.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = fantasy.wav; sourceTree = "<group>"; };
 		5A9467082858917B00470479 /* niceday.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = niceday.wav; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				5A85D36828614A6B00059249 /* GoogleService-Info.plist */,
 				5A9467072858917600470479 /* fantasy.wav */,
 				5A94670C2858918A00470479 /* latin.wav */,
 				5A9467082858917B00470479 /* niceday.wav */,
@@ -242,6 +245,7 @@
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				5A94670E2858918A00470479 /* niceday.wav in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				5A85D36928614A6B00059249 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,7 +287,11 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMAppAuth/GTMAppAuth.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleSignIn/GoogleSignIn.framework",
 				"${BUILT_PRODUCTS_DIR}/Toast/Toast.framework",
 				"${BUILT_PRODUCTS_DIR}/audioplayers_darwin/audioplayers_darwin.framework",
 				"${BUILT_PRODUCTS_DIR}/flutter_facebook_auth/flutter_facebook_auth.framework",
@@ -293,6 +301,7 @@
 				"${BUILT_PRODUCTS_DIR}/package_info/package_info.framework",
 				"${BUILT_PRODUCTS_DIR}/path_provider_ios/path_provider_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/shared_preferences_ios/shared_preferences_ios.framework",
+				"${BUILT_PRODUCTS_DIR}/sign_in_with_apple/sign_in_with_apple.framework",
 				"${BUILT_PRODUCTS_DIR}/sqflite/sqflite.framework",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBAEMKit/FBAEMKit.framework/FBAEMKit",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework/FBSDKCoreKit",
@@ -301,7 +310,11 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMAppAuth.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleSignIn.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/audioplayers_darwin.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_facebook_auth.framework",
@@ -311,6 +324,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/package_info.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/path_provider_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/shared_preferences_ios.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/sign_in_with_apple.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/sqflite.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBAEMKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",

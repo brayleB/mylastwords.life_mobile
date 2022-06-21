@@ -6,46 +6,49 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 	<dict>
+		<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 		<key>CFBundleURLSchemes</key>
 		<array>
-		<string>fb759294372151899</string>
-		</array>
+			<string>fb759294372151899</string>
+			<string>com.googleusercontent.apps.85083387451-omlq2d12q97rjcf4aesm67no7thhp0b1</string>
+		</array>								
 	</dict>
-	</array>
+	</array>	
 	<key>FacebookAppID</key>
-	<string>759294372151899</string>
+		<string>759294372151899</string>
 	<key>FacebookClientToken</key>
-	<string>2ff0da71d5c69f86065825fe871f23f2</string>
+		<string>2ff0da71d5c69f86065825fe871f23f2</string>
 	<key>FacebookDisplayName</key>
-	<string>mylastwords.life</string>
+		<string>mylastwords.life</string>
 	<key>LSApplicationQueriesSchemes</key>
-	<array>
-	<string>fbapi</string>
-	<string>fb-messenger-share-api</string>
-	<string>fbauth2</string>
-	<string>fbshareextension</string>
-	</array>
+		<array>
+			<string>fbapi</string>
+			<string>fb-messenger-share-api</string>
+			<string>fbauth2</string>
+			<string>fbshareextension</string>
+		</array>
 <!-- Facebook Login -->
 	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+		<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>My Last words</string>
+		<string>My Last words</string>
 	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
+		<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
+		<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>My Last Words</string>
+		<string>My Last Words</string>
 	<key>CFBundlePackageType</key>
-	<string>APPL</string>
+		<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
+		<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+		<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+		<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
