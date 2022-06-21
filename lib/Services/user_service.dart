@@ -125,7 +125,11 @@ Future<String> getEmail() async {
   return pref.getString('email') ?? '';
 }
 
-
+//get Name
+Future<String> getUserImgURL() async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  return pref.getString('userImage') ?? '';
+}
 
 //logout
 Future<bool> logout() async {

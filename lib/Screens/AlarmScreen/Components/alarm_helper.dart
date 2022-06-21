@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field, import_of_legacy_library_into_null_safe
+// ignore_for_file: unused_field, import_of_legacy_library_into_null_safe, deprecated_member_use
 
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/models/alarm_info.dart';
@@ -100,30 +100,27 @@ class AlarmHelper {
       DateTime scheduledNotificationDateTime, AlarmInfo alarmInfo) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'alarm_notif',
-      'alarm_notif',
-      'Channel for Alarm notification',
-      icon: 'codex_logo',
-      sound: RawResourceAndroidNotificationSound('a_long_cold_sting'),
-      largeIcon: DrawableResourceAndroidBitmap('codex_logo'),
+      'alarm_notif',          
+      sound: RawResourceAndroidNotificationSound(alarmInfo.sound),      
     );
 
     var iOSPlatformChannelSpecifics = IOSNotificationDetails(
-        sound: alarmInfo.sound,               
+        sound: alarmInfo.sound! +'.wav',               
         presentAlert: true,
         presentBadge: true,
         presentSound: true,          
     );
 
     var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 
-    await flutterLocalNotificationsPlugin.schedule(alarmInfo.id, 'mylastwords.life', alarmInfo.title,
+    await flutterLocalNotificationsPlugin.schedule(alarmInfo.id!, 'mylastwords.life', alarmInfo.title,
         scheduledNotificationDateTime, platformChannelSpecifics);
     print('Scheduled alarm: ' + alarmInfo.id.toString());
   }
 
   void unScheduleAlarm(AlarmInfo alarmInfo)async{
-    await flutterLocalNotificationsPlugin.cancel(alarmInfo.id);
+    await flutterLocalNotificationsPlugin.cancel(alarmInfo.id!);
     print('Unscheduled alarm: ' + alarmInfo.id.toString());
   }
 }

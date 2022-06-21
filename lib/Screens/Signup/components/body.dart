@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mylastwords/Screens/Login/login_screen.dart';
 import 'package:mylastwords/Screens/Signup/components/background.dart';
-import 'package:mylastwords/Screens/Signup/components/or_divider.dart';
-import 'package:mylastwords/Screens/Signup/components/social_icon.dart';
+import 'package:mylastwords/Screens/Login/components/or_divider.dart';
+import 'package:mylastwords/Screens/Login/components/social_icon.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/already_have_an_account_acheck.dart';
 import 'package:mylastwords/components/rounded_button.dart';
@@ -132,21 +132,7 @@ class _BodyState extends State<Body> {
                   ),
                 );
               },
-            ),
-            OrDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SocalIcon(
-                  iconSrc: "assets/icons/facebook.svg",
-                  press: () {},
-                ),
-                SocalIcon(
-                  iconSrc: "assets/icons/google-plus.svg",
-                  press: () {},
-                ),
-              ],
-            )
+            ),            
           ],
         ),
       ),

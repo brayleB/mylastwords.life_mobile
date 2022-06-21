@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mylastwords/Screens/GalleryScreen/Components/viewImage.dart';
 import 'package:mylastwords/Services/user_service.dart';
+import 'package:mylastwords/components/header_tab_add.dart';
 import 'package:mylastwords/components/header_tab_back.dart';
 import 'package:mylastwords/components/header_tab_save.dart';
 import 'package:mylastwords/components/rounded_input_field.dart';
@@ -22,7 +23,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-
+  String? userImg;
   bool lockInBackground = true;
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtPass = TextEditingController();
@@ -39,6 +40,8 @@ class _BodyState extends State<Body> {
   loadDetails()async{
       txtName.text = await getName();    
       txtEmail.text = await getEmail();
+      userImg = await getUserImgURL();  
+      print('this: ' + userImg.toString());
   }
 
   @override
@@ -46,10 +49,10 @@ class _BodyState extends State<Body> {
     Size size = MediaQuery.of(context).size;
     Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
-        appBar: HeaderTabSave(
+        appBar: HeaderTabAdd(
             backgroundcolor: headerBackgroundColor,
             title: 'Profile',
-            press: () {}),
+            saveFunc: () {}),
         backgroundColor: darkBackground,
         body: Container(
           child: Column(

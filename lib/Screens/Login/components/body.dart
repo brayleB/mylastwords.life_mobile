@@ -1,5 +1,6 @@
-import 'dart:ffi';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mylastwords/Screens/Login/components/background.dart';
 import 'package:mylastwords/Screens/Signup/signup_screen.dart';
@@ -14,9 +15,19 @@ import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/models/api_response.dart';
 import 'package:mylastwords/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:http/http.dart' as http;
+
+
+import 'or_divider.dart';
+import 'social_icon.dart';
 // import 'package:flutter_svg/svg.dart';
 
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email']
+  );
 class Body extends StatefulWidget {
   const Body({
     Key? key,
@@ -25,9 +36,10 @@ class Body extends StatefulWidget {
   @override
   _BodyState createState() => _BodyState();
 }
-
 class _BodyState extends State<Body> {
-  
+  String? loginType;
+  AccessToken? fbToken;   
+  GoogleSignInAccount? _gmailUser;
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtPass = TextEditingController();
@@ -35,10 +47,32 @@ class _BodyState extends State<Body> {
 
   @override
   void initState() {  
-
+    _googleSignIn.onCurrentUserChanged.listen((account) {
+      setState(() {
+        _gmailUser = account;
+      });
+      _googleSignIn.signInSilently();
+     });
     super.initState();
   }
 
+  void gmailSignIn() async {
+    await _googleSignIn.signIn();   
+    if(_gmailUser!=null){
+      ToastMessage().toastMsgError('(Under Development) Successfully Login as ' + _gmailUser!.displayName!);           
+    }
+  }
+
+  void appleSignIn() async {      
+    final appleUser = await SignInWithApple.getAppleIDCredential(scopes: 
+      [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName        
+      ],
+    );
+    print(appleUser);
+  }
+  
   void _loginValidate() async {
     bool isEmailvalid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -66,13 +100,38 @@ class _BodyState extends State<Body> {
       ToastMessage().toastMsgDark(errmsg);
     }
   }
+  
+
+  void _loginValidateFacebook() async {
+    final LoginResult res = await FacebookAuth.instance.login(
+      permissions: ['public_profile','email']
+    );
+    if(res.status == LoginStatus.success){      
+      final reqData = await FacebookAuth.instance.getUserData(
+        fields:"email, name, picture",        
+      );  
+      ApiResponse response = await login(reqData['email'], 'mylastwords.life.password');
+      // fbToken = res.accessToken;
+      // var img1 = reqData['picture'];
+      // var img2 = img1['data'];
+      // SharedPreferences pref = await SharedPreferences.getInstance();   
+      // await pref.setString('name', reqData['name'] ?? '');      
+      // await pref.setString('token', fbToken!.token);
+      // await pref.setString('email', reqData['email'] ?? '');
+      // await pref.setString('userImage', img2['url'] ?? '');
+      // await pref.setInt('userId', int.parse(reqData['id'])); 
+      ToastMessage().toastMsgError('(Under Development) Successfully Login as '+reqData['name']);        
+    }         
+  }
 
   void _saveAndRedirectToHome(User user) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString('name', user.name ?? '');
     await pref.setString('token', user.token ?? '');
     await pref.setString('email', user.email ?? '');    
+    await pref.setString('userImage', user.userImage ?? '');
     await pref.setInt('userId', user.id ?? 0);
+    
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -82,14 +141,7 @@ class _BodyState extends State<Body> {
       ),
     );
   }
-
-
-  // @override
-  // void initState() {
-  //   txtEmail.text = "clarkkent@gmail.com";
-  //   txtPass.text = "Clarkkent_007";
-  //   super.initState();
-  // }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -149,6 +201,32 @@ class _BodyState extends State<Body> {
                 );
               },
             ),
+              OrDivider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Material(elevation: 5.0, color: Colors.red),
+                SocalIcon(
+                  iconSrc: "assets/icons/facebook.svg",
+                  press: () {
+                    _loginValidateFacebook();
+                  },
+                ),
+                SocalIcon(
+                  iconSrc: "assets/icons/gmail.svg",
+                  press: () {
+                    gmailSignIn(); 
+                  },
+                ),
+                 SocalIcon(
+                  iconSrc: "assets/icons/apple.svg",
+                  press: () { if(Platform.isIOS){
+                     appleSignIn();
+                  }
+                  },
+                ),
+              ],
+            )
           ],
         ),
       ),

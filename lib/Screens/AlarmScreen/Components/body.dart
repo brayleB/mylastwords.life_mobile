@@ -1,6 +1,4 @@
 // ignore_for_file: deprecated_member_use, unused_field, must_be_immutable
-
-import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mylastwords/Screens/AlarmScreen/Components/alarm_helper.dart';
@@ -39,15 +37,15 @@ class _BodyState extends State<Body> {
     "Sun",
   ];
     List<String> alarmSoundFiles = [
-    "longcold.wav",
-    "rainyday.wav",
-    "electronic.wav",
-    "fantasy.wav",
-    "niceday.wav",
-    "latin.wav",
-    "synergetic.wav",
-    "wakeup.wav",   
-    "positive.wav",  
+    "longcold",
+    "rainyday",
+    "electronic",
+    "fantasy",
+    "niceday",
+    "latin",
+    "synergetic",
+    "wakeup",   
+    "positive",  
   ];
   List<String> _alarmSoundList = [
     "Cold",
@@ -71,8 +69,7 @@ class _BodyState extends State<Body> {
   Future<List<AlarmInfo>>? _alarms;
   List<AlarmInfo>? _currentAlarms;
   String? selectedValue;
-  AudioCache cache = new AudioCache(); 
-  AudioPlayer player = AudioPlayer();
+  final player = AudioPlayer();
   String? editAlarmString, editTxtTitle, editTxtRepeat, editTxtSound;  
   @override
   void initState() {
@@ -264,16 +261,15 @@ class _BodyState extends State<Body> {
                                                         value: alarmSoundFiles[index],
                                                         groupValue: selectedValue,
                                                         selected: selectedValue == alarmSoundFiles[index],
-                                                        onChanged: (val) async {
-                                                          player.stop();
-                                                          player =  await cache.play((ringToneBaseUrl + alarmSoundFiles[index]));
+                                                        onChanged: (val) async {                                                                
+                                                          await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
                                                           setSoundState(() {
                                                             selectedValue = val.toString();
                                                           });
                                                           setModalState((){                                                    
                                                             txtSoundDisplay = _alarmSoundList[index];
                                                           });
-                                                        },
+                                                          },
                                                           );
                                                         },
                                                       ),
@@ -351,35 +347,44 @@ class _BodyState extends State<Body> {
                                   );
                           },
                         );},
-                        ),                     
-                        FloatingActionButton.extended(
-                          backgroundColor: darkBackground,
-                          onPressed: () async {
-                       
-                            var idStr = DateFormat('MMddHHmmss')
-                                    .format(DateTime.now());
-                            var alarmInfo = AlarmInfo(                              
-                                id: int.parse(idStr),
-                                title: title,
-                                alarmDateTime: _alarmTime,
-                                alarmOnOff: "true",
-                                repeat: txtRepeat,
-                                sound: txtSound);
+                        ),   
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                             FloatingActionButton.extended(
+                              backgroundColor: headerBackgroundColor,
+                              onPressed: () async {                          
+                                var idStr = DateFormat('MMddHHmmss')
+                                        .format(DateTime.now());
+                                var alarmInfo = AlarmInfo(                              
+                                    id: int.parse(idStr),
+                                    title: title,
+                                    alarmDateTime: _alarmTime,
+                                    alarmOnOff: "true",
+                                    repeat: txtRepeat,
+                                    sound: txtSound);
 
-                            _alarmHelper.insertAlarm(alarmInfo);
-                            _alarmHelper.scheduleAlarm(
-                                _alarmTime!, alarmInfo);
-                            Navigator.pop(context);                            
-                            loadAlarms();
-                            setState(() {
-                              title = "Title";
-                              txtRepeat = "Repeat";
-                              txtSoundDisplay = "Sound";
-                            });
-                          },
-                          icon: Icon(Icons.alarm),
-                          label: Text('Save Alarm'),
-                        ),
+                                _alarmHelper.insertAlarm(alarmInfo);
+                                _alarmHelper.scheduleAlarm(
+                                    _alarmTime!, alarmInfo);
+                                Navigator.pop(context);                            
+                                loadAlarms();
+                                setState(() {
+                                  title = "Title";
+                                  txtRepeat = "Repeat";
+                                  txtSoundDisplay = "Sound";
+                                });
+                              },
+                              icon: Icon(Icons.alarm),
+                              label: Text('Add Alarm'),
+                            ),
+                            FloatingActionButton.extended(
+                              backgroundColor: headerBackgroundColor,
+                              onPressed: () {Navigator.pop(context);}  ,
+                              icon: Icon(Icons.cancel),
+                              label: Text('Cancel'),
+                            ),
+                        ],),                                    
                       ],
                     ),
                   );

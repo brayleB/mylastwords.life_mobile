@@ -4,6 +4,7 @@ import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/NoteScreen/note_screen.dart';
 import 'package:mylastwords/Services/notes_services.dart';
 import 'package:mylastwords/Services/user_service.dart';
+import 'package:mylastwords/components/header_tab_add.dart';
 import 'package:mylastwords/components/header_tab_save.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
@@ -30,9 +31,9 @@ class _AddNoteState extends State<AddNote> {
   void _validateAddNote() async {
     var errmsg = "";
     if (txtNote.text == "") {
-      errmsg = "Please enter a note";
+      errmsg = "Please enter a Note";
     }
-    if (txtTitle.text == "") {
+    else if (txtTitle.text == "") {
       errmsg = "Please enter a Title";
     } else {
       ApiResponse response = await addNote(txtTitle.text, txtNote.text);
@@ -50,7 +51,9 @@ class _AddNoteState extends State<AddNote> {
         ToastMessage().toastMsgDark('${response.error}');
       }
     }
-    if (errmsg == "") {}
+    if (errmsg != "") {
+      ToastMessage().toastMsgLight(errmsg);
+    }
   }
 
   @override
@@ -63,10 +66,10 @@ class _AddNoteState extends State<AddNote> {
     // Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: HeaderTabSave(
+      appBar: HeaderTabAdd(
         backgroundcolor: headerBackgroundColor,
         title: 'Add Note',
-        press: () {
+        saveFunc: () {
           _validateAddNote();
         },
       ),
