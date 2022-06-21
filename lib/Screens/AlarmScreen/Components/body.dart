@@ -37,15 +37,15 @@ class _BodyState extends State<Body> {
     "Sun",
   ];
     List<String> alarmSoundFiles = [
-    "longcold.wav",
-    "rainyday.wav",
-    "electronic.wav",
-    "fantasy.wav",
-    "niceday.wav",
-    "latin.wav",
-    "synergetic.wav",
-    "wakeup.wav",   
-    "positive.wav",  
+    "longcold",
+    "rainyday",
+    "electronic",
+    "fantasy",
+    "niceday",
+    "latin",
+    "synergetic",
+    "wakeup",   
+    "positive",  
   ];
   List<String> _alarmSoundList = [
     "Cold",
@@ -262,7 +262,7 @@ class _BodyState extends State<Body> {
                                                         groupValue: selectedValue,
                                                         selected: selectedValue == alarmSoundFiles[index],
                                                         onChanged: (val) async {                                                                
-                                                          await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index]));
+                                                          await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
                                                           setSoundState(() {
                                                             selectedValue = val.toString();
                                                           });

@@ -100,14 +100,12 @@ class AlarmHelper {
       DateTime scheduledNotificationDateTime, AlarmInfo alarmInfo) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'alarm_notif',
-      'alarm_notif',      
-      icon: 'codex_logo',
-      sound: RawResourceAndroidNotificationSound('a_long_cold_sting'),
-      largeIcon: DrawableResourceAndroidBitmap('codex_logo'),
+      'alarm_notif',          
+      sound: RawResourceAndroidNotificationSound(alarmInfo.sound),      
     );
 
     var iOSPlatformChannelSpecifics = IOSNotificationDetails(
-        sound: alarmInfo.sound,               
+        sound: alarmInfo.sound! +'.wav',               
         presentAlert: true,
         presentBadge: true,
         presentSound: true,          
