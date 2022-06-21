@@ -76,8 +76,8 @@ class _BodyState extends State<Body> {
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                   fit: BoxFit.contain,
-                                  image: NetworkImage(
-                                      userImg!,scale: 1.0))),
+                                  image: AssetImage(
+                                      'assets/images/placeholder.png'))),
                         ),
                         Positioned(
                           bottom: 0,

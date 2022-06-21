@@ -220,7 +220,10 @@ class _BodyState extends State<Body> {
                 ),
                  SocalIcon(
                   iconSrc: "assets/icons/apple.svg",
-                  press: () {  appleSignIn();},
+                  press: () { if(Platform.isIOS){
+                     appleSignIn();
+                  }
+                  },
                 ),
               ],
             )
