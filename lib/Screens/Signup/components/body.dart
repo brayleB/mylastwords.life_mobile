@@ -50,7 +50,7 @@ class _BodyState extends State<Body> {
       errmsg =
           "Password must contain atleast 1 uppercase, lowercase, number and a special character";
     } else {
-      ApiResponse response = await register(txtEmail.text, txtPass.text);
+      ApiResponse response = await register('New User',txtEmail.text, txtPass.text,'https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png','0123456789','your address');
       print("Reponse Data: " +
           '${response.data}' +
           " Reponse Error: " +

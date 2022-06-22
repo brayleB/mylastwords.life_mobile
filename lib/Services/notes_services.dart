@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 //addNote
 Future<ApiResponse> addNote(String title, String body) async {
+  EasyLoading.show();
   ApiResponse apiResponse = ApiResponse();
   String token = await getToken();
   int id = await getuserId();
@@ -42,6 +44,7 @@ Future<ApiResponse> addNote(String title, String body) async {
   } catch (e) {
     apiResponse.error = '$e' + '. Server Error.';
   }
+  EasyLoading.dismiss();
   return apiResponse;
 }
 
@@ -116,6 +119,7 @@ Future<List<NotesModel>> fetchNotes() async {
 
 //addNote
 Future<ApiResponse> deleteNote(int id) async {
+  EasyLoading.show();
   ApiResponse apiResponse = ApiResponse();
   String token = await getToken();
   print(id);
@@ -145,10 +149,12 @@ Future<ApiResponse> deleteNote(int id) async {
   } catch (e) {
     apiResponse.error = '$e' + '. Server Error.';
   }
+  EasyLoading.dismiss();
   return apiResponse;
 }
 
 Future<ApiResponse> updateNote(int id, String title, String body) async {
+  EasyLoading.show();
   ApiResponse apiResponse = ApiResponse();
   String token = await getToken();
   try {
@@ -180,6 +186,7 @@ Future<ApiResponse> updateNote(int id, String title, String body) async {
   } catch (e) {    
     apiResponse.error = '$e' + '. Server Error.';
   }
+  EasyLoading.dismiss();
   return apiResponse;
 }
 

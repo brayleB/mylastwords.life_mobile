@@ -4,10 +4,10 @@ class User {
   String? email;
   String? type;
   String? subcription;
+  int? status;
   String? userImage;
   String? contact;
   String? address;
-  int? status;
   String? token;
 
   User(
@@ -32,7 +32,7 @@ class User {
       subcription: json['user']['subcription'],
       status: json['user']['status'],
       userImage: json['user']['userImage'],
-      contact: json['user']['contact'],
+      contact: json['user']['contactNumber'],
       address: json['user']['address'],
       token: json['token'],
     );

@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/Login/components/background.dart';
 import 'package:mylastwords/Screens/Signup/signup_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/already_have_an_account_acheck.dart';
+import 'package:mylastwords/components/loader.dart';
 import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/components/rounded_input_field.dart';
 import 'package:mylastwords/components/rounded_password_field.dart';
@@ -97,12 +99,13 @@ class _BodyState extends State<Body> {
       }
     }
     if (errmsg != "") {
-      ToastMessage().toastMsgDark(errmsg);
+      EasyLoading.showError(errmsg);
     }
   }
   
 
-  void _loginValidateFacebook() async {
+  void _loginValidateFacebook() async { 
+    EasyLoading.show();
     final LoginResult res = await FacebookAuth.instance.login(
       permissions: ['public_profile','email']
     );
@@ -110,17 +113,18 @@ class _BodyState extends State<Body> {
       final reqData = await FacebookAuth.instance.getUserData(
         fields:"email, name, picture",        
       );  
-      ApiResponse response = await login(reqData['email'], 'mylastwords.life.password');
-      // fbToken = res.accessToken;
-      // var img1 = reqData['picture'];
-      // var img2 = img1['data'];
-      // SharedPreferences pref = await SharedPreferences.getInstance();   
-      // await pref.setString('name', reqData['name'] ?? '');      
-      // await pref.setString('token', fbToken!.token);
-      // await pref.setString('email', reqData['email'] ?? '');
-      // await pref.setString('userImage', img2['url'] ?? '');
-      // await pref.setInt('userId', int.parse(reqData['id'])); 
-      ToastMessage().toastMsgError('(Under Development) Successfully Login as '+reqData['name']);        
+      var img1 = reqData['picture'];
+      var img2 = img1['data'];
+      ApiResponse respLogin = await login(reqData['email'], reqData['id']);
+      if(respLogin.error==null){        
+        _saveAndRedirectToHome(respLogin.data as User);        
+      }
+      else if(respLogin.error=="invalid credentials"){               
+        ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'], img2['url'], '0123456789', 'Address');
+        if(resSignUp.error==null){                  
+         _saveAndRedirectToHome(respLogin.data as User);
+        }  
+      }                   
     }         
   }
 
@@ -183,8 +187,7 @@ class _BodyState extends State<Body> {
                 textColor: txtColorLight,
               bgcolor: txtColorDark,
               text: "LOGIN",
-              press: () {
-                print(txtEmail.text + " " + txtPass.text);
+              press: () {                   
                 _loginValidate();
               },
             ),
@@ -232,4 +235,5 @@ class _BodyState extends State<Body> {
       ),
     );
   }
+ 
 }
