@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
@@ -9,7 +10,7 @@ import 'package:mylastwords/models/gallery.dart';
 import 'package:http/http.dart' as http;
 
 Future<ApiResponse> uploadImage(File img) async {
-  
+  EasyLoading.show();
   ApiResponse apiResponse = ApiResponse();
   String token = await getToken();
   int id = await getuserId();  
@@ -28,6 +29,7 @@ Future<ApiResponse> uploadImage(File img) async {
   else {
     ToastMessage().toastMsgError('Error uploading photo');
   }
+  EasyLoading.dismiss();
   return apiResponse;
 }
 

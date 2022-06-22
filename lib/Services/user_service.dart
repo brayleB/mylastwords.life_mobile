@@ -1,16 +1,20 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mylastwords/components/loader.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
 import 'package:mylastwords/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //login
 Future<ApiResponse> login(String email, String password) async {
+  EasyLoading.show();
   ApiResponse apiResponse = ApiResponse();
-
-  try {
+  try {     
     final response = await http.post(Uri.parse(loginURL),
         headers: {'Accept': 'application/json'},
         body: {'email': email, 'password': password});
@@ -18,7 +22,6 @@ Future<ApiResponse> login(String email, String password) async {
       case 200:
         print(response.body);
         apiResponse.data = User.fromJson(jsonDecode(response.body));
-
         break;
       case 422:
         final errors = jsonDecode(response.body)['errors'];
@@ -32,28 +35,37 @@ Future<ApiResponse> login(String email, String password) async {
     }
   } catch (e) {
     apiResponse.error = "Server Error. Please check Internet Connection";
-  }
+  }  
+  EasyLoading.dismiss();
   return apiResponse;
 }
 
 //Register
-Future<ApiResponse> register(
+Future<ApiResponse> register(  
+  String name,
   String email,
   String password,
+  String img,  
+  String contactnumber,
+  String address,
 ) async {
+  EasyLoading.show();
   ApiResponse apiResponse = ApiResponse();
-
   try {
     final response = await http.post(Uri.parse(registerURL),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'name': "New User",
+          'name': name,
           'email': email,
           'password': password,
           'type': "user",
           'subcription': "free",
-          'status': 1
+          'status': 1,
+          'userImage':img,
+          'contactNumber':contactnumber,
+          'address':address,
         }));
+    print(response.statusCode);
     switch (response.statusCode) {
       case 200:
         apiResponse.data = User.fromJson(jsonDecode(response.body));
@@ -72,6 +84,7 @@ Future<ApiResponse> register(
     print("Error in register " + e.toString());
     apiResponse.error = "Server Error";
   }
+  EasyLoading.dismiss();
   return apiResponse;
 }
 

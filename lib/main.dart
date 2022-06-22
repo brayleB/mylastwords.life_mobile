@@ -1,6 +1,8 @@
 //@dart=2.9
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/splash_screen.dart';
+import 'package:mylastwords/components/loader.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -26,7 +28,7 @@ void main() async {
       debugPrint('notification payload: ' + payload);
     }
   });
-  runApp(MyApp());
+  runApp(MyApp());  
 }
 
 class MyApp extends StatelessWidget {
@@ -40,6 +42,7 @@ class MyApp extends StatelessWidget {
         primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
+      builder: EasyLoading.init(),
       home: SplashScreen(),
     );
   }
