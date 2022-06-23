@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 //login
 Future<ApiResponse> login(String email, String password) async {
-  EasyLoading.show();
+  EasyLoading.show(status: 'Logging-in');
   ApiResponse apiResponse = ApiResponse();
   try {     
     final response = await http.post(Uri.parse(loginURL),
@@ -49,7 +49,7 @@ Future<ApiResponse> register(
   String contactnumber,
   String address,
 ) async {
-  EasyLoading.show();
+  EasyLoading.show(status: 'Signing Up');
   ApiResponse apiResponse = ApiResponse();
   try {
     final response = await http.post(Uri.parse(registerURL),
@@ -64,8 +64,7 @@ Future<ApiResponse> register(
           'userImage':img,
           'contactNumber':contactnumber,
           'address':address,
-        }));
-    print(response.statusCode);
+        }));   
     switch (response.statusCode) {
       case 200:
         apiResponse.data = User.fromJson(jsonDecode(response.body));
@@ -77,11 +76,14 @@ Future<ApiResponse> register(
       case 403:
         apiResponse.error = jsonDecode(response.body)['message'];
         break;
-      default:
+      case 302: 
+        EasyLoading.showInfo('Email provided already exist');        
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:    
         apiResponse.error = "Something went wrong";
     }
   } catch (e) {
-    print("Error in register " + e.toString());
     apiResponse.error = "Server Error";
   }
   EasyLoading.dismiss();
@@ -113,6 +115,8 @@ Future<ApiResponse> getuserDetails() async {
   }
   return apiResponse;
 }
+
+
 
 //get token
 Future<String> getToken() async {

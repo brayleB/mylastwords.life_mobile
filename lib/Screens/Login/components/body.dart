@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -39,6 +40,7 @@ class Body extends StatefulWidget {
   _BodyState createState() => _BodyState();
 }
 class _BodyState extends State<Body> {
+  String _contactText = '';
   String? loginType;
   AccessToken? fbToken;   
   GoogleSignInAccount? _gmailUser;
@@ -52,18 +54,41 @@ class _BodyState extends State<Body> {
     _googleSignIn.onCurrentUserChanged.listen((account) {
       setState(() {
         _gmailUser = account;
-      });
+      });   
       _googleSignIn.signInSilently();
      });
     super.initState();
   }
 
   void gmailSignIn() async {
-    await _googleSignIn.signIn();   
-    if(_gmailUser!=null){
-      ToastMessage().toastMsgError('(Under Development) Successfully Login as ' + _gmailUser!.displayName!);           
+    EasyLoading.show();
+    try {
+    _gmailUser = await _googleSignIn.signIn();    
+      if(_gmailUser!=null){
+      ApiResponse loginResp = await login(_gmailUser!.email, _gmailUser!.id);           
+      if(loginResp.error==null){
+        _saveAndRedirectToHome(loginResp.data as User);
+      }
+      else if(loginResp.error=="invalid credentials"){
+        ApiResponse signupResp = await register(_gmailUser!.displayName!, _gmailUser!.email, _gmailUser!.id, _gmailUser!.photoUrl!, '', '');
+        if(signupResp.error==null){
+          _saveAndRedirectToHome(signupResp.data as User);
+        }
+        else{
+          EasyLoading.showError(signupResp.error.toString());
+        }
+      }
+      else{
+        EasyLoading.showError(loginResp.error.toString());
+      }
     }
+  } catch (error) {
+    print(error);
+  }            
+    EasyLoading.dismiss();
   }
+
+  
 
   void appleSignIn() async {      
     final appleUser = await SignInWithApple.getAppleIDCredential(scopes: 
@@ -122,10 +147,17 @@ class _BodyState extends State<Body> {
       else if(respLogin.error=="invalid credentials"){               
         ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'], img2['url'], '0123456789', 'Address');
         if(resSignUp.error==null){                  
-         _saveAndRedirectToHome(respLogin.data as User);
+         _saveAndRedirectToHome(resSignUp.data as User);
         }  
-      }                   
-    }         
+        else{
+          EasyLoading.showError(resSignUp.error.toString());
+        }
+      } 
+      else{
+        EasyLoading.showError(respLogin.error.toString());
+      }                 
+    }   
+    EasyLoading.dismiss();      
   }
 
   void _saveAndRedirectToHome(User user) async {
