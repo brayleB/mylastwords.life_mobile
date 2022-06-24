@@ -82,8 +82,8 @@ class _BodyState extends State<Body> {
         EasyLoading.showError(loginResp.error.toString());
       }
     }
-  } catch (error) {
-    print(error);
+  } catch (e) {
+    ToastMessage().toastMsgDark(e.toString());
   }            
     EasyLoading.dismiss();
   }
@@ -125,7 +125,7 @@ class _BodyState extends State<Body> {
     print(appleUser);
     } 
     catch(e){
-      
+      ToastMessage().toastMsgDark(e.toString());
     }      
     EasyLoading.dismiss();
   }
@@ -192,7 +192,8 @@ class _BodyState extends State<Body> {
             EasyLoading.showError(respLogin.error.toString());
           }                 
         }   
-    }catch(e){     
+    }catch(e){  
+      ToastMessage().toastMsgDark(e.toString());   
     }
     
     EasyLoading.dismiss();      
