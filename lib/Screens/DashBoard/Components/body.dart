@@ -142,7 +142,7 @@ class _BodyState extends State<Body> {
                   ],
                 ),
               ),
-              SizedBox(height: 80),
+              SizedBox(height: 30),
               GridDashBoard(),             
             ],
           ),
