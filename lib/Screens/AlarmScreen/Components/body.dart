@@ -29,7 +29,7 @@ class _BodyState extends State<Body> {
   
   List<String> _texts = [
     "Mon",
-    "Teu",
+    "Tue",
     "Wed",
     "Thu",
     "Fri",
@@ -104,7 +104,7 @@ class _BodyState extends State<Body> {
         title: 'Alarm',
         iconbtn: Icons.alarm_add_rounded,
         press: () {
-          showModalBottomSheet(
+          showModalBottomSheet(            
             useRootNavigator: true,
             context: context,
             clipBehavior: Clip.antiAlias,

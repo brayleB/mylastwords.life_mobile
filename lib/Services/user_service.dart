@@ -1,16 +1,20 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mylastwords/components/loader.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
 import 'package:mylastwords/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //login
 Future<ApiResponse> login(String email, String password) async {
+  EasyLoading.show(status: 'Logging-in');
   ApiResponse apiResponse = ApiResponse();
-
-  try {
+  try {     
     final response = await http.post(Uri.parse(loginURL),
         headers: {'Accept': 'application/json'},
         body: {'email': email, 'password': password});
@@ -18,7 +22,6 @@ Future<ApiResponse> login(String email, String password) async {
       case 200:
         print(response.body);
         apiResponse.data = User.fromJson(jsonDecode(response.body));
-
         break;
       case 422:
         final errors = jsonDecode(response.body)['errors'];
@@ -32,28 +35,39 @@ Future<ApiResponse> login(String email, String password) async {
     }
   } catch (e) {
     apiResponse.error = "Server Error. Please check Internet Connection";
-  }
+  }  
+  EasyLoading.dismiss();
   return apiResponse;
 }
 
 //Register
-Future<ApiResponse> register(
+Future<ApiResponse> register(  
+  String name,
   String email,
   String password,
+  String img,  
+  String contactnumber,
+  String address,
 ) async {
+  EasyLoading.show(status: 'Signing Up');
   ApiResponse apiResponse = ApiResponse();
-
+  if(img==""){
+    img="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png";
+  }
   try {
     final response = await http.post(Uri.parse(registerURL),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'name': "New User",
+          'name': name,
           'email': email,
           'password': password,
           'type': "user",
           'subcription': "free",
-          'status': 1
-        }));
+          'status': 1,
+          'userImage':img,
+          'contactNumber':contactnumber,
+          'address':address,
+        }));   
     switch (response.statusCode) {
       case 200:
         apiResponse.data = User.fromJson(jsonDecode(response.body));
@@ -65,20 +79,23 @@ Future<ApiResponse> register(
       case 403:
         apiResponse.error = jsonDecode(response.body)['message'];
         break;
-      default:
+      case 302: 
+        EasyLoading.showInfo('Email provided already exist');        
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:    
         apiResponse.error = "Something went wrong";
     }
   } catch (e) {
-    print("Error in register " + e.toString());
     apiResponse.error = "Server Error";
   }
+  EasyLoading.dismiss();
   return apiResponse;
 }
 
 //getuser
 Future<ApiResponse> getuserDetails() async {
   ApiResponse apiResponse = ApiResponse();
-
   try {
     String token = await getToken();
     final response = await http.get(
@@ -100,6 +117,8 @@ Future<ApiResponse> getuserDetails() async {
   }
   return apiResponse;
 }
+
+
 
 //get token
 Future<String> getToken() async {
@@ -135,4 +154,32 @@ Future<String> getUserImgURL() async {
 Future<bool> logout() async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   return await pref.remove('token');
+}
+
+//getuser
+Future<ApiResponse> logoutUser() async {
+  EasyLoading.show(status: 'Logging-out');
+  ApiResponse apiResponse = ApiResponse();
+  try {
+    String token = await getToken();
+    final response = await http.post(
+      Uri.parse(logoutURL),
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = User.fromJson(jsonDecode(response.body));
+        break;
+      case 401:
+        apiResponse.error = "Unauthorized";
+        break;
+      default:
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    print(e.toString());
+    apiResponse.error = "Server Error.";
+  }
+  EasyLoading.dismiss();
+  return apiResponse;
 }

@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/Login/components/background.dart';
 import 'package:mylastwords/Screens/Signup/signup_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/already_have_an_account_acheck.dart';
+import 'package:mylastwords/components/loader.dart';
 import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/components/rounded_input_field.dart';
 import 'package:mylastwords/components/rounded_password_field.dart';
@@ -37,6 +40,7 @@ class Body extends StatefulWidget {
   _BodyState createState() => _BodyState();
 }
 class _BodyState extends State<Body> {
+  String _contactText = '';
   String? loginType;
   AccessToken? fbToken;   
   GoogleSignInAccount? _gmailUser;
@@ -50,29 +54,86 @@ class _BodyState extends State<Body> {
     _googleSignIn.onCurrentUserChanged.listen((account) {
       setState(() {
         _gmailUser = account;
-      });
+      });   
       _googleSignIn.signInSilently();
      });
     super.initState();
   }
 
   void gmailSignIn() async {
-    await _googleSignIn.signIn();   
-    if(_gmailUser!=null){
-      ToastMessage().toastMsgError('(Under Development) Successfully Login as ' + _gmailUser!.displayName!);           
+    EasyLoading.show();
+    try {
+    _gmailUser = await _googleSignIn.signIn();    
+      if(_gmailUser!=null){
+      ApiResponse loginResp = await login(_gmailUser!.email, _gmailUser!.id);           
+      if(loginResp.error==null){
+        _saveAndRedirectToHome(loginResp.data as User);
+      }
+      else if(loginResp.error=="invalid credentials"){
+        ApiResponse signupResp = await register(_gmailUser!.displayName!, _gmailUser!.email, _gmailUser!.id, _gmailUser!.photoUrl!, '', '');
+        if(signupResp.error==null){
+          _saveAndRedirectToHome(signupResp.data as User);
+        }
+        else{
+          EasyLoading.showError(signupResp.error.toString());
+        }
+      }
+      else{
+        EasyLoading.showError(loginResp.error.toString());
+      }
     }
+  } catch (error) {
+    print(error);
+  }            
+    EasyLoading.dismiss();
   }
 
-  void appleSignIn() async {      
-    final appleUser = await SignInWithApple.getAppleIDCredential(scopes: 
+  
+
+  void appleSignIn() async { 
+    EasyLoading.show(status: 'Apple Signing in...');  
+    try{
+      final appleUser = await SignInWithApple.getAppleIDCredential(scopes: 
       [
         AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName        
+        AppleIDAuthorizationScopes.fullName,                       
       ],
-    );
+    );        
+    if(appleUser.email!=null)
+    {
+      ApiResponse resLogin = await login(appleUser.email.toString(), appleUser.userIdentifier.toString());
+      if(resLogin.error==null){
+        _saveAndRedirectToHome(resLogin.data as User);
+      }
+      else if(resLogin.error=="invalid credentials")
+      {
+        ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(), '', '', '');
+        if(resSignUp.error==null){
+          _saveAndRedirectToHome(resSignUp.data as User);
+        }
+        else{
+          ToastMessage().toastMsgError(resSignUp.error.toString());
+        }
+      }
+      else{
+        ToastMessage().toastMsgError(resLogin.error.toString());
+      }            
+    }
+    else{
+      EasyLoading.showInfo('This apple account already connected to this app, please remove it first via Settings.');
+    }
     print(appleUser);
+    } 
+    catch(e){
+      
+    }      
+    EasyLoading.dismiss();
   }
   
+  
+
+
+
   void _loginValidate() async {
     bool isEmailvalid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -97,31 +158,44 @@ class _BodyState extends State<Body> {
       }
     }
     if (errmsg != "") {
-      ToastMessage().toastMsgDark(errmsg);
+      EasyLoading.showError(errmsg);
     }
   }
   
 
-  void _loginValidateFacebook() async {
-    final LoginResult res = await FacebookAuth.instance.login(
+  void _loginValidateFacebook() async { 
+    EasyLoading.show();
+    try{
+      final LoginResult res = await FacebookAuth.instance.login(
       permissions: ['public_profile','email']
-    );
-    if(res.status == LoginStatus.success){      
-      final reqData = await FacebookAuth.instance.getUserData(
-        fields:"email, name, picture",        
-      );  
-      ApiResponse response = await login(reqData['email'], 'mylastwords.life.password');
-      // fbToken = res.accessToken;
-      // var img1 = reqData['picture'];
-      // var img2 = img1['data'];
-      // SharedPreferences pref = await SharedPreferences.getInstance();   
-      // await pref.setString('name', reqData['name'] ?? '');      
-      // await pref.setString('token', fbToken!.token);
-      // await pref.setString('email', reqData['email'] ?? '');
-      // await pref.setString('userImage', img2['url'] ?? '');
-      // await pref.setInt('userId', int.parse(reqData['id'])); 
-      ToastMessage().toastMsgError('(Under Development) Successfully Login as '+reqData['name']);        
-    }         
+        );
+        if(res.status == LoginStatus.success){      
+          final reqData = await FacebookAuth.instance.getUserData(
+            fields:"email, name, picture",        
+          );  
+          var img1 = reqData['picture'];
+          var img2 = img1['data'];
+          ApiResponse respLogin = await login(reqData['email'], reqData['id']);
+          if(respLogin.error==null){        
+            _saveAndRedirectToHome(respLogin.data as User);        
+          }
+          else if(respLogin.error=="invalid credentials"){               
+            ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'], img2['url'], '0123456789', 'Address');
+            if(resSignUp.error==null){                  
+            _saveAndRedirectToHome(resSignUp.data as User);
+            }  
+            else{
+              EasyLoading.showError(resSignUp.error.toString());
+            }
+          } 
+          else{
+            EasyLoading.showError(respLogin.error.toString());
+          }                 
+        }   
+    }catch(e){     
+    }
+    
+    EasyLoading.dismiss();      
   }
 
   void _saveAndRedirectToHome(User user) async {
@@ -183,8 +257,7 @@ class _BodyState extends State<Body> {
                 textColor: txtColorLight,
               bgcolor: txtColorDark,
               text: "LOGIN",
-              press: () {
-                print(txtEmail.text + " " + txtPass.text);
+              press: () {                   
                 _loginValidate();
               },
             ),
@@ -232,4 +305,5 @@ class _BodyState extends State<Body> {
       ),
     );
   }
+ 
 }

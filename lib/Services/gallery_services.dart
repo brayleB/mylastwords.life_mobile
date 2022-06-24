@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
@@ -9,7 +10,7 @@ import 'package:mylastwords/models/gallery.dart';
 import 'package:http/http.dart' as http;
 
 Future<ApiResponse> uploadImage(File img) async {
-  
+  EasyLoading.show();
   ApiResponse apiResponse = ApiResponse();
   String token = await getToken();
   int id = await getuserId();  
@@ -28,6 +29,7 @@ Future<ApiResponse> uploadImage(File img) async {
   else {
     ToastMessage().toastMsgError('Error uploading photo');
   }
+  EasyLoading.dismiss();
   return apiResponse;
 }
 
@@ -46,6 +48,40 @@ Future<List<GalleryModel>> fetchPhotos() async {
   } else {
     throw Exception('Failed to load images from API');
   }
+}
+
+Future<ApiResponse> deleteImage(int id) async {
+  EasyLoading.show();
+  ApiResponse apiResponse = ApiResponse();
+  String token = await getToken();
+  try {
+    final response = await http.post(
+      Uri.parse(deleteImagesURL + '/$id'),
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        print(response.body);
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['errors'];
+        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
+        break;
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    apiResponse.error = '$e' + '. Server Error.';
+  }
+  EasyLoading.dismiss();
+  return apiResponse;
 }
 
 

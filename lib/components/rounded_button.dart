@@ -37,7 +37,7 @@ class RoundedButton extends StatelessWidget {
         style: TextStyle(color: textColor),
       ),
       onPressed: press,
-      style: ElevatedButton.styleFrom(
+      style: ElevatedButton.styleFrom(          
           primary: bgcolor,
           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
           textStyle: TextStyle(

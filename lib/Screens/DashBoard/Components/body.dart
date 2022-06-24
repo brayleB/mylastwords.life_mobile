@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:mylastwords/Background/tracker.dart';
 import 'package:mylastwords/Screens/DashBoard/components/griddashboard.dart';
 import 'package:mylastwords/Screens/Login/login_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
+import 'package:mylastwords/components/rounded_button.dart';
+import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
+import 'package:mylastwords/models/api_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:flutter_svg/svg.dart';
@@ -18,14 +22,14 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  String accountType = '';
   String userName = '';
   String userImage = '';
 
   @override
   void initState() {
     loadData();
-    loadDetails();
-  
+    loadDetails();  
     UserTracker().sendUserLogData();
     super.initState();
   }
@@ -35,8 +39,7 @@ class _BodyState extends State<Body> {
     setState(() {
       userName = (prefs.getString('name') ?? '');
       userImage = (prefs.getString('userImage') ?? '');      
-    });
-    
+    });    
   }
 
   loadDetails() async {
@@ -68,8 +71,8 @@ class _BodyState extends State<Body> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         CircleAvatar(
-                          backgroundImage: AssetImage(
-                              'assets/images/placeholder.png'),
+                          backgroundImage: NetworkImage(
+                              userImage),
                         ),
                         SizedBox(width: 10),
                         Text(
@@ -96,8 +99,11 @@ class _BodyState extends State<Body> {
                               backgroundColor: lightBackground,
                               actions: <Widget>[
                                 new TextButton(
-                                  onPressed: () {
-                                    logout().then((value) => Navigator.push(
+                                  onPressed: () async {  
+                                    ApiResponse response = await logoutUser();
+                                    if(response.error==null)
+                                    {
+                                      logout().then((value) => Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) {
@@ -105,6 +111,10 @@ class _BodyState extends State<Body> {
                                             },
                                           ),
                                         ));
+                                    }                                                              
+                                    else{
+                                      ToastMessage().toastMsgError(response.error.toString());
+                                    }
                                   },
                                   child: Text(
                                     'Yes',
@@ -133,7 +143,7 @@ class _BodyState extends State<Body> {
                 ),
               ),
               SizedBox(height: 80),
-              GridDashBoard()
+              GridDashBoard(),             
             ],
           ),
         ));
