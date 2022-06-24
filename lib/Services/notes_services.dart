@@ -122,7 +122,6 @@ Future<ApiResponse> deleteNote(int id) async {
   EasyLoading.show();
   ApiResponse apiResponse = ApiResponse();
   String token = await getToken();
-  print(id);
   try {
     final response = await http.post(
       Uri.parse(deleteNotesUrl + '/$id'),

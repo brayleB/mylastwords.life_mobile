@@ -50,4 +50,38 @@ Future<List<GalleryModel>> fetchPhotos() async {
   }
 }
 
+Future<ApiResponse> deleteImage(int id) async {
+  EasyLoading.show();
+  ApiResponse apiResponse = ApiResponse();
+  String token = await getToken();
+  try {
+    final response = await http.post(
+      Uri.parse(deleteImagesURL + '/$id'),
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        print(response.body);
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['errors'];
+        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
+        break;
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    apiResponse.error = '$e' + '. Server Error.';
+  }
+  EasyLoading.dismiss();
+  return apiResponse;
+}
+
 
