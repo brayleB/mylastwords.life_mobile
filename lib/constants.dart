@@ -35,4 +35,5 @@ const addUserLogURL = baseURL + 'api/addlog';
 //Gallery API Endpoints
 const uploadImageURL = baseURL + 'api/store-file';
 const getImagesURL = baseURL + 'api/view-file';
+const deleteImagesURL = baseURL + 'api/delete-file';
 

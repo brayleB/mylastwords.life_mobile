@@ -51,6 +51,9 @@ Future<ApiResponse> register(
 ) async {
   EasyLoading.show(status: 'Signing Up');
   ApiResponse apiResponse = ApiResponse();
+  if(img==""){
+    img="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png";
+  }
   try {
     final response = await http.post(Uri.parse(registerURL),
         headers: {'Content-Type': 'application/json'},
@@ -93,7 +96,6 @@ Future<ApiResponse> register(
 //getuser
 Future<ApiResponse> getuserDetails() async {
   ApiResponse apiResponse = ApiResponse();
-
   try {
     String token = await getToken();
     final response = await http.get(
@@ -152,4 +154,32 @@ Future<String> getUserImgURL() async {
 Future<bool> logout() async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   return await pref.remove('token');
+}
+
+//getuser
+Future<ApiResponse> logoutUser() async {
+  EasyLoading.show(status: 'Logging-out');
+  ApiResponse apiResponse = ApiResponse();
+  try {
+    String token = await getToken();
+    final response = await http.post(
+      Uri.parse(logoutURL),
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = User.fromJson(jsonDecode(response.body));
+        break;
+      case 401:
+        apiResponse.error = "Unauthorized";
+        break;
+      default:
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    print(e.toString());
+    apiResponse.error = "Server Error.";
+  }
+  EasyLoading.dismiss();
+  return apiResponse;
 }

@@ -90,16 +90,50 @@ class _BodyState extends State<Body> {
 
   
 
-  void appleSignIn() async {      
-    final appleUser = await SignInWithApple.getAppleIDCredential(scopes: 
+  void appleSignIn() async { 
+    EasyLoading.show(status: 'Apple Signing in...');  
+    try{
+      final appleUser = await SignInWithApple.getAppleIDCredential(scopes: 
       [
         AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName        
+        AppleIDAuthorizationScopes.fullName,                       
       ],
-    );
+    );        
+    if(appleUser.email!=null)
+    {
+      ApiResponse resLogin = await login(appleUser.email.toString(), appleUser.userIdentifier.toString());
+      if(resLogin.error==null){
+        _saveAndRedirectToHome(resLogin.data as User);
+      }
+      else if(resLogin.error=="invalid credentials")
+      {
+        ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(), '', '', '');
+        if(resSignUp.error==null){
+          _saveAndRedirectToHome(resSignUp.data as User);
+        }
+        else{
+          ToastMessage().toastMsgError(resSignUp.error.toString());
+        }
+      }
+      else{
+        ToastMessage().toastMsgError(resLogin.error.toString());
+      }            
+    }
+    else{
+      EasyLoading.showInfo('This apple account already connected to this app, please remove it first via Settings.');
+    }
     print(appleUser);
+    } 
+    catch(e){
+      
+    }      
+    EasyLoading.dismiss();
   }
   
+  
+
+
+
   void _loginValidate() async {
     bool isEmailvalid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -131,32 +165,36 @@ class _BodyState extends State<Body> {
 
   void _loginValidateFacebook() async { 
     EasyLoading.show();
-    final LoginResult res = await FacebookAuth.instance.login(
+    try{
+      final LoginResult res = await FacebookAuth.instance.login(
       permissions: ['public_profile','email']
-    );
-    if(res.status == LoginStatus.success){      
-      final reqData = await FacebookAuth.instance.getUserData(
-        fields:"email, name, picture",        
-      );  
-      var img1 = reqData['picture'];
-      var img2 = img1['data'];
-      ApiResponse respLogin = await login(reqData['email'], reqData['id']);
-      if(respLogin.error==null){        
-        _saveAndRedirectToHome(respLogin.data as User);        
-      }
-      else if(respLogin.error=="invalid credentials"){               
-        ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'], img2['url'], '0123456789', 'Address');
-        if(resSignUp.error==null){                  
-         _saveAndRedirectToHome(resSignUp.data as User);
-        }  
-        else{
-          EasyLoading.showError(resSignUp.error.toString());
-        }
-      } 
-      else{
-        EasyLoading.showError(respLogin.error.toString());
-      }                 
-    }   
+        );
+        if(res.status == LoginStatus.success){      
+          final reqData = await FacebookAuth.instance.getUserData(
+            fields:"email, name, picture",        
+          );  
+          var img1 = reqData['picture'];
+          var img2 = img1['data'];
+          ApiResponse respLogin = await login(reqData['email'], reqData['id']);
+          if(respLogin.error==null){        
+            _saveAndRedirectToHome(respLogin.data as User);        
+          }
+          else if(respLogin.error=="invalid credentials"){               
+            ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'], img2['url'], '0123456789', 'Address');
+            if(resSignUp.error==null){                  
+            _saveAndRedirectToHome(resSignUp.data as User);
+            }  
+            else{
+              EasyLoading.showError(resSignUp.error.toString());
+            }
+          } 
+          else{
+            EasyLoading.showError(respLogin.error.toString());
+          }                 
+        }   
+    }catch(e){     
+    }
+    
     EasyLoading.dismiss();      
   }
 

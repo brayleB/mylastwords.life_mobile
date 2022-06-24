@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 
 
@@ -61,7 +63,7 @@ class _BodyState extends State<Body> {
      }catch(e){
         ToastMessage().toastMsgError(e.toString());
      }
-}    
+  }     
 
   @override
   void initState() {
@@ -142,7 +144,8 @@ class _BodyState extends State<Body> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ViewImage(
-                                      img: baseURL+listData.data[position].title)));
+                                      img: listData.data,
+                                      pos: position)));
                           }, 
                           child: Container(
                             decoration: BoxDecoration(
@@ -164,7 +167,7 @@ class _BodyState extends State<Body> {
           },
         ),   
       )
-      ); 
+      );       
     }
 }
 
