@@ -70,7 +70,7 @@ class _BodyState extends State<Body> {
         _saveAndRedirectToHome(loginResp.data as User);
       }
       else if(loginResp.error=="invalid credentials"){
-        ApiResponse signupResp = await register(_gmailUser!.displayName!, _gmailUser!.email, _gmailUser!.id, _gmailUser!.photoUrl!, '', '');
+        ApiResponse signupResp = await register(_gmailUser!.displayName!, _gmailUser!.email, _gmailUser!.id, 'google' ,_gmailUser!.photoUrl!, '', '');
         if(signupResp.error==null){
           _saveAndRedirectToHome(signupResp.data as User);
         }
@@ -107,7 +107,7 @@ class _BodyState extends State<Body> {
       }
       else if(resLogin.error=="invalid credentials")
       {
-        ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(), '', '', '');
+        ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(), 'apple' ,'', '', '');
         if(resSignUp.error==null){
           _saveAndRedirectToHome(resSignUp.data as User);
         }
@@ -180,7 +180,7 @@ class _BodyState extends State<Body> {
             _saveAndRedirectToHome(respLogin.data as User);        
           }
           else if(respLogin.error=="invalid credentials"){               
-            ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'], img2['url'], '0123456789', 'Address');
+            ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'], 'facebook' ,img2['url'], '0123456789', 'Address');
             if(resSignUp.error==null){                  
             _saveAndRedirectToHome(resSignUp.data as User);
             }  
@@ -199,14 +199,19 @@ class _BodyState extends State<Body> {
     EasyLoading.dismiss();      
   }
 
-  void _saveAndRedirectToHome(User user) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
+  void _saveAndRedirectToHome(User user) async {    
+    if(user.status.toString()=="deactivated")
+    {
+      EasyLoading.showInfo("User is deactivated. Please contact administrator");
+    }
+    else{
+      SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString('name', user.name ?? '');
     await pref.setString('token', user.token ?? '');
     await pref.setString('email', user.email ?? '');    
     await pref.setString('userImage', user.userImage ?? '');
     await pref.setInt('userId', user.id ?? 0);
-    
+    await pref.setString('type', user.type ?? '');
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -215,6 +220,8 @@ class _BodyState extends State<Body> {
         },
       ),
     );
+    }
+    
   }
   
 
@@ -245,6 +252,7 @@ class _BodyState extends State<Body> {
             ),
             SizedBox(height: size.height * 0.03),
             RoundedInputField(
+              isEnable: true,
               controller: txtEmail,
               hintText: "Your Email",
               onChanged: (value) {},

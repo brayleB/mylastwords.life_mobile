@@ -6,6 +6,7 @@ class RoundedInputField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final IconData icon;
+  final bool isEnable;
 
   final ValueChanged<String> onChanged;
 
@@ -13,6 +14,7 @@ class RoundedInputField extends StatelessWidget {
     Key? key,
     required this.controller,
     required this.hintText,
+    required this.isEnable,
     this.icon = Icons.email_outlined,
     required this.onChanged,
   }) : super(key: key);
@@ -21,7 +23,7 @@ class RoundedInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
-       
+        enabled: isEnable,
         controller: controller,
         onChanged: onChanged,
         cursorColor: kPrimaryColor,
