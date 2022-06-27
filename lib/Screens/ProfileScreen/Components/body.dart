@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mylastwords/Screens/GalleryScreen/Components/viewImage.dart';
-import 'package:mylastwords/Services/user_service.dart';
-import 'package:mylastwords/components/header_tab_add.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/components/header_tab_back.dart';
-import 'package:mylastwords/components/header_tab_save.dart';
 import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/components/rounded_input_field.dart';
-import 'package:mylastwords/components/rounded_password_field.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
-import 'package:mylastwords/components/header_tab.dart';
-import 'package:mylastwords/data.dart';
-import 'package:mylastwords/models/gallery.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:flutter_svg/svg.dart';
@@ -26,8 +19,10 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  String userImg = '';
-  bool lockInBackground = true;
+  String userImg='';
+  bool editableData = true;
+  String accountType='';
+  String displayUserType='';
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtPass = TextEditingController();
   final TextEditingController txtName = TextEditingController();
@@ -37,19 +32,52 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     loadDetails();
+    accountTypeState();
     super.initState();
   }
 
   loadDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      txtEmail.text = (prefs.getString('email') ?? '');
-      txtPass.text = '********';
+      txtEmail.text = (prefs.getString('email') ?? '');      
       txtName.text = (prefs.getString('name') ?? '');
       txtContactNumber.text = (prefs.getString('contactNumber') ?? '');
       txtAddress.text = (prefs.getString('address') ?? '');
-      userImg = (prefs.getString('userImage') ?? '');      
-    });    
+      userImg = (prefs.getString('userImage') ?? 'https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png');     
+      accountType = (prefs.getString('type') ?? ''); 
+    });      
+  }
+
+  accountTypeState(){
+    if(accountType=="apple"||accountType=="google"||accountType=="facebook"){
+      editableData = false;
+      displayUserType = "You are now currently logged in with "+accountType;
+    }
+    else{
+      editableData = true;
+      displayUserType = "You are using MyLastWords Account";
+    }
+  }
+
+  updateingValidator() async {
+    var errmsg = "";
+    if(txtName.text=="")
+    {
+      errmsg="Please enter your full name";
+    }  
+    else if(txtContactNumber.text==""){
+      errmsg="Please enter your contact number";
+    }  
+    else if(txtAddress.text==""){
+      errmsg="Please enter your complete address";
+    }
+    else{
+
+    }
+    if(errmsg!=""){
+      EasyLoading.showError(errmsg);
+    }
+    else{}
   }
 
   @override
@@ -57,183 +85,115 @@ class _BodyState extends State<Body> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: HeaderTabBack(
-            backgroundcolor: headerBackgroundColor,           ),
-        backgroundColor: darkBackground,
-      body: Container(     
-      width: double.infinity,
-      height: size.height,
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
+        backgroundcolor: headerBackgroundColor),
+        backgroundColor: lightBackground,
+      body: 
           SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[                          
-                Container(                          
-                          height: size.height * 0.20,
-                          width: size.width * 0.40,
+            child: Container(                       
+            margin: EdgeInsets.only(top:size.height*0.025),
+            alignment: Alignment.center,
+            child: Column(   
+              crossAxisAlignment: CrossAxisAlignment.center,          
+              children: <Widget>[  
+                  Text(
+                    displayUserType,
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),                                           
+                SizedBox(height: size.height * 0.025),                        
+                SizedBox(
+                  width:200,
+                  height:200,
+                  child: ClipRRect(                                                      
+                  borderRadius: BorderRadius.circular(150),
+                  child: Stack(
+                    children: [
+                      Container(                                                   
                           decoration: BoxDecoration(                            
                               border: Border.all(
                                   width: 2,
-                                  color: Theme.of(context)
-                                      .scaffoldBackgroundColor),
+                                  color: headerBackgroundColor),
                               shape: BoxShape.circle,
                               image: DecorationImage(                                
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
                                       userImg))),
-                        ),                
-                 SizedBox(height: size.height * 0.03),                        
+                        ), 
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 50,
+                          width: double.infinity,
+                          color: Colors.grey.withOpacity(.5),
+                          child: Padding(
+                            padding: EdgeInsets.all(4.0),
+                            child: IconButton(                              
+                              onPressed: (){                                
+                              }, 
+                              icon: Icon(                              
+                              Icons.camera_alt_outlined,
+                              color:Colors.white
+                            ),)
+                          ),
+                        ),
+                        ),
+                    ],
+                  ),
+                ),  
+                ),             
+                 SizedBox(height: size.height * 0.015),                        
                  RoundedInputField(
-                          icon: Icons.email_outlined,
-                          controller: txtEmail,
-                          hintText: "Email",
-                          onChanged: (value) {},
-                        ),                       
-                        RoundedInputField(
-                          icon: Icons.person_outline,
-                          controller: txtName,
-                          hintText: "Full Name",
-                          onChanged: (value) {},
-                        ),
-                        RoundedInputField(
-                          icon: Icons.contact_phone_outlined,
-                          controller: txtContactNumber,
-                          hintText: "Contact Number",
-                          onChanged: (value) {},
-                        ),
-                        RoundedInputField(
-                          icon: Icons.location_on_outlined,
-                          controller: txtAddress,
-                          hintText: "Address",
-                          onChanged: (value) {},
-                        ),  
-                        RoundedButton(
-                          textColor: txtColorLight,
-                          bgcolor: headerBackgroundColor,
-                          text: "Update Profile",
-                          press: () {   
-                            ToastMessage().toastMsgError('Not yet implemented');                                            
-                          },
-                        ),     
-                        RoundedButton(
-                          textColor: txtColorLight,
-                          bgcolor: headerBackgroundColor,
-                          text: "Change Password",
-                          press: () {            
-                            ToastMessage().toastMsgError('Not yet implemented');                                   
-                          },
-                        ),      
+                    isEnable: false,
+                    icon: Icons.email_outlined,
+                    controller: txtEmail,
+                    hintText: "Email",
+                    onChanged: (value) {},
+                  ),                       
+                  RoundedInputField(
+                    isEnable: editableData,
+                    icon: Icons.person_outline,
+                    controller: txtName,
+                    hintText: "Full Name",
+                    onChanged: (value) {},
+                  ),
+                  RoundedInputField(
+                    isEnable: true,
+                    icon: Icons.contact_phone_outlined,
+                    controller: txtContactNumber,
+                    hintText: "Contact Number",
+                    onChanged: (value) {},
+                  ),
+                  RoundedInputField(
+                    isEnable: true,
+                    icon: Icons.location_on_outlined,
+                    controller: txtAddress,
+                    hintText: "Address",
+                    onChanged: (value) {},
+                  ),  
+                  RoundedButton(
+                    textColor: Colors.white,
+                    bgcolor: headerBackgroundColor,
+                    text: "Update Profile",
+                    press: () {   
+                      updateingValidator();
+                      ToastMessage().toastMsgError('Not yet implemented');                                                                 
+                    },
+                  ),     
+                  RoundedButton(
+                    textColor: Colors.white,
+                    bgcolor: headerBackgroundColor,
+                    text: "Change Password",
+                    press: () {            
+                      ToastMessage().toastMsgError('Not yet implemented');                                   
+                    },
+                  ),      
               ],
+              ),
             ),
-          ),
-        ],
-      ),
-    ),
-    );
+          )
+          );
+     
   }
 }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     Size size = MediaQuery.of(context).size;
-//     Orientation orientation = MediaQuery.of(context).orientation;
-//     return Scaffold(        
-//         appBar: HeaderTabAdd(
-//             backgroundcolor: headerBackgroundColor,
-//             title: 'Profile',
-//             saveFunc: () {}),
-//         backgroundColor: darkBackground,
-//         body: Container(
-//           child: Column(
-//             children: [
-//               Expanded(
-//                 flex: 4,
-//                 child: Container(
-                  
-//                   child: OrientationBuilder(
-//                     builder: (context, orientation) => Center(
-//                         child: Stack(
-//                       children: [
-//                         Container(                          
-//                           height: size.height * 0.20,
-//                           width: size.width * 0.40,
-//                           decoration: BoxDecoration(                            
-//                               border: Border.all(
-//                                   width: 5,
-//                                   color: Theme.of(context)
-//                                       .scaffoldBackgroundColor),
-//                               shape: BoxShape.circle,
-//                               image: DecorationImage(                                
-//                                   fit: BoxFit.cover,
-//                                   image: NetworkImage(
-//                                       userImg))),
-//                         ),
-//                         Positioned(
-//                           bottom: 0,
-//                           right: 0,
-//                           child: Container(
-//                             height: size.height * 0.07,
-//                             width: size.height * 0.07,
-//                             decoration: BoxDecoration(
-//                                 shape: BoxShape.circle,
-//                                 border: Border.all(
-//                                     width: 2,
-//                                     color: Theme.of(context)
-//                                         .scaffoldBackgroundColor),
-//                                 color: lightBackground),
-//                             child: Icon(Icons.edit, color: darkBackground),
-//                           ),
-//                         ),
-//                       ],
-//                     )),
-//                   ),
-//                 ),
-//               ),
-//               Expanded(
-//                 flex: 8,
-//                 child: OrientationBuilder(
-//                   builder: (context, orientation) => Container(
-//                     child: Column(
-//                       mainAxisAlignment: MainAxisAlignment.start,
-//                       children: [
-//                         RoundedInputField(
-//                           icon: Icons.email_outlined,
-//                           controller: txtEmail,
-//                           hintText: "Email",
-//                           onChanged: (value) {},
-//                         ),
-//                         RoundedInputField(
-//                           icon: Icons.lock_outline,
-//                           controller: txtPass,
-//                           hintText: "Password",
-//                           onChanged: (value) {},
-//                         ),
-//                         RoundedInputField(
-//                           icon: Icons.person_outline,
-//                           controller: txtName,
-//                           hintText: "Full Name",
-//                           onChanged: (value) {},
-//                         ),
-//                         RoundedInputField(
-//                           icon: Icons.contact_phone_outlined,
-//                           controller: txtContactNumber,
-//                           hintText: "Contact Number",
-//                           onChanged: (value) {},
-//                         ),
-//                         RoundedInputField(
-//                           icon: Icons.location_on_outlined,
-//                           controller: txtAddress,
-//                           hintText: "Address",
-//                           onChanged: (value) {},
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ));
-//   }
-// }
+

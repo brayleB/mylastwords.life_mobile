@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/components/loader.dart';
+import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
 import 'package:mylastwords/models/user.dart';
@@ -48,6 +49,7 @@ Future<ApiResponse> register(
   String img,  
   String contactnumber,
   String address,
+  String type,
 ) async {
   EasyLoading.show(status: 'Signing Up');
   ApiResponse apiResponse = ApiResponse();
@@ -61,7 +63,7 @@ Future<ApiResponse> register(
           'name': name,
           'email': email,
           'password': password,
-          'type': "user",
+          'type': type,
           'subcription': "free",
           'status': 1,
           'userImage':img,
@@ -164,11 +166,12 @@ Future<ApiResponse> logoutUser() async {
     String token = await getToken();
     final response = await http.post(
       Uri.parse(logoutURL),
-      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+      headers: {'Authorization': 'Bearer $token'},
     );
+    print(response.statusCode);
     switch (response.statusCode) {
       case 200:
-        apiResponse.data = User.fromJson(jsonDecode(response.body));
+        print(response.body);
         break;
       case 401:
         apiResponse.error = "Unauthorized";
@@ -176,10 +179,15 @@ Future<ApiResponse> logoutUser() async {
       default:
         apiResponse.error = "Something went wrong";
     }
-  } catch (e) {
-    print(e.toString());
-    apiResponse.error = "Server Error.";
+  } catch (e) {    
+    ToastMessage().toastMsgError(e.toString());
   }
-  EasyLoading.dismiss();
+  SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.remove('name');   
+    await pref.remove('email');    
+    await pref.remove('userImage');
+    await pref.remove('userId');
+    await pref.remove('type');
+  EasyLoading.showInfo('Logout Successfull');
   return apiResponse;
 }
