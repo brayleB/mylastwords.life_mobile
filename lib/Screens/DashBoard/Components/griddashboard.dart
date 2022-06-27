@@ -1,39 +1,48 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:mylastwords/Screens/AboutScreen/about_screen.dart';
 import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
 import 'package:mylastwords/Screens/GalleryScreen/gallery_screen.dart';
 import 'package:mylastwords/Screens/NoteScreen/note_screen.dart';
 import 'package:mylastwords/Screens/ProfileScreen/profile_screen.dart';
-// import 'package:flutter_auth/Screens/AlarmScreen/gallery_screen.dart';
-// import 'package:flutter_auth/Screens/AlarmScreen/settings_screen.dart';
 import 'package:mylastwords/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GridDashBoard extends StatelessWidget {
   Items item1 = new Items(
       id: 1,
       title: "Alarm Clock",
-      details: "No alarms",
+      details: "Always get on time",
       img: "assets/icons/alarm_clock.png");
   Items item2 = new Items(
       id: 2,
       title: "Notes",
-      details: "No notes",
+      details: "Messages to your love ones",
       img: "assets/icons/notes.png");
   Items item3 = new Items(
       id: 3,
       title: "Gallery",
-      details: "No Images or Videos",
+      details: "Store your photos here",
       img: "assets/icons/gallery.png");
   Items item4 = new Items(
       id: 4,
       title: "Profile",
-      details: "No updates",
+      details: "Personal Information",
       img: "assets/icons/profile.png");
-
+  Items item5 = new Items(
+      id: 5,
+      title: "About Us",
+      details: "Know how this app works",
+      img: "assets/images/logo.png");
+  Items item6 = new Items(
+      id: 6,
+      title: "Privacy Policy",
+      details: "Terms and Conditions",
+      img: "assets/icons/privacy.png");
   @override
   Widget build(BuildContext context) {
-    List<Items> myList = [item1, item2, item3, item4];
+    List<Items> myList = [item1, item2, item3, item4, item5, item6];
 
     return Flexible(
       child: GridView.count(
@@ -44,7 +53,7 @@ class GridDashBoard extends StatelessWidget {
           mainAxisSpacing: 25,
           children: myList.map((data) {
             return GestureDetector(
-                onTap: () {
+                onTap: () async {
                   if (data.id == 1) {
                     Navigator.push(
                       context,
@@ -82,8 +91,30 @@ class GridDashBoard extends StatelessWidget {
                       ),
                     );
                   }
+                   else if (data.id == 5) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return AboutScreen();
+                        },
+                      ),
+                    );
+                  }
+                  else if (data.id == 6) {
+                    final Uri url = Uri(
+                      scheme: 'https',
+                      host:'mylastwords.life',
+                      path: '/privacy-policy',                      
+                    );
+                    if(await canLaunchUrl(url)){
+                      print('awd');
+                      await launchUrl(url);
+                    }
+                  }
                 },
                 child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 6),
                   decoration: BoxDecoration(
                       color: kPrimaryLightColor,
                       borderRadius: BorderRadius.circular(15)),
@@ -108,9 +139,9 @@ class GridDashBoard extends StatelessWidget {
                         SizedBox(
                           height: 5,
                         ),
-                        Text(
+                        Text(                          
                           data.details!,
-                          style: TextStyle(
+                          style: TextStyle(                                                        
                               color: txtColorDark,
                               fontSize: 12,
                               fontWeight: FontWeight.w500),

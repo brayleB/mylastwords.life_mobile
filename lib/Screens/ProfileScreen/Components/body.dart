@@ -7,6 +7,7 @@ import 'package:mylastwords/components/header_tab_save.dart';
 import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/components/rounded_input_field.dart';
 import 'package:mylastwords/components/rounded_password_field.dart';
+import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/components/header_tab.dart';
 import 'package:mylastwords/data.dart';
@@ -73,7 +74,7 @@ class _BodyState extends State<Body> {
                           width: size.width * 0.40,
                           decoration: BoxDecoration(                            
                               border: Border.all(
-                                  width: 5,
+                                  width: 2,
                                   color: Theme.of(context)
                                       .scaffoldBackgroundColor),
                               shape: BoxShape.circle,
@@ -88,13 +89,7 @@ class _BodyState extends State<Body> {
                           controller: txtEmail,
                           hintText: "Email",
                           onChanged: (value) {},
-                        ),
-                        RoundedInputField(
-                          icon: Icons.lock_outline,
-                          controller: txtPass,
-                          hintText: "Password",
-                          onChanged: (value) {},
-                        ),
+                        ),                       
                         RoundedInputField(
                           icon: Icons.person_outline,
                           controller: txtName,
@@ -116,10 +111,19 @@ class _BodyState extends State<Body> {
                         RoundedButton(
                           textColor: txtColorLight,
                           bgcolor: headerBackgroundColor,
-                          text: "UPDATE",
-                          press: () {                                               
+                          text: "Update Profile",
+                          press: () {   
+                            ToastMessage().toastMsgError('Not yet implemented');                                            
                           },
-                        ),          
+                        ),     
+                        RoundedButton(
+                          textColor: txtColorLight,
+                          bgcolor: headerBackgroundColor,
+                          text: "Change Password",
+                          press: () {            
+                            ToastMessage().toastMsgError('Not yet implemented');                                   
+                          },
+                        ),      
               ],
             ),
           ),
