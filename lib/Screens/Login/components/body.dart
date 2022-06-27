@@ -296,6 +296,9 @@ class _BodyState extends State<Body> {
                   press: () { if(Platform.isIOS){
                      appleSignIn();
                   }
+                  else{
+                    EasyLoading.showInfo('For IOS device only');
+                  }
                   },
                 ),
               ],
