@@ -139,12 +139,13 @@ class GridDashBoard extends StatelessWidget {
                         SizedBox(
                           height: 5,
                         ),
-                        Text(                          
+                        Text(                                                                         
                           data.details!,
                           style: TextStyle(                                                        
                               color: txtColorDark,
                               fontSize: 12,
                               fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.center,   
                         ),
                         SizedBox(
                           height: 5,
