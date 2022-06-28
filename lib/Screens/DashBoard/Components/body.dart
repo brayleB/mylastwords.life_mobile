@@ -115,6 +115,7 @@ class _BodyState extends State<Body> {
                                     else{
                                       ToastMessage().toastMsgError(response.error.toString());
                                     }
+                                    Navigator.pop(context);
                                   },
                                   child: Text(
                                     'Yes',
@@ -142,7 +143,7 @@ class _BodyState extends State<Body> {
                   ],
                 ),
               ),
-              SizedBox(height: 80),
+              SizedBox(height: 30),
               GridDashBoard(),             
             ],
           ),
