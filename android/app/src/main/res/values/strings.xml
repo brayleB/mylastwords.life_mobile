@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">mylastwords.life</string>
     <string name="facebook_app_id">759294372151899</string>
-    <string name="facebook_client_token">2ff0da71d5c69f86065825fe871f23f2</string>
+    <string name="fb_login_protocol_scheme">fb759294372151899</string>
+    <string name="facebook_client_token">2ff0da71d5c69f86065825fe871f23f2</string>    
 </resources>

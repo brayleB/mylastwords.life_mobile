@@ -61,8 +61,8 @@ class _BodyState extends State<Body> {
   }
 
   void gmailSignIn() async {
-    EasyLoading.show();
-    try {
+  EasyLoading.show();
+  try {
     _gmailUser = await _googleSignIn.signIn();    
       if(_gmailUser!=null){
       ApiResponse loginResp = await login(_gmailUser!.email, _gmailUser!.id);           
@@ -83,7 +83,8 @@ class _BodyState extends State<Body> {
       }
     }
   } catch (e) {
-    ToastMessage().toastMsgDark(e.toString());
+    print(e.toString());
+    ToastMessage().toastMsgDark((e.toString()));
   }            
     EasyLoading.dismiss();
   }
@@ -107,7 +108,7 @@ class _BodyState extends State<Body> {
       }
       else if(resLogin.error=="invalid credentials")
       {
-        ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(),'', '', '', 'apple');
+                ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(),'', '', '', 'apple');
         if(resSignUp.error==null){
           _saveAndRedirectToHome(resSignUp.data as User);
         }
@@ -120,7 +121,7 @@ class _BodyState extends State<Body> {
       }            
     }
     else{
-      EasyLoading.showInfo('This apple account still already connected to this app, please remove it first via Settings.');
+      EasyLoading.showInfo('This apple account already connected to this app, please remove it first via Settings.');
     }
     print(appleUser);
     } 
@@ -176,12 +177,12 @@ class _BodyState extends State<Body> {
           var img1 = reqData['picture'];
           var img2 = img1['data'];
           ApiResponse respLogin = await login(reqData['email'], reqData['id']);
-          if(respLogin.error==null){        
+          if(respLogin.error==null){                    
             _saveAndRedirectToHome(respLogin.data as User);        
           }
           else if(respLogin.error=="invalid credentials"){               
-            ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'] ,img2['url'], '0123456789', 'Address', 'facebook');
-            if(resSignUp.error==null){                  
+          ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'] ,img2['url'], '0123456789', 'Address', 'facebook');
+            if(resSignUp.error==null){                      
             _saveAndRedirectToHome(resSignUp.data as User);
             }  
             else{
@@ -219,7 +220,7 @@ class _BodyState extends State<Body> {
           return DashBoard();
         },
       ),
-    );
+    );    
     }
     
   }
