@@ -95,6 +95,57 @@ Future<ApiResponse> register(
   return apiResponse;
 }
 
+
+
+
+//Register
+Future<ApiResponse> updateUserCall(  
+  String name,  
+  String contactnumber,
+  String address,
+) async {
+  EasyLoading.show(status: 'Updating User Information');
+  String token = await getToken();
+  int id = await getuserId();
+  ApiResponse apiResponse = ApiResponse();
+  try {
+    final response = await http.post(Uri.parse(updateUserURL),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'id':id,
+          'name': name,          
+          'contactNumber':contactnumber,
+          'address':address,
+        }));           
+    switch (response.statusCode) {
+      case 200:        
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['error'];
+        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
+        break;
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      case 302: 
+        EasyLoading.showInfo('Email provided already exist');        
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:    
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    print(e.toString());
+    apiResponse.error = "Server Error";
+  }
+  EasyLoading.dismiss();
+  return apiResponse;
+}
+
+
 //getuser
 Future<ApiResponse> getuserDetails() async {
   ApiResponse apiResponse = ApiResponse();

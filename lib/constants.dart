@@ -20,6 +20,7 @@ const baseURL = "http://144.126.210.250/api/public/";
 
 const loginURL = baseURL + 'api/login';
 const registerURL = baseURL + 'api/register';
+const updateUserURL = baseURL + 'api/edit-user';
 const logoutURL = baseURL + 'api/logout';
 const userURL = baseURL + 'api/getUser';
 

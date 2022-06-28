@@ -208,7 +208,9 @@ class _BodyState extends State<Body> {
       SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString('name', user.name ?? '');
     await pref.setString('token', user.token ?? '');
-    await pref.setString('email', user.email ?? '');    
+    await pref.setString('email', user.email ?? '');
+    await pref.setString('contactNumber', user.contact ?? ''); 
+    await pref.setString('address', user.address ?? '');     
     await pref.setString('userImage', user.userImage ?? '');
     await pref.setInt('userId', user.id ?? 0);
     await pref.setString('type', user.type ?? '');
