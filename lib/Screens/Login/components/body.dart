@@ -70,7 +70,7 @@ class _BodyState extends State<Body> {
         _saveAndRedirectToHome(loginResp.data as User);
       }
       else if(loginResp.error=="invalid credentials"){
-        ApiResponse signupResp = await register(_gmailUser!.displayName!, _gmailUser!.email, _gmailUser!.id, 'google' ,_gmailUser!.photoUrl!, '', '');
+        ApiResponse signupResp = await register(_gmailUser!.displayName!, _gmailUser!.email, _gmailUser!.id,_gmailUser!.photoUrl!, '', '' ,'google' );
         if(signupResp.error==null){
           _saveAndRedirectToHome(signupResp.data as User);
         }
@@ -107,7 +107,7 @@ class _BodyState extends State<Body> {
       }
       else if(resLogin.error=="invalid credentials")
       {
-        ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(), 'apple' ,'', '', '');
+        ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(),'', '', '', 'apple');
         if(resSignUp.error==null){
           _saveAndRedirectToHome(resSignUp.data as User);
         }
@@ -120,7 +120,7 @@ class _BodyState extends State<Body> {
       }            
     }
     else{
-      EasyLoading.showInfo('This apple account already connected to this app, please remove it first via Settings.');
+      EasyLoading.showInfo('This apple account still already connected to this app, please remove it first via Settings.');
     }
     print(appleUser);
     } 
@@ -180,7 +180,7 @@ class _BodyState extends State<Body> {
             _saveAndRedirectToHome(respLogin.data as User);        
           }
           else if(respLogin.error=="invalid credentials"){               
-            ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'], 'facebook' ,img2['url'], '0123456789', 'Address');
+            ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'] ,img2['url'], '0123456789', 'Address', 'facebook');
             if(resSignUp.error==null){                  
             _saveAndRedirectToHome(resSignUp.data as User);
             }  
