@@ -8,6 +8,7 @@ import 'package:mylastwords/Screens/Welcome/components/background.dart';
 import 'package:mylastwords/Screens/Welcome/welcome_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/rounded_button.dart';
+import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
 import 'package:mylastwords/models/user.dart';
@@ -42,42 +43,34 @@ class SplashScreenState extends State<SplashScreen> {
       ApiResponse response = await getuserDetails();
       if(response.error==null){
         _saveAndRedirectToHome(response.data as User);
-      }      
-    }
-    else if (token==""){
-        Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return WelcomeScreen();
-          },
-        ),
-      );
-    }
+      }  
+      else if(response.error=="Unauthorized")      
+      {
+         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => WelcomeScreen()),(route) => false);
+      }
+      else{
+        ToastMessage().toastMsgError(response.error.toString());
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => WelcomeScreen()),(route) => false);
+      }
+    }    
   }
 
   void _saveAndRedirectToHome(User user) async {    
     if(user.status.toString()=="deactivated")
     {
       EasyLoading.showInfo("User is deactivated. Please contact administrator");
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LoginScreen()),(route) => false);
     }
     else{
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setString('name', user.name ?? '');    
-    await pref.setString('email', user.email ?? '');
-    await pref.setString('contactNumber', user.contact ?? ''); 
-    await pref.setString('address', user.address ?? '');     
-    await pref.setString('userImage', user.userImage ?? '');
-    await pref.setInt('userId', user.id ?? 0);
-    await pref.setString('type', user.type ?? '');
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return DashBoard();
-        },
-      ),
-    );
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      await pref.setString('name', user.name ?? '');    
+      await pref.setString('email', user.email ?? '');
+      await pref.setString('contactNumber', user.contact ?? ''); 
+      await pref.setString('address', user.address ?? '');     
+      await pref.setString('userImage', user.userImage ?? '');
+      await pref.setInt('userId', user.id ?? 0);
+      await pref.setString('type', user.type ?? '');
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => DashBoard()),(route) => false);
     }    
   }
 
