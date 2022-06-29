@@ -215,14 +215,7 @@ class _BodyState extends State<Body> {
     await pref.setString('userImage', user.userImage ?? '');
     await pref.setInt('userId', user.id ?? 0);
     await pref.setString('type', user.type ?? '');
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return DashBoard();
-        },
-      ),
-    );    
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => DashBoard()),(route) => false);    
     }
     
   }
