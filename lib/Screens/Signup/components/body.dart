@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/Login/login_screen.dart';
 import 'package:mylastwords/Screens/Signup/components/background.dart';
 import 'package:mylastwords/Screens/Login/components/or_divider.dart';
@@ -64,7 +65,7 @@ class _BodyState extends State<Body> {
             },
           ),
         );
-        ToastMessage().toastMsgDark('Registration Successfull');
+        EasyLoading.showInfo('Successfully Signed Up '+txtEmail.text);
       } else {
         ToastMessage().toastMsgDark('${response.error}');
       }

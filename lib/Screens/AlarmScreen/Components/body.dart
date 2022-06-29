@@ -178,6 +178,7 @@ class _BodyState extends State<Body> {
                                                         itemCount: _texts.length,
                                                         itemBuilder: (_, index) {
                                                           return CheckboxListTile(
+                                                            activeColor: headerBackgroundColor,
                                                             title: Text(_texts[index]),
                                                             value: _isChecked[index],
                                                             onChanged: (val) {
@@ -197,7 +198,7 @@ class _BodyState extends State<Body> {
                                           SizedBox(
                                               width: MediaQuery.of(context).size.width,
                                               child: RaisedButton(
-                                                color: Colors.blue,
+                                                color: headerBackgroundColor,
                                                 onPressed: (){                 
                                                   for(var i = 0; i < _texts.length; i++)
                                                   {
@@ -217,7 +218,11 @@ class _BodyState extends State<Body> {
                                                   });
                                                   Navigator.pop(context);                                                 
                                                    },                                                 
-                                                child: Text('Select'),
+                                                child: Text(
+                                                  'Select',
+                                                  style: TextStyle(
+                                                      color: txtColorLight),
+                                                ),
                                               ))
                                         ],
                                       );
@@ -257,19 +262,21 @@ class _BodyState extends State<Body> {
                                                         itemCount: _alarmSoundList.length,
                                                         itemBuilder: (_, index) {
                                                           return RadioListTile(
-                                                        title: Text(_alarmSoundList[index].toString()),
-                                                        value: alarmSoundFiles[index],
-                                                        groupValue: selectedValue,
-                                                        selected: selectedValue == alarmSoundFiles[index],
-                                                        onChanged: (val) async {                                                                
-                                                          await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
-                                                          setSoundState(() {
-                                                            selectedValue = val.toString();
-                                                          });
-                                                          setModalState((){                                                    
-                                                            txtSoundDisplay = _alarmSoundList[index];
-                                                          });
-                                                          },
+                                                            activeColor: headerBackgroundColor,
+                                                            title: Text(_alarmSoundList[index].toString()),
+                                                            value: alarmSoundFiles[index],
+                                                            groupValue: selectedValue,
+                                                            selected: selectedValue == alarmSoundFiles[index],
+                                                            onChanged: (val) async {                                                           
+                                                                await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
+                                                                  setSoundState(() {
+                                                                    selectedValue = val.toString();
+                                                                  });
+                                                                  setModalState((){                                                    
+                                                                    txtSoundDisplay = _alarmSoundList[index];
+                                                                  });
+                                                                  print('selected:' + selectedValue.toString());
+                                                              },
                                                           );
                                                         },
                                                       ),
@@ -282,7 +289,7 @@ class _BodyState extends State<Body> {
                                           SizedBox(
                                               width: MediaQuery.of(context).size.width,
                                               child: RaisedButton(
-                                                color: Colors.blue,
+                                                color: headerBackgroundColor,
                                                 onPressed: (){                                                                   
                                                   setSoundState((){
                                                     txtSound = selectedValue!;
@@ -292,7 +299,11 @@ class _BodyState extends State<Body> {
                                                     player.stop();
                                                     Navigator.pop(context);                                                                                                    
                                                    },                                                 
-                                                child: Text('Select'),
+                                                child: Text(
+                                                  'Select',
+                                                  style: TextStyle(
+                                                      color: txtColorLight),
+                                                ),
                                               ))
                                         ],
                                       );
@@ -320,7 +331,9 @@ class _BodyState extends State<Body> {
                                           onChanged: (value) {     
                                           },
                                           controller: txtInputTitle,
-                                          decoration: InputDecoration(hintText: "Enter here"),
+                                          decoration: InputDecoration(focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: headerBackgroundColor, width: 1.0),
+                                          ), hintText: "Enter here"),
                                         ),
                                         actions: <Widget>[
                                       TextButton(
