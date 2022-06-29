@@ -38,15 +38,7 @@ class _AddNoteState extends State<AddNote> {
     } else {
       ApiResponse response = await addNote(txtTitle.text, txtNote.text);
       if (response.error == null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return DashBoard();
-            },
-          ),
-        );
-        ToastMessage().toastMsgDark('Added Successful');
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => true);        
       } else {
         ToastMessage().toastMsgDark('${response.error}');
       }
