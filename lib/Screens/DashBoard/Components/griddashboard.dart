@@ -107,10 +107,7 @@ class GridDashBoard extends StatelessWidget {
                       host:'mylastwords.life',
                       path: '/privacy-policy',                      
                     );
-                    if(await canLaunchUrl(url)){
-                      print('awd');
-                      await launchUrl(url);
-                    }
+                    await launchUrl(url);
                   }
                 },
                 child: Container(

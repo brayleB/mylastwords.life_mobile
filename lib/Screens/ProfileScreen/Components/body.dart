@@ -33,8 +33,7 @@ class _BodyState extends State<Body> {
 
   @override
   void initState() {
-    loadDetails();
-    accountTypeState();
+    loadDetails();   
     super.initState();
   }
 
@@ -47,19 +46,17 @@ class _BodyState extends State<Body> {
       txtAddress.text = (prefs.getString('address') ?? '');
       userImg = (prefs.getString('userImage') ?? 'https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png');     
       accountType = (prefs.getString('type') ?? ''); 
-    });      
-  }
-
-  accountTypeState(){
-    if(accountType=="apple"||accountType=="google"||accountType=="facebook"){
+    });   
+      if(accountType=="apple"||accountType=="google"||accountType=="facebook"){
       editableData = false;
       displayUserType = "You are now currently logged in with "+accountType;
-    }
-    else{
-      editableData = true;
-      displayUserType = "You are using MyLastWords Account";
-    }
+      }
+      else{
+        editableData = true;
+        displayUserType = "You are using MyLastWords Account";
+      }
   }
+
 
   updateingValidator() async {
     var errmsg = "";

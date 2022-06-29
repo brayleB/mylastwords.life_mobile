@@ -52,7 +52,10 @@ class SplashScreenState extends State<SplashScreen> {
         ToastMessage().toastMsgError(response.error.toString());
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => WelcomeScreen()),(route) => false);
       }
-    }    
+    } 
+    else{
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => WelcomeScreen()),(route) => false);
+    }   
   }
 
   void _saveAndRedirectToHome(User user) async {    
