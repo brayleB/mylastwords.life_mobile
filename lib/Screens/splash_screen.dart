@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/Login/login_screen.dart';
 import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
 import 'package:mylastwords/Screens/Signup/signup_screen.dart';
 import 'package:mylastwords/Screens/Welcome/components/background.dart';
 import 'package:mylastwords/Screens/Welcome/welcome_screen.dart';
+import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/constants.dart';
+import 'package:mylastwords/models/api_response.dart';
+import 'package:mylastwords/models/user.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:flutter_svg/svg.dart';
@@ -35,14 +39,10 @@ class SplashScreenState extends State<SplashScreen> {
       token = (prefs.getString('token') ?? '');
     });
     if (token != "") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return DashBoard();
-          },
-        ),
-      );
+      ApiResponse response = await getuserDetails();
+      if(response.error==null){
+        _saveAndRedirectToHome(response.data as User);
+      }      
     }
     else if (token==""){
         Navigator.push(
@@ -54,6 +54,31 @@ class SplashScreenState extends State<SplashScreen> {
         ),
       );
     }
+  }
+
+  void _saveAndRedirectToHome(User user) async {    
+    if(user.status.toString()=="deactivated")
+    {
+      EasyLoading.showInfo("User is deactivated. Please contact administrator");
+    }
+    else{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString('name', user.name ?? '');    
+    await pref.setString('email', user.email ?? '');
+    await pref.setString('contactNumber', user.contact ?? ''); 
+    await pref.setString('address', user.address ?? '');     
+    await pref.setString('userImage', user.userImage ?? '');
+    await pref.setInt('userId', user.id ?? 0);
+    await pref.setString('type', user.type ?? '');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return DashBoard();
+        },
+      ),
+    );
+    }    
   }
 
     @override

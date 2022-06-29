@@ -22,7 +22,7 @@ const loginURL = baseURL + 'api/login';
 const registerURL = baseURL + 'api/register';
 const updateUserURL = baseURL + 'api/edit-user';
 const logoutURL = baseURL + 'api/logout';
-const userURL = baseURL + 'api/getUser';
+const userURL = baseURL + 'api/user';
 
 //Notes API Endpoints
 const addNoteURL = baseURL + 'api/addnote';

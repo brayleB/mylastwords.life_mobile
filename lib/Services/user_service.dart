@@ -148,6 +148,7 @@ Future<ApiResponse> updateUserCall(
 
 //getuser
 Future<ApiResponse> getuserDetails() async {
+  EasyLoading.show(status: 'Loading User Information');
   ApiResponse apiResponse = ApiResponse();
   try {
     String token = await getToken();
@@ -168,7 +169,8 @@ Future<ApiResponse> getuserDetails() async {
   } catch (e) {
     apiResponse.error = "Server Error.";
   }
-  return apiResponse;
+  EasyLoading.dismiss();
+  return apiResponse;  
 }
 
 
