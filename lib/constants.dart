@@ -18,6 +18,8 @@ const ringToneBaseUrl = "AlarmRingtones/";
 const baseURL = "http://144.126.210.250/api/public/";
 // const baseURL = "http://127.0.0.1:8000";
 
+const loginOthersURL = baseURL + 'api/loginOthers';
+const registerOthersURL = baseURL + 'api/registerOthers';
 const loginURL = baseURL + 'api/login';
 const registerURL = baseURL + 'api/register';
 const updateUserURL = baseURL + 'api/edit-user';

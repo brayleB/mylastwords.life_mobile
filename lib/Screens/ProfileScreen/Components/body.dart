@@ -47,8 +47,12 @@ class _BodyState extends State<Body> {
       userImg = (prefs.getString('userImage') ?? 'https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png');     
       accountType = (prefs.getString('type') ?? ''); 
     });   
-      if(accountType=="apple"||accountType=="google"||accountType=="facebook"){
+      if(accountType=="google"||accountType=="facebook"){
       editableData = false;
+      displayUserType = "You are now currently logged in with "+accountType;
+      }
+      else if(accountType=="apple"){
+      editableData = true;
       displayUserType = "You are now currently logged in with "+accountType;
       }
       else{
@@ -152,7 +156,7 @@ class _BodyState extends State<Body> {
                 ),             
                  SizedBox(height: size.height * 0.015),                        
                  RoundedInputField(
-                    isEnable: false,
+                    isEnable: editableData,
                     icon: Icons.email_outlined,
                     controller: txtEmail,
                     hintText: "Email",
