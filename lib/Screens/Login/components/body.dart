@@ -95,35 +95,41 @@ class _BodyState extends State<Body> {
     EasyLoading.show(status: 'Apple Signing in...');  
     try{
       final appleUser = await SignInWithApple.getAppleIDCredential(scopes: 
-      [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,                       
-      ],
-    );        
-    if(appleUser.email!=null)
-    {
-      ApiResponse resLogin = await login(appleUser.email.toString(), appleUser.userIdentifier.toString());
-      if(resLogin.error==null){
-        _saveAndRedirectToHome(resLogin.data as User);
-      }
-      else if(resLogin.error=="invalid credentials")
-      {
-                ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(),'', '', '', 'apple');
-        if(resSignUp.error==null){
-          _saveAndRedirectToHome(resSignUp.data as User);
-        }
+        [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,                       
+        ],
+      );            
+        if(appleUser.identityToken!=null){
+          ApiResponse resLogin = await loginOthers(appleUser.userIdentifier.toString());
+          if(resLogin.error==null){
+            _saveAndRedirectToHome(resLogin.data as User);
+          }
+          else if(resLogin.error=="invalid credentials")
+          {            
+            if(appleUser.email==null){
+              ApiResponse resSignUp = await registerOthers('New User' , '', appleUser.userIdentifier.toString(),'', '', '', 'apple');
+              if(resSignUp.error==null){
+                _saveAndRedirectToHome(resSignUp.data as User);
+              }
+              else{
+                ToastMessage().toastMsgError(resSignUp.error.toString());
+              }
+            }  
+            else{
+              ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(),'', '', '', 'apple');
+              if(resSignUp.error==null){
+                _saveAndRedirectToHome(resSignUp.data as User);
+              }
+              else{
+                ToastMessage().toastMsgError(resSignUp.error.toString());
+              }
+            }    
+          }
         else{
-          ToastMessage().toastMsgError(resSignUp.error.toString());
-        }
-      }
-      else{
-        ToastMessage().toastMsgError(resLogin.error.toString());
-      }            
-    }
-    else{
-      EasyLoading.showInfo('This apple account already connected to this app, please remove it first via Settings.');
-    }
-    print(appleUser);
+          ToastMessage().toastMsgError(resLogin.error.toString());
+        } 
+      }                     
     } 
     catch(e){
       ToastMessage().toastMsgDark(e.toString());
