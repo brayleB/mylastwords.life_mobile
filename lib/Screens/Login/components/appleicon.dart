@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class SocalIcon extends StatelessWidget {
+class AppleIcon extends StatelessWidget {
   final String? iconSrc;
   final void Function() press;
-  const SocalIcon({
+  const AppleIcon({
     Key? key,
     this.iconSrc,
     required this.press,

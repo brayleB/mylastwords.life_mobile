@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/Login/components/appleicon.dart';
@@ -9,7 +7,6 @@ import 'package:mylastwords/Screens/Login/components/background.dart';
 import 'package:mylastwords/Screens/Signup/signup_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/already_have_an_account_acheck.dart';
-import 'package:mylastwords/components/loader.dart';
 import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/components/rounded_input_field.dart';
 import 'package:mylastwords/components/rounded_password_field.dart';
@@ -22,7 +19,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:http/http.dart' as http;
 
 
 import 'or_divider.dart';
@@ -309,7 +305,8 @@ class _BodyState extends State<Body> {
                  AppleIcon(
                   iconSrc: "assets/icons/apple.svg",
                   press: () { if(Platform.isIOS){
-                     appleSignIn();
+                    ToastMessage().toastMsgDark('Under development');
+                    //  appleSignIn();
                   }
                   else{
                     EasyLoading.showInfo('For IOS device only');

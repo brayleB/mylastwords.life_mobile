@@ -70,10 +70,50 @@ class _BodyState extends State<Body> {
   List<AlarmInfo>? _currentAlarms;
   String? selectedValue;
   final player = AudioPlayer();
-  String? editAlarmString, editTxtTitle, editTxtRepeat, editTxtSound;  
+  String? editAlarmString, editTxtTitle, editTxtRepeat, editTxtSound; 
+
+
+  final _timePickerTheme = TimePickerThemeData(
+  backgroundColor: darkBackground,
+  hourMinuteShape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+    side: BorderSide(color: ColorTheme1, width: 1),
+  ),
+  dayPeriodBorderSide: const BorderSide(color: darkBackground, width: 4),
+  dayPeriodColor: MaterialStateColor.resolveWith((states) =>
+      states.contains(MaterialState.selected) ? ColorTheme2 : Colors.blueGrey.shade800),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(5)),
+    side: BorderSide(color: ColorTheme1, width: 2),
+  ),
+  dayPeriodTextColor: MaterialStateColor.resolveWith(
+      (states) => states.contains(MaterialState.selected) ? ColorTheme10 : ColorTheme2),
+  dayPeriodShape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+    side: BorderSide(color: ColorTheme1, width: 1),
+  ),
+  hourMinuteColor: MaterialStateColor.resolveWith((states) =>
+      states.contains(MaterialState.selected) ? ColorTheme2 : Colors.blueGrey.shade800),
+  hourMinuteTextColor: MaterialStateColor.resolveWith(
+      (states) => states.contains(MaterialState.selected) ? ColorTheme10 : ColorTheme2),
+  dialHandColor: Colors.blueGrey.shade700,
+  dialBackgroundColor: Colors.blueGrey.shade800,
+  hourMinuteTextStyle: const TextStyle(fontSize: 40, fontWeight: FontWeight.w500),
+  dayPeriodTextStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+  helpTextStyle:
+      const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+  inputDecorationTheme: const InputDecorationTheme(
+    border: InputBorder.none,
+    contentPadding: EdgeInsets.all(0),
+  ),
+  dialTextColor: MaterialStateColor.resolveWith(
+      (states) => states.contains(MaterialState.selected) ? ColorTheme2 : Colors.white),
+  entryModeIconColor: ColorTheme1,
+);
+
   @override
   void initState() {
-    title = "";
+    title = "Hello";
     txtRepeat = "No Repeat";
     txtSoundDisplay = "Cold";
     txtSound = "cold";
@@ -123,9 +163,25 @@ class _BodyState extends State<Body> {
                         FlatButton(
                           onPressed: () async {
                             var selectedTime = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
-                            );
+                                                              context: context,
+                                                              initialTime: TimeOfDay.now(),
+                                                              builder: (context, child) {
+                                                                return Theme(
+                                                                  data: Theme.of(context).copyWith(
+                                                                    // This uses the _timePickerTheme defined above
+                                                                    timePickerTheme: _timePickerTheme,
+                                                                    textButtonTheme: TextButtonThemeData(
+                                                                      style: ButtonStyle(
+                                                                        backgroundColor: MaterialStateColor.resolveWith((states) => darkBackground),
+                                                                        foregroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
+                                                                        overlayColor: MaterialStateColor.resolveWith((states) => Colors.deepOrange),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  child: child!,
+                                                                );
+                                                              },
+                                                            );
                             if (selectedTime != null) {
                               final now = DateTime.now();
                               var selectedDateTime = DateTime(
@@ -495,10 +551,25 @@ class _BodyState extends State<Body> {
                                                       onPressed: () async {
                                                         var selectedTime =
                                                             await showTimePicker(
-                                                          context: context,
-                                                          initialTime:
-                                                              TimeOfDay.now(),
-                                                        );
+                                                              context: context,
+                                                              initialTime: TimeOfDay.now(),
+                                                              builder: (context, child) {
+                                                                return Theme(
+                                                                  data: Theme.of(context).copyWith(
+                                                                    // This uses the _timePickerTheme defined above
+                                                                    timePickerTheme: _timePickerTheme,
+                                                                    textButtonTheme: TextButtonThemeData(
+                                                                      style: ButtonStyle(
+                                                                        backgroundColor: MaterialStateColor.resolveWith((states) => darkBackground),
+                                                                        foregroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
+                                                                        overlayColor: MaterialStateColor.resolveWith((states) => Colors.deepOrange),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  child: child!,
+                                                                );
+                                                              },
+                                                            );
                                                         if (selectedTime !=
                                                             null) {
                                                           final now =
