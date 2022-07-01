@@ -4,9 +4,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
+import 'package:mylastwords/Screens/GalleryScreen/gallery_screen.dart';
 import 'package:mylastwords/Services/gallery_services.dart';
 
 import 'package:mylastwords/components/header_tab_add.dart';
+import 'package:mylastwords/components/toastmessage.dart';
 
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
@@ -18,10 +20,7 @@ class PreviewImage extends StatelessWidget {
 
   PreviewImage({Key? key, required this.fileImage}) : super(key: key);
 
-  void _saveImage() async {
-    ApiResponse response = await uploadImage(fileImage!);   
-    print(response.error.toString());
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +28,14 @@ class PreviewImage extends StatelessWidget {
       appBar: HeaderTabAdd(
         backgroundcolor: headerBackgroundColor,
         title: "Preview",
-        saveFunc: () {
-          _saveImage();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return DashBoard();
-              },
-            ),
-          );
+        saveFunc: () async {
+          ApiResponse response = await uploadImage(fileImage!);   
+          if(response.error==null){
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => GalleryScreen()),(route) => true);
+          }
+          else{
+            ToastMessage().toastMsgError(response.error.toString());
+          }
         },       
       ),      
       body: Container(  

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/header_tab_back.dart';
 import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/components/rounded_input_field.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
+import 'package:mylastwords/models/api_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:flutter_svg/svg.dart';
@@ -31,8 +33,7 @@ class _BodyState extends State<Body> {
 
   @override
   void initState() {
-    loadDetails();
-    accountTypeState();
+    loadDetails();   
     super.initState();
   }
 
@@ -45,26 +46,31 @@ class _BodyState extends State<Body> {
       txtAddress.text = (prefs.getString('address') ?? '');
       userImg = (prefs.getString('userImage') ?? 'https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png');     
       accountType = (prefs.getString('type') ?? ''); 
-    });      
-  }
-
-  accountTypeState(){
-    if(accountType=="apple"||accountType=="google"||accountType=="facebook"){
+    });   
+      if(accountType=="google"||accountType=="facebook"){
       editableData = false;
       displayUserType = "You are now currently logged in with "+accountType;
-    }
-    else{
+      }
+      else if(accountType=="apple"){
       editableData = true;
-      displayUserType = "You are using MyLastWords Account";
-    }
+      displayUserType = "You are now currently logged in with "+accountType;
+      }
+      else{
+        editableData = true;
+        displayUserType = "You are using MyLastWords Account";
+      }
   }
+
 
   updateingValidator() async {
     var errmsg = "";
-    if(txtName.text=="")
+    if(txtEmail.text=="")
     {
-      errmsg="Please enter your full name";
+      errmsg="Please provide your email";
     }  
+    else if(txtName.text==""){
+      errmsg="Please enter your contact number";
+    } 
     else if(txtContactNumber.text==""){
       errmsg="Please enter your contact number";
     }  
@@ -72,14 +78,24 @@ class _BodyState extends State<Body> {
       errmsg="Please enter your complete address";
     }
     else{
-
+      ApiResponse response = await updateUserCall(txtName.text, txtContactNumber.text, txtAddress.text);
+        if(response.error==null){
+          EasyLoading.showInfo('Successfully Updated User');
+          SharedPreferences prefs = await SharedPreferences.getInstance();                     
+          await prefs.setString('name',txtName.text);
+          await prefs.setString('contactNumber',txtContactNumber.text);
+          await prefs.setString('address',txtAddress.text);  
+          loadDetails();        
+      }
+      else{
+        ToastMessage().toastMsgError(response.error.toString());
+      }
     }
     if(errmsg!=""){
       EasyLoading.showError(errmsg);
     }
     else{}
   }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -143,7 +159,7 @@ class _BodyState extends State<Body> {
                 ),             
                  SizedBox(height: size.height * 0.015),                        
                  RoundedInputField(
-                    isEnable: false,
+                    isEnable: editableData,
                     icon: Icons.email_outlined,
                     controller: txtEmail,
                     hintText: "Email",
@@ -175,8 +191,8 @@ class _BodyState extends State<Body> {
                     bgcolor: headerBackgroundColor,
                     text: "Update Profile",
                     press: () {   
-                      updateingValidator();
-                      ToastMessage().toastMsgError('Not yet implemented');                                                                 
+                      ToastMessage().toastMsgDark('Under development');
+                      // updateingValidator();                                                                                    
                     },
                   ),     
                   RoundedButton(

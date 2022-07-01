@@ -103,14 +103,7 @@ class _BodyState extends State<Body> {
                                     ApiResponse response = await logoutUser();
                                     if(response.error==null)
                                     {
-                                      logout().then((value) => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return LoginScreen();
-                                            },
-                                          ),
-                                        ));
+                                      logout().then((value) => Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LoginScreen()),(route) => false));
                                     }                                                              
                                     else{
                                       ToastMessage().toastMsgError(response.error.toString());

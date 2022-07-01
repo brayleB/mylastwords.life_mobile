@@ -70,13 +70,53 @@ class _BodyState extends State<Body> {
   List<AlarmInfo>? _currentAlarms;
   String? selectedValue;
   final player = AudioPlayer();
-  String? editAlarmString, editTxtTitle, editTxtRepeat, editTxtSound;  
+  String? editAlarmString, editTxtTitle, editTxtRepeat, editTxtSound; 
+
+
+  final _timePickerTheme = TimePickerThemeData(
+  backgroundColor: darkBackground,
+  hourMinuteShape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+    side: BorderSide(color: ColorTheme1, width: 1),
+  ),
+  dayPeriodBorderSide: const BorderSide(color: darkBackground, width: 4),
+  dayPeriodColor: MaterialStateColor.resolveWith((states) =>
+      states.contains(MaterialState.selected) ? ColorTheme2 : Colors.blueGrey.shade800),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(5)),
+    side: BorderSide(color: ColorTheme1, width: 2),
+  ),
+  dayPeriodTextColor: MaterialStateColor.resolveWith(
+      (states) => states.contains(MaterialState.selected) ? ColorTheme10 : ColorTheme2),
+  dayPeriodShape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+    side: BorderSide(color: ColorTheme1, width: 1),
+  ),
+  hourMinuteColor: MaterialStateColor.resolveWith((states) =>
+      states.contains(MaterialState.selected) ? ColorTheme2 : Colors.blueGrey.shade800),
+  hourMinuteTextColor: MaterialStateColor.resolveWith(
+      (states) => states.contains(MaterialState.selected) ? ColorTheme10 : ColorTheme2),
+  dialHandColor: Colors.blueGrey.shade700,
+  dialBackgroundColor: Colors.blueGrey.shade800,
+  hourMinuteTextStyle: const TextStyle(fontSize: 40, fontWeight: FontWeight.w500),
+  dayPeriodTextStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+  helpTextStyle:
+      const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+  inputDecorationTheme: const InputDecorationTheme(
+    border: InputBorder.none,
+    contentPadding: EdgeInsets.all(0),
+  ),
+  dialTextColor: MaterialStateColor.resolveWith(
+      (states) => states.contains(MaterialState.selected) ? ColorTheme2 : Colors.white),
+  entryModeIconColor: ColorTheme1,
+);
+
   @override
   void initState() {
-    title = "Title";
+    title = "Hello";
     txtRepeat = "No Repeat";
-    txtSoundDisplay = "Sound";
-    txtSound = "Sound";
+    txtSoundDisplay = "Cold";
+    txtSound = "cold";
     _alarmTime = DateTime.now();
     _alarmHelper.initializaDatabase().then((value) {      
       loadAlarms();
@@ -123,9 +163,25 @@ class _BodyState extends State<Body> {
                         FlatButton(
                           onPressed: () async {
                             var selectedTime = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
-                            );
+                                                              context: context,
+                                                              initialTime: TimeOfDay.now(),
+                                                              builder: (context, child) {
+                                                                return Theme(
+                                                                  data: Theme.of(context).copyWith(
+                                                                    // This uses the _timePickerTheme defined above
+                                                                    timePickerTheme: _timePickerTheme,
+                                                                    textButtonTheme: TextButtonThemeData(
+                                                                      style: ButtonStyle(
+                                                                        backgroundColor: MaterialStateColor.resolveWith((states) => darkBackground),
+                                                                        foregroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
+                                                                        overlayColor: MaterialStateColor.resolveWith((states) => Colors.deepOrange),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  child: child!,
+                                                                );
+                                                              },
+                                                            );
                             if (selectedTime != null) {
                               final now = DateTime.now();
                               var selectedDateTime = DateTime(
@@ -147,13 +203,20 @@ class _BodyState extends State<Body> {
                           ),
                         ),
                         ListTile(
-                            title:  Text(
-                                  txtRepeat,
+                            leading:  Text(
+                                  'Repeat - ',
                                   style: TextStyle(
                                       color: txtColorDark,
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500),
                                 ),
+                            title: Text(
+                              txtRepeat,
+                              style: TextStyle(
+                                  color: txtColorDark,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500),
+                            ),
                           trailing: Icon(Icons.arrow_forward_ios),
                           onTap: (){                       
                                   showDialog(    
@@ -178,6 +241,7 @@ class _BodyState extends State<Body> {
                                                         itemCount: _texts.length,
                                                         itemBuilder: (_, index) {
                                                           return CheckboxListTile(
+                                                            activeColor: headerBackgroundColor,
                                                             title: Text(_texts[index]),
                                                             value: _isChecked[index],
                                                             onChanged: (val) {
@@ -197,7 +261,7 @@ class _BodyState extends State<Body> {
                                           SizedBox(
                                               width: MediaQuery.of(context).size.width,
                                               child: RaisedButton(
-                                                color: Colors.blue,
+                                                color: headerBackgroundColor,
                                                 onPressed: (){                 
                                                   for(var i = 0; i < _texts.length; i++)
                                                   {
@@ -217,7 +281,11 @@ class _BodyState extends State<Body> {
                                                   });
                                                   Navigator.pop(context);                                                 
                                                    },                                                 
-                                                child: Text('Select'),
+                                                child: Text(
+                                                  'Select',
+                                                  style: TextStyle(
+                                                      color: txtColorLight),
+                                                ),
                                               ))
                                         ],
                                       );
@@ -227,7 +295,14 @@ class _BodyState extends State<Body> {
                               },
                         ),
                         ListTile(
-                          title:  Text(
+                          leading:  Text(
+                                  'Sound - ',
+                                  style: TextStyle(
+                                      color: txtColorDark,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                          title: Text(
                                   txtSoundDisplay,
                                   style: TextStyle(
                                       color: txtColorDark,
@@ -257,19 +332,21 @@ class _BodyState extends State<Body> {
                                                         itemCount: _alarmSoundList.length,
                                                         itemBuilder: (_, index) {
                                                           return RadioListTile(
-                                                        title: Text(_alarmSoundList[index].toString()),
-                                                        value: alarmSoundFiles[index],
-                                                        groupValue: selectedValue,
-                                                        selected: selectedValue == alarmSoundFiles[index],
-                                                        onChanged: (val) async {                                                                
-                                                          await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
-                                                          setSoundState(() {
-                                                            selectedValue = val.toString();
-                                                          });
-                                                          setModalState((){                                                    
-                                                            txtSoundDisplay = _alarmSoundList[index];
-                                                          });
-                                                          },
+                                                            activeColor: headerBackgroundColor,
+                                                            title: Text(_alarmSoundList[index].toString()),
+                                                            value: alarmSoundFiles[index],
+                                                            groupValue: alarmSoundFiles[0],
+                                                            selected: selectedValue == alarmSoundFiles[index],
+                                                            onChanged: (val) async {                                                           
+                                                                await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
+                                                                  setSoundState(() {
+                                                                    selectedValue = val.toString();
+                                                                  });
+                                                                  setModalState((){                                                    
+                                                                    txtSoundDisplay = _alarmSoundList[index];
+                                                                  });
+                                                                  print('selected:' + selectedValue.toString());
+                                                              },
                                                           );
                                                         },
                                                       ),
@@ -282,7 +359,7 @@ class _BodyState extends State<Body> {
                                           SizedBox(
                                               width: MediaQuery.of(context).size.width,
                                               child: RaisedButton(
-                                                color: Colors.blue,
+                                                color: headerBackgroundColor,
                                                 onPressed: (){                                                                   
                                                   setSoundState((){
                                                     txtSound = selectedValue!;
@@ -292,7 +369,11 @@ class _BodyState extends State<Body> {
                                                     player.stop();
                                                     Navigator.pop(context);                                                                                                    
                                                    },                                                 
-                                                child: Text('Select'),
+                                                child: Text(
+                                                  'Select',
+                                                  style: TextStyle(
+                                                      color: txtColorLight),
+                                                ),
                                               ))
                                         ],
                                       );
@@ -302,13 +383,20 @@ class _BodyState extends State<Body> {
                           },
                         ),
                         ListTile(
-                          title:  Text(
-                                  title,
+                          leading:  Text(
+                                  'Label - ',
                                   style: TextStyle(
                                       color: txtColorDark,
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500),
                                 ),
+                            title: Text(
+                              title,
+                              style: TextStyle(
+                                  color: txtColorDark,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500),
+                            ),
                           trailing: Icon(Icons.arrow_forward_ios),
                           onTap: () { showDialog(                            
                           context: context,
@@ -320,7 +408,9 @@ class _BodyState extends State<Body> {
                                           onChanged: (value) {     
                                           },
                                           controller: txtInputTitle,
-                                          decoration: InputDecoration(hintText: "Enter here"),
+                                          decoration: InputDecoration(focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: headerBackgroundColor, width: 1.0),
+                                          ), hintText: "Enter here"),
                                         ),
                                         actions: <Widget>[
                                       TextButton(
@@ -461,10 +551,25 @@ class _BodyState extends State<Body> {
                                                       onPressed: () async {
                                                         var selectedTime =
                                                             await showTimePicker(
-                                                          context: context,
-                                                          initialTime:
-                                                              TimeOfDay.now(),
-                                                        );
+                                                              context: context,
+                                                              initialTime: TimeOfDay.now(),
+                                                              builder: (context, child) {
+                                                                return Theme(
+                                                                  data: Theme.of(context).copyWith(
+                                                                    // This uses the _timePickerTheme defined above
+                                                                    timePickerTheme: _timePickerTheme,
+                                                                    textButtonTheme: TextButtonThemeData(
+                                                                      style: ButtonStyle(
+                                                                        backgroundColor: MaterialStateColor.resolveWith((states) => darkBackground),
+                                                                        foregroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
+                                                                        overlayColor: MaterialStateColor.resolveWith((states) => Colors.deepOrange),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  child: child!,
+                                                                );
+                                                              },
+                                                            );
                                                         if (selectedTime !=
                                                             null) {
                                                           final now =

@@ -1,14 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mylastwords/Screens/Login/components/appleicon.dart';
 import 'package:mylastwords/Screens/Login/components/background.dart';
 import 'package:mylastwords/Screens/Signup/signup_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/already_have_an_account_acheck.dart';
-import 'package:mylastwords/components/loader.dart';
 import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/components/rounded_input_field.dart';
 import 'package:mylastwords/components/rounded_password_field.dart';
@@ -21,7 +19,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:http/http.dart' as http;
 
 
 import 'or_divider.dart';
@@ -61,8 +58,8 @@ class _BodyState extends State<Body> {
   }
 
   void gmailSignIn() async {
-    EasyLoading.show();
-    try {
+  EasyLoading.show();
+  try {
     _gmailUser = await _googleSignIn.signIn();    
       if(_gmailUser!=null){
       ApiResponse loginResp = await login(_gmailUser!.email, _gmailUser!.id);           
@@ -83,7 +80,8 @@ class _BodyState extends State<Body> {
       }
     }
   } catch (e) {
-    ToastMessage().toastMsgDark(e.toString());
+    print(e.toString());
+    ToastMessage().toastMsgDark((e.toString()));
   }            
     EasyLoading.dismiss();
   }
@@ -94,35 +92,44 @@ class _BodyState extends State<Body> {
     EasyLoading.show(status: 'Apple Signing in...');  
     try{
       final appleUser = await SignInWithApple.getAppleIDCredential(scopes: 
-      [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,                       
-      ],
-    );        
-    if(appleUser.email!=null)
-    {
-      ApiResponse resLogin = await login(appleUser.email.toString(), appleUser.userIdentifier.toString());
-      if(resLogin.error==null){
-        _saveAndRedirectToHome(resLogin.data as User);
-      }
-      else if(resLogin.error=="invalid credentials")
-      {
-        ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(),'', '', '', 'apple');
-        if(resSignUp.error==null){
-          _saveAndRedirectToHome(resSignUp.data as User);
-        }
+        [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,                       
+        ],
+      );            
+        if(appleUser.identityToken!=null){
+          ApiResponse resLogin = await loginOthers(appleUser.userIdentifier.toString());
+          if(resLogin.error==null){
+            _saveAndRedirectToHome(resLogin.data as User);
+          }
+          else if(resLogin.error=="invalid credentials")
+          {            
+            if(appleUser.email==null){
+              ApiResponse resSignUp = await registerOthers('New User' , '', appleUser.userIdentifier.toString(),'', '', '', 'apple');
+              if(resSignUp.error==null){
+                _saveAndRedirectToHome(resSignUp.data as User);
+              }
+              else{
+                ToastMessage().toastMsgError(resSignUp.error.toString());
+              }
+            }  
+            else{
+              ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(),'', '', '', 'apple');
+              if(resSignUp.error==null){
+                _saveAndRedirectToHome(resSignUp.data as User);
+              }
+              else{
+                ToastMessage().toastMsgError(resSignUp.error.toString());
+              }
+            }    
+          }
         else{
-          ToastMessage().toastMsgError(resSignUp.error.toString());
-        }
+          ToastMessage().toastMsgError(resLogin.error.toString());
+        } 
       }
       else{
-        ToastMessage().toastMsgError(resLogin.error.toString());
-      }            
-    }
-    else{
-      EasyLoading.showInfo('This apple account still already connected to this app, please remove it first via Settings.');
-    }
-    print(appleUser);
+        ToastMessage().toastMsgDark('Something went wrong');
+      }                     
     } 
     catch(e){
       ToastMessage().toastMsgDark(e.toString());
@@ -176,12 +183,12 @@ class _BodyState extends State<Body> {
           var img1 = reqData['picture'];
           var img2 = img1['data'];
           ApiResponse respLogin = await login(reqData['email'], reqData['id']);
-          if(respLogin.error==null){        
+          if(respLogin.error==null){                    
             _saveAndRedirectToHome(respLogin.data as User);        
           }
           else if(respLogin.error=="invalid credentials"){               
-            ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'] ,img2['url'], '0123456789', 'Address', 'facebook');
-            if(resSignUp.error==null){                  
+          ApiResponse resSignUp = await register(reqData['name'],reqData['email'], reqData['id'] ,img2['url'], '0123456789', 'Address', 'facebook');
+            if(resSignUp.error==null){                      
             _saveAndRedirectToHome(resSignUp.data as User);
             }  
             else{
@@ -208,18 +215,13 @@ class _BodyState extends State<Body> {
       SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString('name', user.name ?? '');
     await pref.setString('token', user.token ?? '');
-    await pref.setString('email', user.email ?? '');    
+    await pref.setString('email', user.email ?? '');
+    await pref.setString('contactNumber', user.contact ?? ''); 
+    await pref.setString('address', user.address ?? '');     
     await pref.setString('userImage', user.userImage ?? '');
     await pref.setInt('userId', user.id ?? 0);
     await pref.setString('type', user.type ?? '');
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return DashBoard();
-        },
-      ),
-    );
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => DashBoard()),(route) => false);    
     }
     
   }
@@ -300,10 +302,11 @@ class _BodyState extends State<Body> {
                     gmailSignIn(); 
                   },
                 ),
-                 SocalIcon(
+                 AppleIcon(
                   iconSrc: "assets/icons/apple.svg",
                   press: () { if(Platform.isIOS){
-                     appleSignIn();
+                    ToastMessage().toastMsgDark('Under development');
+                    //  appleSignIn();
                   }
                   else{
                     EasyLoading.showInfo('For IOS device only');

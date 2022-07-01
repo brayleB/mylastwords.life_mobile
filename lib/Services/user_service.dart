@@ -41,6 +41,8 @@ Future<ApiResponse> login(String email, String password) async {
   return apiResponse;
 }
 
+
+
 //Register
 Future<ApiResponse> register(  
   String name,
@@ -95,8 +97,144 @@ Future<ApiResponse> register(
   return apiResponse;
 }
 
+//loginApple
+Future<ApiResponse> loginOthers(String password) async {
+  EasyLoading.show(status: 'Logging-in');
+  ApiResponse apiResponse = ApiResponse();
+  try {     
+    final response = await http.post(Uri.parse(loginOthersURL),
+        headers: {'Accept': 'application/json'},
+        body: {'password': password});      
+    switch (response.statusCode) {
+      case 200:
+        print(response.body);
+        apiResponse.data = User.fromJson(jsonDecode(response.body));
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['errors'];
+        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
+        break;
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    apiResponse.error = "Server Error. Please check Internet Connection";
+  }  
+  EasyLoading.dismiss();
+  return apiResponse;
+}
+
+//RegisterApple
+Future<ApiResponse> registerOthers(  
+  String name,
+  String email,
+  String password,
+  String img,  
+  String contactnumber,
+  String address,
+  String type,
+) async {
+  EasyLoading.show(status: 'Signing Up');
+  ApiResponse apiResponse = ApiResponse();
+  if(img==""){
+    img="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png";
+  }
+  try {
+    final response = await http.post(Uri.parse(registerOthersURL),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'name': name,
+          'email': email,
+          'password': password,
+          'type': type,
+          'subcription': "free",
+          'status': 1,
+          'userImage':img,
+          'contactNumber':contactnumber,
+          'address':address,
+        }));   
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = User.fromJson(jsonDecode(response.body));
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['error'];
+        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
+        break;
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      case 302:         
+        EasyLoading.showInfo('Account already exist');        
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:    
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    apiResponse.error = "Server Error";
+  }
+  EasyLoading.dismiss();
+  return apiResponse;
+}
+
+
+
+
+//Register
+Future<ApiResponse> updateUserCall(  
+  String name,  
+  String contactnumber,
+  String address,
+) async {
+  EasyLoading.show(status: 'Updating User Information');
+  String token = await getToken();
+  int id = await getuserId();
+  ApiResponse apiResponse = ApiResponse();
+  try {
+    final response = await http.post(Uri.parse(updateUserURL),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'id':id,
+          'name': name,          
+          'contactNumber':contactnumber,
+          'address':address,
+        }));           
+    switch (response.statusCode) {
+      case 200:        
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['error'];
+        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
+        break;
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      case 302: 
+        EasyLoading.showInfo('Email provided already exist');        
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:    
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    print(e.toString());
+    apiResponse.error = "Server Error";
+  }
+  EasyLoading.dismiss();
+  return apiResponse;
+}
+
+
 //getuser
 Future<ApiResponse> getuserDetails() async {
+  EasyLoading.show(status: 'Loading User Information');
   ApiResponse apiResponse = ApiResponse();
   try {
     String token = await getToken();
@@ -117,7 +255,8 @@ Future<ApiResponse> getuserDetails() async {
   } catch (e) {
     apiResponse.error = "Server Error.";
   }
-  return apiResponse;
+  EasyLoading.dismiss();
+  return apiResponse;  
 }
 
 
