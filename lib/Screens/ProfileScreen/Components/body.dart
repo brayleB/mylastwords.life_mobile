@@ -64,10 +64,13 @@ class _BodyState extends State<Body> {
 
   updateingValidator() async {
     var errmsg = "";
-    if(txtName.text=="")
+    if(txtEmail.text=="")
     {
-      errmsg="Please enter your full name";
+      errmsg="Please provide your email";
     }  
+    else if(txtName.text==""){
+      errmsg="Please enter your contact number";
+    } 
     else if(txtContactNumber.text==""){
       errmsg="Please enter your contact number";
     }  

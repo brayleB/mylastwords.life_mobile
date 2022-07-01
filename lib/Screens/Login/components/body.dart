@@ -130,6 +130,9 @@ class _BodyState extends State<Body> {
         else{
           ToastMessage().toastMsgError(resLogin.error.toString());
         } 
+      }
+      else{
+        ToastMessage().toastMsgDark('Something went wrong');
       }                     
     } 
     catch(e){

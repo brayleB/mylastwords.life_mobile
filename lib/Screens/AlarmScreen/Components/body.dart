@@ -73,10 +73,10 @@ class _BodyState extends State<Body> {
   String? editAlarmString, editTxtTitle, editTxtRepeat, editTxtSound;  
   @override
   void initState() {
-    title = "Title";
+    title = "";
     txtRepeat = "No Repeat";
-    txtSoundDisplay = "Sound";
-    txtSound = "Sound";
+    txtSoundDisplay = "Cold";
+    txtSound = "cold";
     _alarmTime = DateTime.now();
     _alarmHelper.initializaDatabase().then((value) {      
       loadAlarms();
@@ -147,13 +147,20 @@ class _BodyState extends State<Body> {
                           ),
                         ),
                         ListTile(
-                            title:  Text(
-                                  txtRepeat,
+                            leading:  Text(
+                                  'Repeat - ',
                                   style: TextStyle(
                                       color: txtColorDark,
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500),
                                 ),
+                            title: Text(
+                              txtRepeat,
+                              style: TextStyle(
+                                  color: txtColorDark,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500),
+                            ),
                           trailing: Icon(Icons.arrow_forward_ios),
                           onTap: (){                       
                                   showDialog(    
@@ -232,7 +239,14 @@ class _BodyState extends State<Body> {
                               },
                         ),
                         ListTile(
-                          title:  Text(
+                          leading:  Text(
+                                  'Sound - ',
+                                  style: TextStyle(
+                                      color: txtColorDark,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                          title: Text(
                                   txtSoundDisplay,
                                   style: TextStyle(
                                       color: txtColorDark,
@@ -265,7 +279,7 @@ class _BodyState extends State<Body> {
                                                             activeColor: headerBackgroundColor,
                                                             title: Text(_alarmSoundList[index].toString()),
                                                             value: alarmSoundFiles[index],
-                                                            groupValue: selectedValue,
+                                                            groupValue: alarmSoundFiles[0],
                                                             selected: selectedValue == alarmSoundFiles[index],
                                                             onChanged: (val) async {                                                           
                                                                 await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
@@ -313,13 +327,20 @@ class _BodyState extends State<Body> {
                           },
                         ),
                         ListTile(
-                          title:  Text(
-                                  title,
+                          leading:  Text(
+                                  'Label - ',
                                   style: TextStyle(
                                       color: txtColorDark,
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500),
                                 ),
+                            title: Text(
+                              title,
+                              style: TextStyle(
+                                  color: txtColorDark,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500),
+                            ),
                           trailing: Icon(Icons.arrow_forward_ios),
                           onTap: () { showDialog(                            
                           context: context,

@@ -41,35 +41,7 @@ Future<ApiResponse> login(String email, String password) async {
   return apiResponse;
 }
 
-//loginApple
-Future<ApiResponse> loginOthers(String password) async {
-  EasyLoading.show(status: 'Logging-in');
-  ApiResponse apiResponse = ApiResponse();
-  try {     
-    final response = await http.post(Uri.parse(loginOthersURL),
-        headers: {'Accept': 'application/json'},
-        body: {'password': password});
-    switch (response.statusCode) {
-      case 200:
-        print(response.body);
-        apiResponse.data = User.fromJson(jsonDecode(response.body));
-        break;
-      case 422:
-        final errors = jsonDecode(response.body)['errors'];
-        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
-        break;
-      case 403:
-        apiResponse.error = jsonDecode(response.body)['message'];
-        break;
-      default:
-        apiResponse.error = "Something went wrong";
-    }
-  } catch (e) {
-    apiResponse.error = "Server Error. Please check Internet Connection";
-  }  
-  EasyLoading.dismiss();
-  return apiResponse;
-}
+
 
 //Register
 Future<ApiResponse> register(  
@@ -125,7 +97,37 @@ Future<ApiResponse> register(
   return apiResponse;
 }
 
-//Register
+//loginApple
+Future<ApiResponse> loginOthers(String password) async {
+  EasyLoading.show(status: 'Logging-in');
+  ApiResponse apiResponse = ApiResponse();
+  try {     
+    final response = await http.post(Uri.parse(loginOthersURL),
+        headers: {'Accept': 'application/json'},
+        body: {'password': password});      
+    switch (response.statusCode) {
+      case 200:
+        print(response.body);
+        apiResponse.data = User.fromJson(jsonDecode(response.body));
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['errors'];
+        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
+        break;
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    apiResponse.error = "Server Error. Please check Internet Connection";
+  }  
+  EasyLoading.dismiss();
+  return apiResponse;
+}
+
+//RegisterApple
 Future<ApiResponse> registerOthers(  
   String name,
   String email,
@@ -141,7 +143,7 @@ Future<ApiResponse> registerOthers(
     img="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png";
   }
   try {
-    final response = await http.post(Uri.parse(registerURL),
+    final response = await http.post(Uri.parse(registerOthersURL),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'name': name,
@@ -165,8 +167,8 @@ Future<ApiResponse> registerOthers(
       case 403:
         apiResponse.error = jsonDecode(response.body)['message'];
         break;
-      case 302: 
-        EasyLoading.showInfo('Email provided already exist');        
+      case 302:         
+        EasyLoading.showInfo('Account already exist');        
         apiResponse.error = jsonDecode(response.body)['message'];
         break;
       default:    
