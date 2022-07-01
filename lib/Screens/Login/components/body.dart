@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mylastwords/Screens/Login/components/appleicon.dart';
 import 'package:mylastwords/Screens/Login/components/background.dart';
 import 'package:mylastwords/Screens/Signup/signup_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
@@ -302,7 +303,7 @@ class _BodyState extends State<Body> {
                     gmailSignIn(); 
                   },
                 ),
-                 SocalIcon(
+                 AppleIcon(
                   iconSrc: "assets/icons/apple.svg",
                   press: () { if(Platform.isIOS){
                      appleSignIn();
