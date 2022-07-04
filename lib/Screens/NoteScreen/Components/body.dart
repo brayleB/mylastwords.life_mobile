@@ -96,7 +96,22 @@ class _BodyState extends State<Body> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<NotesModel>? data = snapshot.data;
-                  return _notesListView(data);
+                  if(snapshot.data!.length<=0){
+                    return Center(
+                      child: Center(
+                        child:  Text(
+                                'Notes empty',
+                                style: TextStyle(
+                                  color: txtColorLight,
+                                  fontSize: 30,
+                                ),
+                              ),
+                      ),
+                    );
+                  }
+                  else{
+                    return _notesListView(data);
+                  }
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 }

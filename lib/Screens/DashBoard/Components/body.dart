@@ -61,7 +61,7 @@ class _BodyState extends State<Body> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 70),
+              SizedBox(height:size.height * 0.08),
               Padding(
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: Row(
@@ -136,7 +136,7 @@ class _BodyState extends State<Body> {
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height:size.height * 0.04),
               GridDashBoard(),             
             ],
           ),

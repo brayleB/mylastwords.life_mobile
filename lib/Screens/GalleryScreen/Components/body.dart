@@ -119,7 +119,21 @@ class _BodyState extends State<Body> {
                   ),
                 );
             } else {
-              return GridView.builder(
+              if(listData.data.length==0){
+                return Center(
+                      child: Center(
+                        child:  Text(
+                                'No Photos',
+                                style: TextStyle(
+                                  color: txtColorDark,
+                                  fontSize: 30,
+                                ),
+                              ),
+                      ),
+                    );
+              }
+              else{
+                return GridView.builder(
                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: 1,
@@ -163,6 +177,7 @@ class _BodyState extends State<Body> {
                   );
                 },
               );
+              }
             }
           },
         ),   

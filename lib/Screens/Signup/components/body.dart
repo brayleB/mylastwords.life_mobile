@@ -13,6 +13,7 @@ import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mylastwords/models/api_response.dart';
+import 'package:url_launcher/url_launcher.dart';
 // import 'package:flutter_svg/svg.dart';
 
 class Body extends StatefulWidget {
@@ -93,13 +94,7 @@ class _BodyState extends State<Body> {
             Image.asset(
               "assets/images/logo.png",
               height: size.height * 0.2,
-            ),
-            SizedBox(height: size.height * 0.01),
-            Text(
-              "By creating an account,\nYou may receive newsletters or promotions",
-              style: TextStyle(color: txtColorDark, fontSize: 13),
-              textAlign: TextAlign.center,
-            ),
+            ),                 
             SizedBox(height: size.height * 0.03),
             RoundedInputField(
               isEnable: true,
@@ -107,12 +102,46 @@ class _BodyState extends State<Body> {
               hintText: "Your Email",
               onChanged: (value) {},
             ),
-            RoundedPasswordField(
-             
+            RoundedPasswordField(             
               hintText: "Password",
               controller: txtPass,
               onChanged: (value) {},
-            ),
+            ),     
+            SizedBox(height: size.height * 0.03),      
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [GestureDetector(
+              onTap: () async { final Uri url = Uri(
+                      scheme: 'https',
+                      host:'mylastwords.life',
+                      path: '/terms-and-conditions',                      
+                    );
+                    await launchUrl(url); },
+              child: Text(
+                "Terms and Conditions",
+                style: TextStyle(
+                  color: kPrimaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
+                ),
+              ),
+            ), Icon(Icons.arrow_forward_ios, size: 15, color: kPrimaryColor,),],),
+             SizedBox(height: size.height * 0.02),
+            Row(mainAxisAlignment: MainAxisAlignment.center,children: [GestureDetector(
+              onTap: () async { final Uri url = Uri(
+                      scheme: 'https',
+                      host:'mylastwords.life',
+                      path: '/privacy-policy',                      
+                    );
+                    await launchUrl(url); },
+              child: Text(
+                "Privacy Policy",
+                style: TextStyle(
+                  color: kPrimaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
+                ),
+              ),
+            ), Icon(Icons.arrow_forward_ios, size: 15, color: kPrimaryColor,),],),    
+            SizedBox(height: size.height * 0.03),                 
             RoundedButton(
               textColor: txtColorLight,
               bgcolor: txtColorDark,
