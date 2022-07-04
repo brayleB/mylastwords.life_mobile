@@ -161,7 +161,7 @@ class _BodyState extends State<Body> {
       if (response.error == null) {
         _saveAndRedirectToHome(response.data as User);
       } else {
-        ToastMessage().toastMsgDark('${response.error}');
+        EasyLoading.showError(response.error.toString());
       }
     }
     if (errmsg != "") {
@@ -241,18 +241,18 @@ class _BodyState extends State<Body> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: size.height * 0.03),
+            SizedBox(height: size.height * 0.01),
             Image.asset(
               "assets/images/logo.png",
               height: size.height * 0.2,
             ),
-            SizedBox(height: size.height * 0.03),
+            SizedBox(height: size.height * 0.01),
             Text(
-              "Sign in to your account to access your profile, history, \nand any private pages you've been granted access to.",
+              "Sign in to your account to access your alarm \nand your private photos and notes",
               style: TextStyle(color: txtColorDark, fontSize: 13),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: size.height * 0.03),
+            SizedBox(height: size.height * 0.02),
             RoundedInputField(
               isEnable: true,
               controller: txtEmail,
@@ -263,6 +263,16 @@ class _BodyState extends State<Body> {
               hintText: "Password",
               controller: txtPass,
               onChanged: (value) {},
+            ),
+             GestureDetector(
+              onTap: (){ToastMessage().toastMsgDark('Not yet implemented');},
+              child: Text(
+                "Forgot password?",
+                style: TextStyle(
+                  color: kPrimaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             RoundedButton(
                 textColor: txtColorLight,
