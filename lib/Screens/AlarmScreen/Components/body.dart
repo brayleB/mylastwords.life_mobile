@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use, unused_field, must_be_immutable
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/AlarmScreen/Components/alarm_helper.dart';
 import 'package:mylastwords/components/input_dialogue.dart';
 import 'package:mylastwords/components/rounded_button.dart';
@@ -116,7 +117,7 @@ class _BodyState extends State<Body> {
     title = "Hello";
     txtRepeat = "No Repeat";
     txtSoundDisplay = "Cold";
-    txtSound = "cold";
+    txtSound = "longcold";
     _alarmTime = DateTime.now();
     _alarmHelper.initializaDatabase().then((value) {      
       loadAlarms();
@@ -361,13 +362,17 @@ class _BodyState extends State<Body> {
                                               child: RaisedButton(
                                                 color: headerBackgroundColor,
                                                 onPressed: (){                                                                   
-                                                  setSoundState((){
-                                                    txtSound = selectedValue!;
-                                                    selectedValue = _alarmSoundList[0];
-                                                    txtSoundDisplay = "Sound";
-                                                    });                                                   
-                                                    player.stop();
-                                                    Navigator.pop(context);                                                                                                    
+                                                    if(selectedValue==null){
+                                                      EasyLoading.showInfo('Please choose alarm sound');
+                                                    }else{
+                                                      setSoundState((){
+                                                      txtSound = selectedValue!;
+                                                      selectedValue = _alarmSoundList[0];
+                                                      txtSoundDisplay = "Sound";
+                                                      });                                                   
+                                                      player.stop();
+                                                      Navigator.pop(context);
+                                                    }                                                                                              
                                                    },                                                 
                                                 child: Text(
                                                   'Select',
