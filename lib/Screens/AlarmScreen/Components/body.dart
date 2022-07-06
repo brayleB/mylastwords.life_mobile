@@ -37,7 +37,7 @@ class _BodyState extends State<Body> {
     "Sat",
     "Sun",
   ];
-    List<String> alarmSoundFiles = [
+  List<String> alarmSoundFiles = [
     "longcold",
     "rainyday",
     "electronic",
@@ -71,7 +71,6 @@ class _BodyState extends State<Body> {
   List<AlarmInfo>? _currentAlarms;
   String? selectedValue;
   final player = AudioPlayer();
-  String? editAlarmString, editTxtTitle, editTxtRepeat, editTxtSound; 
 
 
   final _timePickerTheme = TimePickerThemeData(
@@ -230,7 +229,7 @@ class _BodyState extends State<Body> {
                                         title: Text('Repeat'),
                                         content: Container(
                                           width: MediaQuery.of(context).size.width,
-                                          height: MediaQuery.of(context).size.height * 0.5,
+                                          height: MediaQuery.of(context).size.height * 0.9,
                                           child: Column(         
                                             children: [
                                               Expanded(
@@ -317,8 +316,7 @@ class _BodyState extends State<Body> {
                                     context: context,
                                     builder: (context) {
                                       return StatefulBuilder(builder: (context, setSoundState){                                      
-                                        return AlertDialog(
-                                        title: Text('Sound'),
+                                        return AlertDialog(                                       
                                         content: Container(
                                           width: MediaQuery.of(context).size.width,
                                           height: MediaQuery.of(context).size.height,
@@ -534,110 +532,347 @@ class _BodyState extends State<Body> {
 
                         return GestureDetector(
                         onTap: () {
-                          editAlarmString = DateFormat('hh:mm aa').format(alarm.alarmDateTime!);
-                          showModalBottomSheet(
-                                        useRootNavigator: true,
-                                        context: context,
-                                        clipBehavior: Clip.antiAlias,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(24),
-                                          ),
-                                        ),
-                                        builder: (context) {
-                                          return StatefulBuilder(
-                                            builder: (context, setModalState) {
-                                              return Container(
-                                                padding:
-                                                    const EdgeInsets.all(32),
-                                                child: Column(
-                                                  children: [
-                                                    FlatButton(
-                                                      onPressed: () async {
-                                                        var selectedTime =
-                                                            await showTimePicker(
-                                                              context: context,
-                                                              initialTime: TimeOfDay.now(),
-                                                              builder: (context, child) {
-                                                                return Theme(
-                                                                  data: Theme.of(context).copyWith(
-                                                                    // This uses the _timePickerTheme defined above
-                                                                    timePickerTheme: _timePickerTheme,
-                                                                    textButtonTheme: TextButtonThemeData(
-                                                                      style: ButtonStyle(
-                                                                        backgroundColor: MaterialStateColor.resolveWith((states) => darkBackground),
-                                                                        foregroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
-                                                                        overlayColor: MaterialStateColor.resolveWith((states) => Colors.deepOrange),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  child: child!,
-                                                                );
-                                                              },
-                                                            );
-                                                        if (selectedTime !=
-                                                            null) {
-                                                          final now =
-                                                              DateTime.now();
-                                                          var selectedDateTime =
-                                                              DateTime(
-                                                                  now.year,
-                                                                  now.month,
-                                                                  now.day,
-                                                                  selectedTime
-                                                                      .hour,
-                                                                  selectedTime
-                                                                      .minute);
-                                                          _alarmTime =
-                                                              selectedDateTime;
-                                                          setModalState(() {
-                                                            _alarmTimeString =
-                                                                DateFormat(
-                                                                        'hh:mm aa')
-                                                                    .format(
-                                                                        selectedDateTime);
-                                                          });
-                                                        }
-                                                      },
-                                                      child: Text(
-                                                        editAlarmString!,
-                                                        style: TextStyle(
-                                                            fontSize: 32),
-                                                      ),
-                                                    ),
-                                                    ListTile(
-                                                      title: Text(alarm.repeat!),
-                                                      trailing: Icon(Icons
-                                                          .arrow_forward_ios),
-                                                    ),
-                                                    ListTile(
-                                                      title: Text('Sound'),
-                                                      trailing: Icon(Icons
-                                                          .arrow_forward_ios),
-                                                    ),
-                                                    ListTile(
-                                                      title: Text(title),
-                                                      trailing: Icon(Icons
-                                                          .arrow_forward_ios),
-                                                    ),
-                                                    FloatingActionButton
-                                                        .extended(
-                                                      backgroundColor:
-                                                          darkBackground,
-                                                      onPressed: () async {
-                                                        ToastMessage().toastMsgError("Not yet implemented");
-                                                        Navigator.pop(context);
-                                                      },
-                                                      icon: Icon(Icons.alarm),
-                                                      label: Text('Save Alarm'),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
+                          var editAlarmString = DateFormat('hh:mm aa').format(alarm.alarmDateTime!);
+                          var txtEditRepeat = alarm.repeat.toString();
+                          var txtEditSound = alarm.sound.toString();
+                          var txtEditTitle = alarm.title.toString();
+//edit alarm                          
+                          showModalBottomSheet(            
+                              useRootNavigator: true,
+                              context: context,
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(24),
+                                ),
+                              ),
+                              builder: (context) {
+                                return StatefulBuilder(
+                                  builder: (context, setModalState) {
+                                    return Container(
+                                      padding: const EdgeInsets.all(30),
+                                      child: Column(
+                                        children: [
+                                          FlatButton(
+                                            onPressed: () async {
+                                              var selectedTime = await showTimePicker(
+                                                                                context: context,
+                                                                                initialTime: TimeOfDay(hour: alarm.alarmDateTime!.hour, minute: alarm.alarmDateTime!.minute),
+                                                                                builder: (context, child) {
+                                                                                  return Theme(
+                                                                                    data: Theme.of(context).copyWith(
+                                                                                      // This uses the _timePickerTheme defined above
+                                                                                      timePickerTheme: _timePickerTheme,
+                                                                                      textButtonTheme: TextButtonThemeData(
+                                                                                        style: ButtonStyle(
+                                                                                          backgroundColor: MaterialStateColor.resolveWith((states) => darkBackground),
+                                                                                          foregroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
+                                                                                          overlayColor: MaterialStateColor.resolveWith((states) => Colors.deepOrange),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    child: child!,
+                                                                                  );
+                                                                                },
+                                                                              );
+                                              if (selectedTime != null) {
+                                                final now = DateTime.now();
+                                                var selectedDateTime = DateTime(
+                                                    now.year,
+                                                    now.month,
+                                                    now.day,
+                                                    selectedTime.hour,
+                                                    selectedTime.minute);
+                                                _alarmTime = selectedDateTime;
+                                                setModalState(() {
+                                                  editAlarmString = DateFormat('hh:mm aa')
+                                                      .format(selectedDateTime);
+                                                });
+                                              }
                                             },
-                                          );
-                                        },
-                                      );
+                                            child: Text(
+                                              editAlarmString,
+                                              style: TextStyle(fontSize: 32),
+                                            ),
+                                          ),
+                                          ListTile(
+                                              leading:  Text(
+                                                    'Repeat - ',
+                                                    style: TextStyle(
+                                                        color: txtColorDark,
+                                                        fontSize: 20,
+                                                        fontWeight: FontWeight.w500),
+                                                  ),
+                                              title: Text(
+                                                txtEditRepeat,
+                                                style: TextStyle(
+                                                    color: txtColorDark,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            trailing: Icon(Icons.arrow_forward_ios),
+                                            onTap: (){                       
+                                                    showDialog(    
+                                                      barrierDismissible: false,
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return StatefulBuilder(builder: (context, setChkState){
+                                                          _days.clear();
+                                                          return AlertDialog(
+                                                          title: Text('Repeat'),
+                                                          content: Container(
+                                                            width: MediaQuery.of(context).size.width,
+                                                            height: MediaQuery.of(context).size.height * 0.9,
+                                                            child: Column(         
+                                                              children: [
+                                                                Expanded(
+                                                                  child: ListView(
+                                                                      shrinkWrap: true,            
+                                                                      children: [
+                                                                        ListView.builder(
+                                                                          shrinkWrap: true,
+                                                                          itemCount: _texts.length,
+                                                                          itemBuilder: (_, index) {
+                                                                            return CheckboxListTile(
+                                                                              activeColor: headerBackgroundColor,
+                                                                              title: Text(_texts[index]),
+                                                                              value: _isChecked[index],
+                                                                              onChanged: (val) {
+                                                                                setChkState(() {
+                                                                                  _isChecked[index] = val!;                                                                                                                                                                                    
+                                                                                });
+                                                                              },
+                                                                            );
+                                                                          },
+                                                                        ),
+                                                                      ]),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          actions: <Widget>[
+                                                            SizedBox(
+                                                                width: MediaQuery.of(context).size.width,
+                                                                child: RaisedButton(
+                                                                  color: headerBackgroundColor,
+                                                                  onPressed: (){                 
+                                                                    for(var i = 0; i < _texts.length; i++)
+                                                                    {
+                                                                      if(_isChecked[i] == true)
+                                                                      {                                                      
+                                                                        _days.add(_texts[i].toString());                                                                                                      
+                                                                      }
+                                                                    }
+                                                                    setModalState((){
+                                                                      if(_days.isEmpty){
+                                                                        txtEditRepeat = "No Repeat";
+                                                                      }
+                                                                      else{
+                                                                        txtEditRepeat = _days.toString().replaceAll('[', '').replaceAll(']', '');
+                                                                      }
+                                                                      
+                                                                    });
+                                                                    Navigator.pop(context);                                                 
+                                                                    },                                                 
+                                                                  child: Text(
+                                                                    'Select',
+                                                                    style: TextStyle(
+                                                                        color: txtColorLight),
+                                                                  ),
+                                                                ))
+                                                          ],
+                                                        );
+                                                        });
+                                                      },                                    
+                                                    );                                 
+                                                },
+                                          ),
+                                          ListTile(
+                                            leading:  Text(
+                                                    'Sound  - ',
+                                                    style: TextStyle(
+                                                        color: txtColorDark,
+                                                        fontSize: 20,
+                                                        fontWeight: FontWeight.w500),
+                                                  ),
+                                            title: Text(
+                                                    txtEditSound,
+                                                    style: TextStyle(
+                                                        color: txtColorDark,
+                                                        fontSize: 20,
+                                                        fontWeight: FontWeight.w500),
+                                                  ),
+                                            trailing: Icon(Icons.arrow_forward_ios),
+                                            onTap: () {                                                                   
+                                                showDialog(    
+                                                      barrierDismissible: false,
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return StatefulBuilder(builder: (context, setSoundState){                                      
+                                                          return AlertDialog(                                                         
+                                                          content: Container(
+                                                            width: MediaQuery.of(context).size.width,
+                                                            height: MediaQuery.of(context).size.height,
+                                                            child: Column(         
+                                                              children: [
+                                                                Expanded(
+                                                                  child: ListView(
+                                                                      shrinkWrap: true,            
+                                                                      children: [
+                                                                        ListView.builder(
+                                                                          shrinkWrap: true,
+                                                                          itemCount: _alarmSoundList.length,
+                                                                          itemBuilder: (_, index) {
+                                                                            return RadioListTile(
+                                                                              activeColor: headerBackgroundColor,
+                                                                              title: Text(_alarmSoundList[index].toString()),
+                                                                              value: alarmSoundFiles[index],
+                                                                              groupValue: selectedValue,
+                                                                              selected: selectedValue == alarmSoundFiles[index],
+                                                                              onChanged: (val) async {                                                           
+                                                                                  await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
+                                                                                    setSoundState(() {
+                                                                                      selectedValue = val.toString();
+                                                                                    });
+                                                                                    setModalState((){                                                    
+                                                                                      txtEditSound = _alarmSoundList[index];
+                                                                                    });
+                                                                                    print('selected:' + selectedValue.toString());
+                                                                                },
+                                                                            );
+                                                                          },
+                                                                        ),
+                                                                      ]),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          actions: <Widget>[
+                                                            SizedBox(
+                                                                width: MediaQuery.of(context).size.width,
+                                                                child: RaisedButton(
+                                                                  color: headerBackgroundColor,
+                                                                  onPressed: (){                                                                   
+                                                                      if(selectedValue==null){
+                                                                        EasyLoading.showInfo('Please choose alarm sound');
+                                                                      }else{
+                                                                        setSoundState((){
+                                                                        txtSound = selectedValue!;
+                                                                        selectedValue = _alarmSoundList[0];
+                                                                        txtEditSound = "Sound";
+                                                                        });                                                   
+                                                                        player.stop();
+                                                                        Navigator.pop(context);
+                                                                      }                                                                                              
+                                                                    },                                                 
+                                                                  child: Text(
+                                                                    'Select',
+                                                                    style: TextStyle(
+                                                                        color: txtColorLight),
+                                                                  ),
+                                                                ))
+                                                          ],
+                                                        );
+                                                        });
+                                                      },                                    
+                                                    );                         
+                                            },
+                                          ),
+                                          ListTile(
+                                            leading:  Text(
+                                                    'Label    - ',
+                                                    style: TextStyle(
+                                                        color: txtColorDark,
+                                                        fontSize: 20,
+                                                        fontWeight: FontWeight.w500),
+                                                  ),
+                                              title: Text(
+                                                txtEditTitle,
+                                                style: TextStyle(
+                                                    color: txtColorDark,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            trailing: Icon(Icons.arrow_forward_ios),
+                                            onTap: () { 
+                                            showDialog(                            
+                                            context: context,
+                                            barrierColor: Colors.black.withOpacity(.4),
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                      title: Text('Title'),
+                                                          content: TextField(
+                                                            onChanged: (value) {     
+                                                            },
+                                                            controller: txtInputTitle,
+                                                            decoration: InputDecoration(focusedBorder: OutlineInputBorder(
+                                                              borderSide: BorderSide(color: headerBackgroundColor, width: 1.0),
+                                                            ), hintText: "Enter here"),
+                                                          ),
+                                                          actions: <Widget>[
+                                                        TextButton(
+                                                          onPressed: () {
+                                                              setModalState(() {
+                                                                if(txtInputTitle.text=="")
+                                                                {
+                                                                  txtEditTitle="Title";
+                                                                }
+                                                                else
+                                                                {
+                                                                  txtEditTitle = txtInputTitle.text; 
+                                                                }                                             
+                                                              });
+                                                            Navigator.pop(context);
+                                                          },
+                                                          child: Text(
+                                                            'Ok',
+                                                            style: TextStyle(color: txtColorDark, fontSize: 15),
+                                                          ),
+                                                        ),
+                                                    
+                                                      ],
+                                                    );
+                                            },
+                                          );},
+                                          ),   
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              FloatingActionButton.extended(
+                                                backgroundColor: headerBackgroundColor,
+                                                onPressed: () async {                                                                           
+                                                  var alarmInfo = AlarmInfo(  
+                                                      id: alarm.id,                                                                               
+                                                      title: txtEditTitle,
+                                                      alarmDateTime: _alarmTime,
+                                                      alarmOnOff: alarm.alarmOnOff,
+                                                      repeat: txtEditRepeat,
+                                                      sound: txtEditSound);
+
+                                                  _alarmHelper.updateAlarm(alarmInfo);
+                                                  _alarmHelper.scheduleAlarm(
+                                                      _alarmTime!, alarmInfo);
+                                                  Navigator.pop(context);                            
+                                                  loadAlarms();                                              
+                                                },
+                                                icon: Icon(Icons.alarm),
+                                                label: Text('Update'),
+                                              ),
+                                              FloatingActionButton.extended(
+                                                backgroundColor: headerBackgroundColor,
+                                                onPressed: () {Navigator.pop(context);}  ,
+                                                icon: Icon(Icons.cancel),
+                                                label: Text('Cancel'),
+                                              ),
+                                          ],),                                    
+                                        ],
+                                      ),
+                                    );
+                                  },                          
+                                );
+                              },
+                            );
+//end edit alarm                            
                         },
                         child: Container(
                         margin: const EdgeInsets.only(
