@@ -243,10 +243,11 @@ class _BodyState extends State<Body> {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: size.height * 0.01),
-            Image.asset(
-              "assets/images/logo.png",
-              height: size.height * 0.2,
-            ),
+            Icon(                              
+                  Icons.login_outlined,
+                  color: headerBackgroundColor,
+                  size: size.height * 0.2,
+                  ), 
             SizedBox(height: size.height * 0.01),
             Text(
               "Sign in to your account to access your alarm \nand your private photos and notes",

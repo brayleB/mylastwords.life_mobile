@@ -87,14 +87,15 @@ class _BodyState extends State<Body> {
             SizedBox(height: size.height * 0.05),
             Text(
               "SIGN UP",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: size.height * 0.01),
-            Image.asset(
-              "assets/images/logo.png",
-              height: size.height * 0.2,
-            ),                 
+            Icon(                              
+                  Icons.person_add_alt_1_rounded,
+                  color: headerBackgroundColor,
+                  size: size.height * 0.2,
+                  ),                
             SizedBox(height: size.height * 0.03),
             RoundedInputField(
               isEnable: true,
