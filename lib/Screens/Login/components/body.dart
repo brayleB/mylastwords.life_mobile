@@ -234,9 +234,11 @@ class _BodyState extends State<Body> {
 
     return Background(
       child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            SizedBox(height: size.height * 0.02),
             Text(
               "LOGIN",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -246,11 +248,11 @@ class _BodyState extends State<Body> {
             Icon(                              
                   Icons.login_outlined,
                   color: headerBackgroundColor,
-                  size: size.height * 0.2,
+                  size: size.height * 0.12,
                   ), 
             SizedBox(height: size.height * 0.01),
             Text(
-              "Sign in to your account to access your alarm \nand your private photos and notes",
+              "Sign in to your account to access your alarm, private photos and notes",
               style: TextStyle(color: txtColorDark, fontSize: 15),
               textAlign: TextAlign.center,
             ),
