@@ -18,7 +18,7 @@ class GridDashBoard extends StatelessWidget {
   Items item2 = new Items(
       id: 2,
       title: "Notes",
-      details: "Messages to your love ones",
+      details: "Your last messages",
       img: "assets/icons/notes.png");
   Items item3 = new Items(
       id: 3,
@@ -32,14 +32,14 @@ class GridDashBoard extends StatelessWidget {
       img: "assets/icons/profile.png");
   Items item5 = new Items(
       id: 5,
-      title: "About Us",
-      details: "Know how this app works",
+      title: "About",
+      details: "Know how it works",
       img: "assets/images/logo.png");
   Items item6 = new Items(
       id: 6,
-      title: "Privacy Policy",
-      details: "Terms and Conditions",
-      img: "assets/icons/privacy.png");
+      title: "Contact Us",
+      details: "Your inquiries",
+      img: "assets/icons/contactus.png");
   @override
   Widget build(BuildContext context) {
     List<Items> myList = [item1, item2, item3, item4, item5, item6];
@@ -105,7 +105,7 @@ class GridDashBoard extends StatelessWidget {
                     final Uri url = Uri(
                       scheme: 'https',
                       host:'mylastwords.life',
-                      path: '/privacy-policy',                      
+                      path: '/contact-us',                      
                     );
                     await launchUrl(url);
                   }

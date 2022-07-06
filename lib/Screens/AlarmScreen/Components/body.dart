@@ -296,7 +296,7 @@ class _BodyState extends State<Body> {
                         ),
                         ListTile(
                           leading:  Text(
-                                  'Sound - ',
+                                  'Sound  - ',
                                   style: TextStyle(
                                       color: txtColorDark,
                                       fontSize: 20,
@@ -335,7 +335,7 @@ class _BodyState extends State<Body> {
                                                             activeColor: headerBackgroundColor,
                                                             title: Text(_alarmSoundList[index].toString()),
                                                             value: alarmSoundFiles[index],
-                                                            groupValue: alarmSoundFiles[0],
+                                                            groupValue: selectedValue,
                                                             selected: selectedValue == alarmSoundFiles[index],
                                                             onChanged: (val) async {                                                           
                                                                 await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
@@ -384,7 +384,7 @@ class _BodyState extends State<Body> {
                         ),
                         ListTile(
                           leading:  Text(
-                                  'Label - ',
+                                  'Label    - ',
                                   style: TextStyle(
                                       color: txtColorDark,
                                       fontSize: 20,

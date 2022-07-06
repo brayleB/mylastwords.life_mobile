@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/Login/components/appleicon.dart';
 import 'package:mylastwords/Screens/Login/components/background.dart';
+import 'package:mylastwords/Screens/PasswordScreen/forgotpass_screen.dart';
 import 'package:mylastwords/Screens/Signup/signup_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/already_have_an_account_acheck.dart';
@@ -161,7 +162,7 @@ class _BodyState extends State<Body> {
       if (response.error == null) {
         _saveAndRedirectToHome(response.data as User);
       } else {
-        ToastMessage().toastMsgDark('${response.error}');
+        EasyLoading.showError(response.error.toString());
       }
     }
     if (errmsg != "") {
@@ -241,18 +242,19 @@ class _BodyState extends State<Body> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: size.height * 0.03),
-            Image.asset(
-              "assets/images/logo.png",
-              height: size.height * 0.2,
-            ),
-            SizedBox(height: size.height * 0.03),
+            SizedBox(height: size.height * 0.01),
+            Icon(                              
+                  Icons.login_outlined,
+                  color: headerBackgroundColor,
+                  size: size.height * 0.2,
+                  ), 
+            SizedBox(height: size.height * 0.01),
             Text(
-              "Sign in to your account to access your profile, history, \nand any private pages you've been granted access to.",
-              style: TextStyle(color: txtColorDark, fontSize: 13),
+              "Sign in to your account to access your alarm \nand your private photos and notes",
+              style: TextStyle(color: txtColorDark, fontSize: 15),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: size.height * 0.03),
+            SizedBox(height: size.height * 0.02),
             RoundedInputField(
               isEnable: true,
               controller: txtEmail,
@@ -264,6 +266,28 @@ class _BodyState extends State<Body> {
               controller: txtPass,
               onChanged: (value) {},
             ),
+             SizedBox(height: size.height * 0.01),
+             GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ForgotPassScreen();
+                    },
+                  ),
+                );
+              },
+              child: Text(
+                "Forgot password?",
+                style: TextStyle(
+                  color: txtColorDark,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
+                ),
+              ),
+            ),
+            SizedBox(height: size.height * 0.01),
             RoundedButton(
                 textColor: txtColorLight,
               bgcolor: txtColorDark,
@@ -305,8 +329,8 @@ class _BodyState extends State<Body> {
                  AppleIcon(
                   iconSrc: "assets/icons/apple.svg",
                   press: () { if(Platform.isIOS){
-                    ToastMessage().toastMsgDark('Under development');
-                    //  appleSignIn();
+                    // ToastMessage().toastMsgDark('Under development');
+                     appleSignIn();
                   }
                   else{
                     EasyLoading.showInfo('For IOS device only');

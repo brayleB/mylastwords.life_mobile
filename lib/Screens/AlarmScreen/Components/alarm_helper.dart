@@ -96,8 +96,7 @@ class AlarmHelper {
     return await db!.update(tblAlarm, alarmInfo.toMap(), where: 'id=?',whereArgs: [alarmInfo.id]);    
   }   
 
-  void scheduleAlarm(
-      DateTime scheduledNotificationDateTime, AlarmInfo alarmInfo) async {
+  void scheduleAlarm(DateTime scheduledNotificationDateTime, AlarmInfo alarmInfo) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'alarm_notif',
       'alarm_notif',          

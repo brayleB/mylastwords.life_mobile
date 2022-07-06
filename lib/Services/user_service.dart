@@ -234,7 +234,7 @@ Future<ApiResponse> updateUserCall(
 
 //getuser
 Future<ApiResponse> getuserDetails() async {
-  EasyLoading.show(status: 'Loading User Information');
+  EasyLoading.show(status: 'Loading data, please wait');
   ApiResponse apiResponse = ApiResponse();
   try {
     String token = await getToken();
