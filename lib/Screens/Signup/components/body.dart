@@ -118,7 +118,7 @@ class _BodyState extends State<Body> {
               child: Text(
                 "Terms and Conditions",
                 style: TextStyle(
-                  color: kPrimaryColor,
+                  color: txtColorDark,
                   fontWeight: FontWeight.bold,
                   fontSize: 16
                 ),
@@ -135,7 +135,7 @@ class _BodyState extends State<Body> {
               child: Text(
                 "Privacy Policy",
                 style: TextStyle(
-                  color: kPrimaryColor,
+                  color: txtColorDark,
                   fontWeight: FontWeight.bold,
                   fontSize: 16
                 ),

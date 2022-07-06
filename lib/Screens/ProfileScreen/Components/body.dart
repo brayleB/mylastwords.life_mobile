@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mylastwords/Screens/PasswordScreen/changepass_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/header_tab_back.dart';
 import 'package:mylastwords/components/rounded_button.dart';
@@ -197,10 +198,17 @@ class _BodyState extends State<Body> {
                   ),     
                   RoundedButton(
                     textColor: Colors.white,
-                    bgcolor: headerBackgroundColor,
+                    bgcolor: ColorTheme5,
                     text: "Change Password",
                     press: () {            
-                      ToastMessage().toastMsgError('Not yet implemented');                                   
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return ChangePassScreen();
+                          },
+                        ),
+                      );                            
                     },
                   ),      
               ],

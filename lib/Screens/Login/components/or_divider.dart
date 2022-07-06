@@ -16,8 +16,9 @@ class OrDivider extends StatelessWidget {
             child: Text(
               "or Sign in with",
               style: TextStyle(
-                color: kPrimaryColor,
+                color: txtColorDark,
                 fontWeight: FontWeight.w600,
+                fontSize: 16,
               ),
             ),
           ),
