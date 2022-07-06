@@ -96,11 +96,16 @@ class AlarmHelper {
     return await db!.update(tblAlarm, alarmInfo.toMap(), where: 'id=?',whereArgs: [alarmInfo.id]);    
   }   
 
-  void scheduleAlarm(DateTime scheduledNotificationDateTime, AlarmInfo alarmInfo) async {
+  void scheduleAlarm(DateTime scheduledNotificationDateTime, AlarmInfo alarmInfo) async {   
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'alarm_notif',
-      'alarm_notif',          
-      sound: RawResourceAndroidNotificationSound(alarmInfo.sound),      
+        alarmInfo.id.toString(),
+        alarmInfo.title.toString(),                  
+        playSound: true,     
+        sound: RawResourceAndroidNotificationSound(alarmInfo.sound),       
+        importance: Importance.max,
+        priority: Priority.high,   
+        enableVibration: true,
+        enableLights: true,          
     );
 
     var iOSPlatformChannelSpecifics = IOSNotificationDetails(
@@ -114,10 +119,10 @@ class AlarmHelper {
         android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.schedule(alarmInfo.id!, 'mylastwords.life', alarmInfo.title,
-        scheduledNotificationDateTime, platformChannelSpecifics);
-    print('Scheduled alarm: ' + alarmInfo.id.toString());
+        scheduledNotificationDateTime, platformChannelSpecifics);                        
   }
-
+  
+  
   void unScheduleAlarm(AlarmInfo alarmInfo)async{
     await flutterLocalNotificationsPlugin.cancel(alarmInfo.id!);
     print('Unscheduled alarm: ' + alarmInfo.id.toString());
