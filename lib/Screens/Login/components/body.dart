@@ -244,13 +244,12 @@ class _BodyState extends State<Body> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: size.height * 0.01),
-            Icon(                              
-                  Icons.login_outlined,
-                  color: headerBackgroundColor,
-                  size: size.height * 0.12,
-                  ), 
-            SizedBox(height: size.height * 0.01),
+            SizedBox(height: size.height * 0.02),
+                        Image.asset(
+              "assets/images/logo.png",
+              height: size.height * 0.2,
+            ),                 
+            SizedBox(height: size.height * 0.02),
             Text(
               "Sign in to your account to access your alarm, private photos and notes",
               style: TextStyle(color: txtColorDark, fontSize: 15),

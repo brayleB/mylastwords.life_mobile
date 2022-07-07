@@ -90,13 +90,12 @@ class _BodyState extends State<Body> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: size.height * 0.01),
-            Icon(                              
-                  Icons.person_add_alt_1_rounded,
-                  color: headerBackgroundColor,
-                  size: size.height * 0.2,
-                  ),                
-            SizedBox(height: size.height * 0.03),
+             SizedBox(height: size.height * 0.02),
+                        Image.asset(
+              "assets/images/logo.png",
+              height: size.height * 0.2,
+            ),                 
+            SizedBox(height: size.height * 0.02),
             RoundedInputField(
               isEnable: true,
               controller: txtEmail,
