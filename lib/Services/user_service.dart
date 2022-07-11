@@ -330,3 +330,33 @@ Future<ApiResponse> logoutUser() async {
   EasyLoading.showInfo('Logout Successfull');
   return apiResponse;
 }
+
+
+//resetPassword
+Future<ApiResponse> forgotPassword(String email) async {
+  EasyLoading.show(status: 'Loading...');
+  ApiResponse apiResponse = ApiResponse();
+  try {    
+    final response = await http.post(
+      Uri.parse(forgotPasswordURL),
+      headers: {
+          'Content-Type': 'application/json',        
+        },
+        body: jsonEncode({
+          'email':email,         
+        })); 
+    print(response.statusCode);
+    switch (response.statusCode) {
+      case 200:
+        print('success');
+        break;     
+      default:
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    apiResponse.error = "Server Error.";
+  }
+  EasyLoading.dismiss();
+  return apiResponse;  
+}
+

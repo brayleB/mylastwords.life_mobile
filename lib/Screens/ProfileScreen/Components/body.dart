@@ -1,5 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mylastwords/Screens/PasswordScreen/changepass_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/header_tab_back.dart';
@@ -31,6 +36,42 @@ class _BodyState extends State<Body> {
   final TextEditingController txtName = TextEditingController();
   final TextEditingController txtContactNumber = TextEditingController();
   final TextEditingController txtAddress = TextEditingController();
+  File? fileImage;
+  final picker = new ImagePicker();  
+
+  Future getImage() async {
+    try{
+      final pickedFile = await picker.getImage(source: ImageSource.gallery, maxHeight: 500, maxWidth: 500);    
+          setState(() {
+            if (pickedFile != null) {       
+              fileImage = File(pickedFile.path);              
+              print('Image selected : '+fileImage.toString());
+          
+            } else {
+              ToastMessage().toastMsgError('No image selected');
+            }
+          });
+    }catch(e){
+      ToastMessage().toastMsgError(e.toString());
+    }    
+  }
+
+  Future takeImage() async {
+     try{
+        final pickedFile = await picker.getImage(source: ImageSource.camera, maxHeight: 500, maxWidth: 400, preferredCameraDevice: CameraDevice.rear);
+          setState(() {
+            if (pickedFile != null) {
+              fileImage = File(pickedFile.path);
+        
+            } else {
+              print('No image selected.');
+            }
+          });        
+     }catch(e){
+        ToastMessage().toastMsgError(e.toString());
+     }
+  }     
+
 
   @override
   void initState() {
@@ -97,6 +138,7 @@ class _BodyState extends State<Body> {
     }
     else{}
   }
+ 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -136,16 +178,39 @@ class _BodyState extends State<Body> {
                                   image: NetworkImage(
                                       userImg))),
                         ), 
-                      Align(
+                      Align(                        
                         alignment: Alignment.bottomCenter,
-                        child: Container(
+                        child: Container(                          
                           height: 50,
                           width: double.infinity,
                           color: Colors.grey.withOpacity(.5),
-                          child: Padding(
+                          child: Padding(                            
                             padding: EdgeInsets.all(4.0),
-                            child: IconButton(                              
-                              onPressed: (){                                
+                            child: IconButton(                                                                                          
+                              onPressed: (){    
+                                if(editableData==true){                                  
+                                   showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) => Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          ListTile(
+                                            leading: Icon(Icons.camera_alt),
+                                            title: Text('Camera'),
+                                            onTap: () {
+                                              takeImage();
+                                            },
+                                          ),
+                                          ListTile(
+                                              leading: Icon(Icons.image),
+                                              title: Text('Gallery'),
+                                              onTap: () {
+                                                getImage();
+                                              }),
+                                        ],
+                                      ),
+                                    );
+                                }                                
                               }, 
                               icon: Icon(                              
                               Icons.camera_alt_outlined,

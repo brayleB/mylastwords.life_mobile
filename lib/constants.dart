@@ -39,6 +39,8 @@ const registerURL = baseURL + 'api/register';
 const updateUserURL = baseURL + 'api/edit-user';
 const logoutURL = baseURL + 'api/logout';
 const userURL = baseURL + 'api/user';
+const forgotPasswordURL = baseURL + 'api/password/email';
+const resetPasswordURL = baseURL + 'api/password/reset';
 
 //Notes API Endpoints
 const addNoteURL = baseURL + 'api/addnote';
