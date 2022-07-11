@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/header_tab_back.dart';
 import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/components/rounded_input_field.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
+import 'package:mylastwords/models/api_response.dart';
 
 
 // import 'package:flutter_svg/svg.dart';
@@ -18,7 +21,7 @@ class ForgotPassScreen extends StatefulWidget {
 }
 
 class _ForgotPassScreenState extends State<ForgotPassScreen> {
-  final TextEditingController txtBackUp = TextEditingController();
+  final TextEditingController txtEmail = TextEditingController();
 
   @override
   void initState() {
@@ -58,7 +61,7 @@ class _ForgotPassScreenState extends State<ForgotPassScreen> {
                  RoundedInputField(
                     isEnable: true,
                     icon: Icons.email_outlined,
-                    controller: txtBackUp,
+                    controller: txtEmail,
                     hintText: "Email",
                     onChanged: (value) {},
                   ),                                                                                           
@@ -66,8 +69,14 @@ class _ForgotPassScreenState extends State<ForgotPassScreen> {
                     textColor: Colors.white,
                     bgcolor: headerBackgroundColor,
                     text: "Submit",
-                    press: () {            
-                      ToastMessage().toastMsgError('Not yet implemented');                                   
+                    press: () async {            
+                      ApiResponse response = await forgotPassword(txtEmail.text);   
+                      if(response.error==null){
+                        EasyLoading.showInfo('A link has sent to your provided email. Please check');
+                      }  
+                      else{
+                        ToastMessage().toastMsgLight(response.error.toString());
+                      }                        
                     },
                   ),      
               ],

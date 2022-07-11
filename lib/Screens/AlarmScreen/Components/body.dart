@@ -438,8 +438,9 @@ class _BodyState extends State<Body> {
                                   
                                     ],
                                   );
+                             },
+                           );
                           },
-                        );},
                         ),   
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
