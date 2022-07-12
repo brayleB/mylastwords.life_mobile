@@ -256,9 +256,8 @@ class _BodyState extends State<Body> {
                     textColor: Colors.white,
                     bgcolor: headerBackgroundColor,
                     text: "Update Profile",
-                    press: () {   
-                      ToastMessage().toastMsgDark('Under development');
-                      // updateingValidator();                                                                                    
+                    press: () {                   
+                      updateingValidator();                                                                                    
                     },
                   ),     
                   RoundedButton(
