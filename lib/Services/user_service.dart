@@ -6,6 +6,7 @@ import 'package:mylastwords/components/loader.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
+import 'package:mylastwords/models/apple.dart';
 import 'package:mylastwords/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
@@ -77,7 +78,7 @@ Future<ApiResponse> register(
         apiResponse.data = User.fromJson(jsonDecode(response.body));
         break;
       case 422:
-        final errors = jsonDecode(response.body)['error'];
+        final errors = jsonDecode(response.body)['errors'];
         apiResponse.error = errors[errors.keys.elementAt(0)[0]];
         break;
       case 403:
@@ -97,94 +98,8 @@ Future<ApiResponse> register(
   return apiResponse;
 }
 
-//loginApple
-Future<ApiResponse> loginOthers(String password) async {
-  EasyLoading.show(status: 'Logging-in');
-  ApiResponse apiResponse = ApiResponse();
-  try {     
-    final response = await http.post(Uri.parse(loginOthersURL),
-        headers: {'Accept': 'application/json'},
-        body: {'password': password});      
-    switch (response.statusCode) {
-      case 200:
-        print(response.body);
-        apiResponse.data = User.fromJson(jsonDecode(response.body));
-        break;
-      case 422:
-        final errors = jsonDecode(response.body)['errors'];
-        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
-        break;
-      case 403:
-        apiResponse.error = jsonDecode(response.body)['message'];
-        break;
-      default:
-        apiResponse.error = "Something went wrong";
-    }
-  } catch (e) {
-    apiResponse.error = "Server Error. Please check Internet Connection";
-  }  
-  EasyLoading.dismiss();
-  return apiResponse;
-}
 
-//RegisterApple
-Future<ApiResponse> registerOthers(  
-  String name,
-  String email,
-  String password,
-  String img,  
-  String contactnumber,
-  String address,
-  String type,
-) async {
-  EasyLoading.show(status: 'Signing Up');
-  ApiResponse apiResponse = ApiResponse();
-  if(img==""){
-    img="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png";
-  }
-  try {
-    final response = await http.post(Uri.parse(registerOthersURL),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'name': name,
-          'email': email,
-          'password': password,
-          'type': type,
-          'subcription': "free",
-          'status': 1,
-          'userImage':img,
-          'contactNumber':contactnumber,
-          'address':address,
-        }));   
-    switch (response.statusCode) {
-      case 200:
-        apiResponse.data = User.fromJson(jsonDecode(response.body));
-        break;
-      case 422:
-        final errors = jsonDecode(response.body)['error'];
-        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
-        break;
-      case 403:
-        apiResponse.error = jsonDecode(response.body)['message'];
-        break;
-      case 302:         
-        EasyLoading.showInfo('Account already exist');        
-        apiResponse.error = jsonDecode(response.body)['message'];
-        break;
-      default:    
-        apiResponse.error = "Something went wrong";
-    }
-  } catch (e) {
-    apiResponse.error = "Server Error";
-  }
-  EasyLoading.dismiss();
-  return apiResponse;
-}
-
-
-
-
-//Register
+//Edit
 Future<ApiResponse> updateUserCall(  
   String name,  
   String contactnumber,
@@ -328,5 +243,133 @@ Future<ApiResponse> logoutUser() async {
     await pref.remove('userId');
     await pref.remove('type');
   EasyLoading.showInfo('Logout Successfull');
+  return apiResponse;
+}
+
+
+//resetPassword
+Future<ApiResponse> forgotPassword(String email) async {
+  EasyLoading.show(status: 'Loading...');
+  ApiResponse apiResponse = ApiResponse();
+  try {    
+    final response = await http.post(
+      Uri.parse(forgotPasswordURL),
+      headers: {
+          'Content-Type': 'application/json',        
+        },
+        body: jsonEncode({
+          'email':email,         
+        })); 
+    print(response.statusCode);
+    switch (response.statusCode) {
+      case 200:
+        print('success');
+        break;     
+      default:
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    apiResponse.error = "Server Error.";
+  }
+  EasyLoading.dismiss();
+  return apiResponse;  
+}
+
+
+//addApple
+Future<ApiResponse> addAppleAccount(  
+  String appleID,
+  String name,
+  String email,
+) async {
+  EasyLoading.show(status: 'Checking Apple Account');
+  ApiResponse apiResponse = ApiResponse();
+  try {
+    final response = await http.post(Uri.parse(addAppleUserURL),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'appleID': appleID,
+          'name': name,
+          'email': email,        
+        }));          
+    switch (response.statusCode) {
+      case 200:        
+        apiResponse.data = AppleAccsModel.fromJson(jsonDecode(response.body));
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['errors'];
+        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
+        break;
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      case 302: 
+        apiResponse.error = "already exists";
+        break;
+      default:    
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) { 
+    apiResponse.error = e.toString();
+  }
+  EasyLoading.dismiss();
+  return apiResponse;
+}
+
+//getApple
+Future<ApiResponse> getAppleAccount(String appleID) async {
+  EasyLoading.show(status: 'Loading data, please wait');
+  ApiResponse apiResponse = ApiResponse();
+  try {    
+    final response = await http.get(
+      Uri.parse(getAppleUserURL+"?appleID="+appleID),
+      headers: {'Accept': 'application/json'},       
+    );   
+    switch (response.statusCode) {
+      case 200:    
+        print(response.body)    ;
+        apiResponse.data = AppleAccsModel.fromJson(jsonDecode(response.body));        
+        break;              
+      default:
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    apiResponse.error = "Server Error.";
+  }
+  EasyLoading.dismiss();
+  return apiResponse;  
+}
+
+//updateAppleAccount
+//Edit
+Future<ApiResponse> updateAppleAccountEmail(  
+  String appleID, String email, 
+) async {
+  EasyLoading.show(status: 'Updating Apple Account');  
+  ApiResponse apiResponse = ApiResponse();
+  try {
+    final response = await http.post(Uri.parse(updateAppleAccountEmailURL),
+        headers: {
+          'Content-Type': 'application/json',       
+        },
+        body: jsonEncode({
+          'appleID':appleID,
+          'email':email,      
+        }));           
+    switch (response.statusCode) {
+      case 200:        
+        break;     
+      case 302: 
+        EasyLoading.showInfo('Email provided already exist');        
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:    
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    print(e.toString());
+    apiResponse.error = "Server Error";
+  }
+  EasyLoading.dismiss();
   return apiResponse;
 }

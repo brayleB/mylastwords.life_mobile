@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mylastwords/Screens/Login/components/appleEmail.dart';
 import 'package:mylastwords/Screens/Login/components/appleicon.dart';
 import 'package:mylastwords/Screens/Login/components/background.dart';
 import 'package:mylastwords/Screens/PasswordScreen/forgotpass_screen.dart';
@@ -15,6 +16,7 @@ import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/models/api_response.dart';
+import 'package:mylastwords/models/apple.dart';
 import 'package:mylastwords/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -89,7 +91,7 @@ class _BodyState extends State<Body> {
 
   
 
-  void appleSignIn() async { 
+  void appleSignIn() async {    
     EasyLoading.show(status: 'Apple Signing in...');  
     try{
       final appleUser = await SignInWithApple.getAppleIDCredential(scopes: 
@@ -97,40 +99,51 @@ class _BodyState extends State<Body> {
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,                       
         ],
-      );            
-        if(appleUser.identityToken!=null){
-          ApiResponse resLogin = await loginOthers(appleUser.userIdentifier.toString());
-          if(resLogin.error==null){
-            _saveAndRedirectToHome(resLogin.data as User);
+      );     
+      //Second Authentication (no email and name provided from apple server)     
+      if(appleUser.email==null){
+        //appleID registration
+        ApiResponse addAppleAccResp = await addAppleAccount(appleUser.userIdentifier.toString(), "", "");        
+        if(addAppleAccResp.error==null){
+          //get appleID
+          ApiResponse getAppleAccResp = await getAppleAccount(appleUser.userIdentifier.toString());
+          if(getAppleAccResp.error==null){
+            var data =  getAppleAccResp.data as AppleAccsModel;
+            var appleId = data.applelist[0].appleID.toString();
+            Navigator.push(context,MaterialPageRoute(builder: (context) {return AppleEmailScreen(appleID: appleId);},),);  
           }
-          else if(resLogin.error=="invalid credentials")
-          {            
-            if(appleUser.email==null){
-              ApiResponse resSignUp = await registerOthers('New User' , '', appleUser.userIdentifier.toString(),'', '', '', 'apple');
-              if(resSignUp.error==null){
-                _saveAndRedirectToHome(resSignUp.data as User);
-              }
-              else{
-                ToastMessage().toastMsgError(resSignUp.error.toString());
-              }
-            }  
-            else{
-              ApiResponse resSignUp = await register(appleUser.givenName.toString() + ' ' +appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(),'', '', '', 'apple');
-              if(resSignUp.error==null){
-                _saveAndRedirectToHome(resSignUp.data as User);
-              }
-              else{
-                ToastMessage().toastMsgError(resSignUp.error.toString());
-              }
-            }    
+        }
+        //appleID failed registration because existing
+        else if(addAppleAccResp.error=="already exists"){
+          //get appleID
+          ApiResponse getAppleAccResp = await getAppleAccount(appleUser.userIdentifier.toString());
+          if(getAppleAccResp.error==null){
+            var data =  getAppleAccResp.data as AppleAccsModel;
+            var appleId = data.applelist[0].appleID.toString();  
+            var email = data.applelist[0].email.toString();   
+            ApiResponse loginResp = await login(email, appleId);
+            if(loginResp.error==null){
+              _saveAndRedirectToHome(loginResp.data as User);
+            }
+            else{ToastMessage().toastMsgDark(loginResp.error.toString());}
           }
-        else{
-          ToastMessage().toastMsgError(resLogin.error.toString());
-        } 
-      }
+        }
+      }  
       else{
-        ToastMessage().toastMsgDark('Something went wrong');
-      }                     
+        ApiResponse addAppleAccResp = await addAppleAccount(appleUser.userIdentifier.toString(), appleUser.email.toString(), appleUser.givenName.toString()+" "+appleUser.familyName.toString()); 
+        if(addAppleAccResp.error==null){
+          ApiResponse signupResp = await register(appleUser.givenName.toString()+" "+appleUser.familyName.toString(), appleUser.email.toString(), appleUser.userIdentifier.toString(), "https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png", "", "", "apple");
+          if(signupResp.error==null){
+            _saveAndRedirectToHome(signupResp.data as User);
+          }
+          else{
+            ToastMessage().toastMsgDark(signupResp.error.toString());
+            }
+        }                
+        else{
+          ToastMessage().toastMsgDark(addAppleAccResp.error.toString());
+        }
+      }                         
     } 
     catch(e){
       ToastMessage().toastMsgDark(e.toString());
@@ -223,8 +236,7 @@ class _BodyState extends State<Body> {
     await pref.setInt('userId', user.id ?? 0);
     await pref.setString('type', user.type ?? '');
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => DashBoard()),(route) => false);    
-    }
-    
+    }    
   }
   
 
@@ -234,23 +246,24 @@ class _BodyState extends State<Body> {
 
     return Background(
       child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            SizedBox(height: size.height * 0.02),
             Text(
               "LOGIN",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: size.height * 0.01),
-            Icon(                              
-                  Icons.login_outlined,
-                  color: headerBackgroundColor,
-                  size: size.height * 0.2,
-                  ), 
-            SizedBox(height: size.height * 0.01),
+            SizedBox(height: size.height * 0.02),
+                        Image.asset(
+              "assets/images/logo.png",
+              height: size.height * 0.2,
+            ),                 
+            SizedBox(height: size.height * 0.02),
             Text(
-              "Sign in to your account to access your alarm \nand your private photos and notes",
+              "Sign in to your account to access your alarm, private photos and notes",
               style: TextStyle(color: txtColorDark, fontSize: 15),
               textAlign: TextAlign.center,
             ),

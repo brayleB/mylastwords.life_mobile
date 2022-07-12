@@ -29,7 +29,7 @@ const ringToneBaseUrl = "AlarmRingtones/";
 //User API Endpoints
 
 //base URL
-const baseURL = "http://144.126.210.250/api/public/";
+const baseURL = "https://mylastwordsadmin.online/";
 // const baseURL = "http://127.0.0.1:8000";
 
 const loginOthersURL = baseURL + 'api/loginOthers';
@@ -39,6 +39,11 @@ const registerURL = baseURL + 'api/register';
 const updateUserURL = baseURL + 'api/edit-user';
 const logoutURL = baseURL + 'api/logout';
 const userURL = baseURL + 'api/user';
+const forgotPasswordURL = baseURL + 'api/password/email';
+const resetPasswordURL = baseURL + 'api/password/reset';
+const addAppleUserURL = baseURL + 'api/addAppleAccount';
+const getAppleUserURL = baseURL + 'api/getAppleAccount';
+const updateAppleAccountEmailURL = baseURL + 'api/updateAppleAccountEmail';
 
 //Notes API Endpoints
 const addNoteURL = baseURL + 'api/addnote';

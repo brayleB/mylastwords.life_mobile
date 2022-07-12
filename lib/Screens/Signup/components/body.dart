@@ -52,7 +52,7 @@ class _BodyState extends State<Body> {
       errmsg =
           "Password must contain atleast 1 uppercase, lowercase, number and a special character";
     } else {
-      ApiResponse response = await register('New User',txtEmail.text, txtPass.text,  'https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png','0123456789','your address','basic',);
+      ApiResponse response = await register('New User',txtEmail.text, txtPass.text,  'https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png','','','basic',);
       print("Reponse Data: " +
           '${response.data}' +
           " Reponse Error: " +
@@ -90,13 +90,12 @@ class _BodyState extends State<Body> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: size.height * 0.01),
-            Icon(                              
-                  Icons.person_add_alt_1_rounded,
-                  color: headerBackgroundColor,
-                  size: size.height * 0.2,
-                  ),                
-            SizedBox(height: size.height * 0.03),
+             SizedBox(height: size.height * 0.02),
+                        Image.asset(
+              "assets/images/logo.png",
+              height: size.height * 0.2,
+            ),                 
+            SizedBox(height: size.height * 0.02),
             RoundedInputField(
               isEnable: true,
               controller: txtEmail,

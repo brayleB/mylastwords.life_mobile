@@ -1,32 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Services/user_service.dart';
+
 import 'package:mylastwords/components/header_tab_back.dart';
 import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/components/rounded_input_field.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
+import 'package:mylastwords/models/apple.dart';
+import 'package:mylastwords/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 // import 'package:flutter_svg/svg.dart';
 
-class ForgotPassScreen extends StatefulWidget {
-  const ForgotPassScreen({
-    Key? key,
-  }) : super(key: key);
+class AppleEmailScreen extends StatefulWidget {
+  final String appleID;
+  const AppleEmailScreen({
+    Key? key, required this.appleID,
+  }) : super(key: key, );
 
   @override
-  _ForgotPassScreenState createState() => _ForgotPassScreenState();
+  _AppleEmailScreenState createState() => _AppleEmailScreenState();
 }
 
-class _ForgotPassScreenState extends State<ForgotPassScreen> {
+class _AppleEmailScreenState extends State<AppleEmailScreen> {
   final TextEditingController txtEmail = TextEditingController();
 
   @override
   void initState() {
    
     super.initState();
+  }
+
+    void _saveAndRedirectToHome(User user) async {    
+    if(user.status.toString()=="deactivated")
+    {
+      EasyLoading.showInfo("User is deactivated. Please contact administrator");
+    }
+    else{
+      SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString('name', user.name ?? '');
+    await pref.setString('token', user.token ?? '');
+    await pref.setString('email', user.email ?? '');
+    await pref.setString('contactNumber', user.contact ?? ''); 
+    await pref.setString('address', user.address ?? '');     
+    await pref.setString('userImage', user.userImage ?? '');
+    await pref.setInt('userId', user.id ?? 0);
+    await pref.setString('type', user.type ?? '');
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => DashBoard()),(route) => false);    
+    }    
   }
 
   @override
@@ -47,13 +73,13 @@ class _ForgotPassScreenState extends State<ForgotPassScreen> {
               children: <Widget>[ 
                  SizedBox(height: size.height * 0.010),     
                  Icon(                              
-                  Icons.lock_reset,
+                  Icons.apple_outlined,
                   color: headerBackgroundColor,
                   size: size.height * 0.15,
                   ),                                                                                                                  
                  SizedBox(height: size.height * 0.015),    
                  Text(
-                    'Provide your account`s Email for your Password Recovery',
+                    'Please enter an Email to provide for this Apple Account',
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
                     textAlign: TextAlign.center,
                  ),  
@@ -70,21 +96,24 @@ class _ForgotPassScreenState extends State<ForgotPassScreen> {
                     bgcolor: headerBackgroundColor,
                     text: "Submit",
                     press: () async {            
-                      ApiResponse response = await forgotPassword(txtEmail.text);   
-                      if(response.error==null){
-                        EasyLoading.showInfo('A link has sent to your provided email. Please check');
-                      }  
-                      else{
-                        ToastMessage().toastMsgLight(response.error.toString());
-                      }                        
+                      if(txtEmail.text!=""){
+                        ApiResponse updateEmailResp = await updateAppleAccountEmail(widget.appleID, txtEmail.text);
+                        if(updateEmailResp.error==null){
+                          ApiResponse signUpResp = await register("Hello User", txtEmail.text, widget.appleID, "https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png", "", "", "apple");
+                          if(signUpResp.error==null){
+                            _saveAndRedirectToHome(signUpResp.data as User);
+                          }                          
+                        }
+                      }else{
+                        EasyLoading.showInfo("Please enter email");
+                      }
                     },
                   ),      
               ],
               ),
             ),
           )
-          );
-     
+          );     
   }
 }
 
