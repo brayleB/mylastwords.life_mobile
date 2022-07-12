@@ -41,6 +41,9 @@ const logoutURL = baseURL + 'api/logout';
 const userURL = baseURL + 'api/user';
 const forgotPasswordURL = baseURL + 'api/password/email';
 const resetPasswordURL = baseURL + 'api/password/reset';
+const addAppleUserURL = baseURL + 'api/addAppleAccount';
+const getAppleUserURL = baseURL + 'api/getAppleAccount';
+const updateAppleAccountEmailURL = baseURL + 'api/updateAppleAccountEmail';
 
 //Notes API Endpoints
 const addNoteURL = baseURL + 'api/addnote';
