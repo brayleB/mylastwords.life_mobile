@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/ProfileScreen/Components/removeAccountScreen.dart';
 import 'package:mylastwords/Screens/ProfileScreen/Components/previewImage.dart';
 import 'package:mylastwords/Services/user_service.dart';
@@ -14,6 +15,7 @@ import 'package:mylastwords/components/rounded_input_field.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
+import 'package:mylastwords/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:flutter_svg/svg.dart';
@@ -130,12 +132,12 @@ class _BodyState extends State<Body> {
     else{
       ApiResponse response = await updateUserCall(txtName.text, txtContactNumber.text, txtAddress.text);
         if(response.error==null){
-          EasyLoading.showInfo('Successfully Updated User');
+          EasyLoading.showInfo('Successfully Updated User');          
           SharedPreferences prefs = await SharedPreferences.getInstance();                     
           await prefs.setString('name',txtName.text);
           await prefs.setString('contactNumber',txtContactNumber.text);
           await prefs.setString('address',txtAddress.text);  
-          loadDetails();        
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => DashBoard()),(route) => false);                
       }
       else{
         ToastMessage().toastMsgError(response.error.toString());
