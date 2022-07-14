@@ -82,7 +82,7 @@ class _AddNoteState extends State<AddNote> {
                 maxLines: 1,
                 maxLength: 100,
                 keyboardType: TextInputType.multiline,
-                decoration: InputDecoration.collapsed(hintText: "Title..."),
+                decoration: InputDecoration.collapsed(hintText: "To whom / Title..."),
                 style: TextStyle(
                     color: txtColorDark,
                     fontSize: 18,
