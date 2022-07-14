@@ -2,18 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/Login/login_screen.dart';
-import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
-import 'package:mylastwords/Screens/Signup/signup_screen.dart';
-import 'package:mylastwords/Screens/Welcome/components/background.dart';
 import 'package:mylastwords/Screens/Welcome/welcome_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
-import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/components/toastmessage.dart';
-import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
 import 'package:mylastwords/models/user.dart';
-import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:new_version/new_version.dart';
 // import 'package:flutter_svg/svg.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,6 +27,39 @@ class SplashScreenState extends State<SplashScreen> {
   void initState() {
     checkToken();
     super.initState();
+    // Instantiate NewVersion manager object (Using GCP Console app as example)
+    final newVersion = NewVersion(
+      iOSId: 'com.example.mylastwords',
+      androidId: 'com.mylastwords.life',
+    );
+    // You can let the plugin handle fetching the status and showing a dialog,
+    // or you can fetch the status and display your own dialog, or no dialog.
+    const simpleBehavior = true;
+    if (simpleBehavior) {
+      basicStatusCheck(newVersion);
+    } else {
+      advancedStatusCheck(newVersion);
+    }
+  }
+
+  basicStatusCheck(NewVersion newVersion) {
+    newVersion.showAlertIfNecessary(context: context);
+  }
+
+  advancedStatusCheck(NewVersion newVersion) async {
+    final status = await newVersion.getVersionStatus();
+    if (status != null) {
+      debugPrint(status.releaseNotes);
+      debugPrint(status.appStoreLink);
+      debugPrint(status.localVersion);
+      debugPrint(status.storeVersion);
+      debugPrint(status.canUpdate.toString());
+      newVersion.showUpdateDialog(
+        context: context,
+        versionStatus: status,
+        dialogTitle: 'Update Available',        
+      );
+    }
   }
 
   checkToken() async {
@@ -63,6 +91,9 @@ class SplashScreenState extends State<SplashScreen> {
     {
       EasyLoading.showInfo("This account is deactivated. Visit mylastwords.life for inquiries.");
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LoginScreen()),(route) => false);
+    }
+    else if(user.status==2){
+      EasyLoading.showInfo("This account is previously removed. Contact mylastwords.life for account recovery");
     }
     else{
       SharedPreferences pref = await SharedPreferences.getInstance();
