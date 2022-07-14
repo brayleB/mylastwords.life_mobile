@@ -131,11 +131,7 @@ Future<ApiResponse> updateUserCall(
         break;
       case 403:
         apiResponse.error = jsonDecode(response.body)['message'];
-        break;
-      case 302: 
-        EasyLoading.showInfo('Email provided already exist');        
-        apiResponse.error = jsonDecode(response.body)['message'];
-        break;
+        break;    
       default:    
         apiResponse.error = "Something went wrong";
     }
