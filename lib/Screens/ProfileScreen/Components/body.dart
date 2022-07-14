@@ -5,7 +5,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mylastwords/Screens/PasswordScreen/changepass_screen.dart';
+import 'package:mylastwords/Screens/ProfileScreen/Components/removeAccountScreen.dart';
+import 'package:mylastwords/Screens/ProfileScreen/Components/previewImage.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/header_tab_back.dart';
 import 'package:mylastwords/components/rounded_button.dart';
@@ -44,8 +45,11 @@ class _BodyState extends State<Body> {
       final pickedFile = await picker.getImage(source: ImageSource.gallery, maxHeight: 500, maxWidth: 500);    
           setState(() {
             if (pickedFile != null) {       
-              fileImage = File(pickedFile.path);              
-              print('Image selected : '+fileImage.toString());
+              fileImage = File(pickedFile.path);      
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PreviewImage(fileImage: fileImage)));                   
           
             } else {
               ToastMessage().toastMsgError('No image selected');
@@ -61,7 +65,11 @@ class _BodyState extends State<Body> {
         final pickedFile = await picker.getImage(source: ImageSource.camera, maxHeight: 500, maxWidth: 400, preferredCameraDevice: CameraDevice.rear);
           setState(() {
             if (pickedFile != null) {
-              fileImage = File(pickedFile.path);
+              fileImage = File(pickedFile.path);   
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PreviewImage(fileImage: fileImage)));                 
         
             } else {
               print('No image selected.');
@@ -225,7 +233,7 @@ class _BodyState extends State<Body> {
                 ),             
                  SizedBox(height: size.height * 0.015),                        
                  RoundedInputField(
-                    isEnable: editableData,
+                    isEnable: false,
                     icon: Icons.email_outlined,
                     controller: txtEmail,
                     hintText: "Email",
@@ -255,26 +263,68 @@ class _BodyState extends State<Body> {
                   RoundedButton(
                     textColor: Colors.white,
                     bgcolor: headerBackgroundColor,
-                    text: "Update Profile",
+                    text: "Save",
                     press: () {                   
                       updateingValidator();                                                                                    
                     },
                   ),     
-                  RoundedButton(
+                  // RoundedButton(
+                  //   textColor: Colors.white,
+                  //   bgcolor: ColorTheme5,
+                  //   text: "Change Password",
+                  //   press: () {            
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) {
+                  //           return ChangePassScreen();
+                  //         },
+                  //       ),
+                  //     );                            
+                  //   },
+                  // ),   
+                   RoundedButton(
                     textColor: Colors.white,
                     bgcolor: ColorTheme5,
-                    text: "Change Password",
+                    text: "Delete Account",
                     press: () {            
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
+                      showDialog(
+                          context: context,
                           builder: (context) {
-                            return ChangePassScreen();
+                            return AlertDialog(
+                              title: Text('Confirmation'),
+                              content: Text('Do you really want to delete your account? All notes and images will be removed.'),
+                              backgroundColor: lightBackground,
+                              actions: <Widget>[
+                                new TextButton(
+                                  onPressed: () async {  
+                                    ApiResponse resp = await requestAccountRemoval();
+                                    if(resp.error==null){
+                                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => RemoveAccountScreen()),(route) => false); 
+                                    }else{ToastMessage().toastMsgDark(resp.error.toString());}                                    
+                                    },
+                                  child: Text(
+                                    'Yes',
+                                    style: TextStyle(
+                                        color: txtColorDark, fontSize: 17),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true).pop(
+                                        false); // dismisses only the dialog and returns false
+                                  },
+                                  child: Text(
+                                    'No',
+                                    style: TextStyle(
+                                        color: txtColorDark, fontSize: 15),
+                                  ),
+                                ),
+                              ],
+                            );
                           },
-                        ),
-                      );                            
-                    },
-                  ),      
+                        ); },
+                  ),   
               ],
               ),
             ),

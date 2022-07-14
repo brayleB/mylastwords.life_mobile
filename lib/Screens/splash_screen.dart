@@ -58,10 +58,10 @@ class SplashScreenState extends State<SplashScreen> {
     }   
   }
 
-  void _saveAndRedirectToHome(User user) async {    
-    if(user.status.toString()=="deactivated")
+  void _saveAndRedirectToHome(User user) async {        
+    if(user.status==0)
     {
-      EasyLoading.showInfo("User is deactivated. Please contact administrator");
+      EasyLoading.showInfo("This account is deactivated. Visit mylastwords.life for inquiries.");
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LoginScreen()),(route) => false);
     }
     else{
