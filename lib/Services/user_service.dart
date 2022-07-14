@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -341,7 +342,6 @@ Future<ApiResponse> getAppleAccount(String appleID) async {
 }
 
 //updateAppleAccount
-//Edit
 Future<ApiResponse> updateAppleAccountEmail(  
   String appleID, String email, 
 ) async {
@@ -369,6 +369,62 @@ Future<ApiResponse> updateAppleAccountEmail(
   } catch (e) {
     print(e.toString());
     apiResponse.error = "Server Error";
+  }
+  EasyLoading.dismiss();
+  return apiResponse;
+}
+
+//requestAccountRemoval
+//updateAppleAccount
+Future<ApiResponse> requestAccountRemoval(    
+) async {
+  EasyLoading.show(status: 'Requesting account removal');  
+  String token = await getToken();
+  int id = await getuserId();
+  ApiResponse apiResponse = ApiResponse();
+  try {
+    final response = await http.post(Uri.parse(requestAccountRemovalURL),
+        headers: {
+          'Content-Type': 'application/json','Authorization': 'Bearer $token'      
+        },
+        body: jsonEncode({
+          'id':id,             
+        }));   
+    print(response.body)       ;
+    switch (response.statusCode) {
+      case 200:        
+        break;      
+      default:    
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) { 
+    apiResponse.error = "Server Error";
+  }
+  EasyLoading.dismiss();
+  return apiResponse;
+}
+
+//update Profile Image
+Future<ApiResponse> updateProfilePicture(File img) async {
+  EasyLoading.show();
+  ApiResponse apiResponse = ApiResponse();
+  String token = await getToken();
+  int id = await getuserId();  
+  var stream = http.ByteStream(img.openRead());
+  stream.cast();
+  // var length = await img.length();
+  var request = http.MultipartRequest('POST', Uri.parse(changeProfilePhoto));
+  request.fields['id'] = id.toString();  
+  request.headers.addAll({'Authorization': 'Bearer $token'});
+  request.files.add(http.MultipartFile.fromBytes('file', File(img.path).readAsBytesSync(),filename: img.path));
+  var response = await request.send();  
+  print(request.headers);
+  if (response.statusCode == 200) {
+    ToastMessage().toastMsgDark('Photo uploaded successfully');
+  } 
+  else {
+    print(response.reasonPhrase);
+    ToastMessage().toastMsgError('Error uploading photo');
   }
   EasyLoading.dismiss();
   return apiResponse;

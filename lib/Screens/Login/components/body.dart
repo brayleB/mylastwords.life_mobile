@@ -220,22 +220,25 @@ class _BodyState extends State<Body> {
     EasyLoading.dismiss();      
   }
 
-  void _saveAndRedirectToHome(User user) async {    
-    if(user.status.toString()=="deactivated")
+  void _saveAndRedirectToHome(User user) async {     
+    if(user.status==0)
     {
-      EasyLoading.showInfo("User is deactivated. Please contact administrator");
+      EasyLoading.showInfo("This account is deactivated. Visit mylastwords.life for inquiries.");
     }
-    else{
+    else if(user.status==2){
+      EasyLoading.showInfo("This account is previously removed. Contact mylastwords.life for account recovery");
+    }
+    else{           
       SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setString('name', user.name ?? '');
-    await pref.setString('token', user.token ?? '');
-    await pref.setString('email', user.email ?? '');
-    await pref.setString('contactNumber', user.contact ?? ''); 
-    await pref.setString('address', user.address ?? '');     
-    await pref.setString('userImage', user.userImage ?? '');
-    await pref.setInt('userId', user.id ?? 0);
-    await pref.setString('type', user.type ?? '');
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => DashBoard()),(route) => false);    
+      await pref.setString('name', user.name ?? '');
+      await pref.setString('token', user.token ?? '');
+      await pref.setString('email', user.email ?? '');
+      await pref.setString('contactNumber', user.contact ?? ''); 
+      await pref.setString('address', user.address ?? '');     
+      await pref.setString('userImage', user.userImage??'');
+      await pref.setInt('userId', user.id ?? 0);
+      await pref.setString('type', user.type ?? '');
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => DashBoard()),(route) => false);    
     }    
   }
   
@@ -279,27 +282,27 @@ class _BodyState extends State<Body> {
               controller: txtPass,
               onChanged: (value) {},
             ),
-             SizedBox(height: size.height * 0.01),
-             GestureDetector(
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return ForgotPassScreen();
-                    },
-                  ),
-                );
-              },
-              child: Text(
-                "Forgot password?",
-                style: TextStyle(
-                  color: txtColorDark,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16
-                ),
-              ),
-            ),
+            //  SizedBox(height: size.height * 0.01),
+            //  GestureDetector(
+            //   onTap: (){
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) {
+            //           return ForgotPassScreen();
+            //         },
+            //       ),
+            //     );
+            //   },
+            //   child: Text(
+            //     "Forgot password?",
+            //     style: TextStyle(
+            //       color: txtColorDark,
+            //       fontWeight: FontWeight.bold,
+            //       fontSize: 16
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: size.height * 0.01),
             RoundedButton(
                 textColor: txtColorLight,
