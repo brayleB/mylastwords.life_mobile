@@ -44,14 +44,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
           ApiResponse response = await updateNote(widget.id, txtTitle.text, txtBody.text);
           if(response.error==null){
             ToastMessage().toastMsgDark('Note updated');    
-               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return NoteScreen();
-                    },
-                  ),
-                );                    
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => false);                    
           }
           else{
             ToastMessage().toastMsgError('Note updating error');
@@ -94,14 +87,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
                             onPressed: () async {
                                   ApiResponse apiResponse = await deleteNote(widget.id);
                                   if(apiResponse.error==null){
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return NoteScreen();
-                                        },
-                                      ),
-                                    );
+                                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => false);
                                   }  
                             },
                             child: Text(
