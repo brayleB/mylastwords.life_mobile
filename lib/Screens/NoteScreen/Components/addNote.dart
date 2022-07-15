@@ -38,7 +38,7 @@ class _AddNoteState extends State<AddNote> {
     } else {
       ApiResponse response = await addNote(txtTitle.text, txtNote.text);
       if (response.error == null) {
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => true);        
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => false);       
       } else {
         ToastMessage().toastMsgDark('${response.error}');
       }
