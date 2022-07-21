@@ -70,20 +70,13 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: HeaderTab(
           backgroundcolor: headerBackgroundColor,
           title: 'Notes',
-          iconbtn: Icons.note_add_outlined,
-          press: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return AddNote();
-                },
-              ),
-            );
+          iconbtn: Icons.info_outline,
+          press: () {            
           }),
       backgroundColor: darkBackground,
       body: Column(
@@ -125,6 +118,26 @@ class _BodyState extends State<Body> {
           ),
         ],
       ),
+      floatingActionButton: Container(
+        height: size.height * 0.17,
+        width: size.width * 0.17, 
+        margin: EdgeInsets.only(right: size.width*0.05),      
+        child: FloatingActionButton(
+            onPressed: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return AddNote();
+                  },
+                ),
+              );
+            },
+            child: Icon(Icons.add, size: 30),
+            backgroundColor: headerBackgroundColor,               
+            ),
+          ),      
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

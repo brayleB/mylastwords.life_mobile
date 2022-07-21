@@ -285,9 +285,9 @@ Future<ApiResponse> addAppleAccount(
     final response = await http.post(Uri.parse(addAppleUserURL),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'appleID': appleID,
-          'name': name,
-          'email': email,        
+          'appleID': appleID,          
+          'email': email,   
+          'name': name,     
         }));          
     switch (response.statusCode) {
       case 200:        

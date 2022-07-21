@@ -6,7 +6,6 @@ import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
 import 'package:mylastwords/models/note.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 //addNote
 Future<ApiResponse> addNote(String title, String body) async {
@@ -25,7 +24,7 @@ Future<ApiResponse> addNote(String title, String body) async {
           'title': title,
           'body': body,
         }));
-
+    print(response.body);
     switch (response.statusCode) {
       case 200:      
         apiResponse.data = Note.fromJson(jsonDecode(response.body));
