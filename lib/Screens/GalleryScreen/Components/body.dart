@@ -81,30 +81,9 @@ class _BodyState extends State<Body> {
           appBar: HeaderTab(
           backgroundcolor: headerBackgroundColor,
           title: 'Gallery',
-          press: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (context) => Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.camera_alt),
-                    title: Text('Camera'),
-                    onTap: () {
-                      takeImage();
-                    },
-                  ),
-                  ListTile(
-                      leading: Icon(Icons.image),
-                      title: Text('Gallery'),
-                      onTap: () {
-                        getImage();
-                      }),
-                ],
-              ),
-            );
+          press: () {            
           },
-          iconbtn: Icons.add_a_photo,
+          iconbtn: Icons.info_outline,
         ),
         backgroundColor: lightBackground,
         body:Container(
@@ -181,7 +160,40 @@ class _BodyState extends State<Body> {
             }
           },
         ),   
-      )
+      ),
+      floatingActionButton: Container(
+        height: size.height * 0.17,
+        width: size.width * 0.17, 
+        margin: EdgeInsets.only(right: size.width*0.05),      
+        child: FloatingActionButton(
+            onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        leading: Icon(Icons.camera_alt),
+                        title: Text('Camera'),
+                        onTap: () {
+                          takeImage();
+                        },
+                      ),
+                      ListTile(
+                          leading: Icon(Icons.image),
+                          title: Text('Gallery'),
+                          onTap: () {
+                            getImage();
+                          }),
+                    ],
+                  ),
+                );
+            },
+            child: Icon(Icons.add, size: 30),
+            backgroundColor: headerBackgroundColor,               
+            ),
+          ),      
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       );       
     }
 }

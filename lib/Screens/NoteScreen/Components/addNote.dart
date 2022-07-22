@@ -27,6 +27,8 @@ class AddNote extends StatefulWidget {
 class _AddNoteState extends State<AddNote> {
   final TextEditingController txtNote = TextEditingController();
   final TextEditingController txtTitle = TextEditingController();
+  final TextEditingController txtSpecialIns = TextEditingController();
+  final TextEditingController txtContactInfo = TextEditingController();
 
   void _validateAddNote() async {
     var errmsg = "";
@@ -66,54 +68,100 @@ class _AddNoteState extends State<AddNote> {
         },
       ),
       backgroundColor: darkBackground,
-      body: Column(
-        children: <Widget>[
-          Card(
-            margin: EdgeInsets.only(top: 10, left: 15, right: 15),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-            ),
-            color: txtColorLight,
-            child: Padding(
-              padding: EdgeInsets.all(15.0),
-              child: TextField(
-                controller: txtTitle,
-                maxLines: 1,
-                maxLength: 100,
-                keyboardType: TextInputType.multiline,
-                decoration: InputDecoration.collapsed(hintText: "To whom / Title..."),
-                style: TextStyle(
-                    color: txtColorDark,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400),
+      body: SingleChildScrollView(child: 
+          Column(
+           children: <Widget>[
+//title/to whom          
+            Card(
+              margin: EdgeInsets.only(top: 10, left: 15, right: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+              ),
+              color: txtColorLight,
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: TextField(
+                  controller: txtTitle,
+                  maxLines: 1,
+                  maxLength: 100,
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration.collapsed(hintText: "To whom or Title..."),
+                  style: TextStyle(
+                      color: txtColorDark,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400),
+                ),
               ),
             ),
-          ),
-          Card(
-            margin: EdgeInsets.only(top: 2, left: 15, right: 15),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-            ),
-            color: txtColorLight,
-            child: Padding(
-              padding: EdgeInsets.all(15.0),
-              child: TextField(
-                controller: txtNote,
-                maxLines: 20,
-                maxLength: 1000,
-                keyboardType: TextInputType.multiline,
-                decoration: InputDecoration.collapsed(hintText: "Body..."),
-                style: TextStyle(
-                    color: txtColorDark,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w400),
+  //special instructions        
+            Card(
+              margin: EdgeInsets.only(top: 2, left: 15, right: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(1))),            
+              color: txtColorLight,
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: TextField(
+                  controller: txtSpecialIns,
+                  maxLines: 2,
+                  maxLength: 150,
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration.collapsed(hintText: "Special Instructions..."),
+                  style: TextStyle(
+                      color: txtColorDark,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400),
+                ),
               ),
             ),
-          ),
-        ],
+  //contact info       
+            Card(
+              margin: EdgeInsets.only(top: 2, left: 15, right: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(1))),            
+              color: txtColorLight,
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: TextField(
+                  controller: txtContactInfo,
+                  maxLines: 1,
+                  maxLength: 50,
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration.collapsed(hintText: "Contact Information..."),
+                  style: TextStyle(
+                      color: txtColorDark,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+            ),          
+  //body          
+            Card(
+              margin: EdgeInsets.only(top: 2, left: 15, right: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10)),
+              ),
+              color: txtColorLight,
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: TextField(
+                  controller: txtNote,
+                  maxLines: 30,
+                  maxLength: 1000,
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration.collapsed(hintText: "Body..."),
+                  style: TextStyle(
+                      color: txtColorDark,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

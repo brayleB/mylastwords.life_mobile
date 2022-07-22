@@ -135,6 +135,48 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
               ),
             ),
           ),
+          //special instructions        
+            Card(
+              margin: EdgeInsets.only(top: 2, left: 15, right: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(1))),            
+              color: txtColorLight,
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: TextField(
+                  controller: txtTitle,
+                  maxLines: 2,
+                  maxLength: 150,
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration.collapsed(hintText: "Special Instructions..."),
+                  style: TextStyle(
+                      color: txtColorDark,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+            ),
+  //contact info       
+            Card(
+              margin: EdgeInsets.only(top: 2, left: 15, right: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(1))),            
+              color: txtColorLight,
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: TextField(
+                  controller: txtTitle,
+                  maxLines: 1,
+                  maxLength: 50,
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration.collapsed(hintText: "Contact Information..."),
+                  style: TextStyle(
+                      color: txtColorDark,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+            ),   
           Card(
             margin: EdgeInsets.only(top: 2, left: 15, right: 15),
             shape: RoundedRectangleBorder(
