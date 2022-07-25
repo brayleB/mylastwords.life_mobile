@@ -20,8 +20,10 @@ class PreviewEditNote extends StatefulWidget {
   final int id;
   final String keyTitle;
   final String keyNote;
+  final String keyInstruct;
+  final String keyContact;
   const PreviewEditNote(
-      {Key? key, required this.id, required this.keyTitle, required this.keyNote})
+      {Key? key, required this.id, required this.keyTitle, required this.keyNote, required this.keyInstruct, required this.keyContact})
       : super(
           key: key,
         );
@@ -33,6 +35,8 @@ class PreviewEditNote extends StatefulWidget {
 class _PreviewEditNoteState extends State<PreviewEditNote> {
   final TextEditingController txtBody = TextEditingController();
   final TextEditingController txtTitle = TextEditingController();
+  final TextEditingController txtInstruct = TextEditingController();
+  final TextEditingController txtContact = TextEditingController();
   void _validateAddNote() async {
     var errmsg = "";
     if (txtBody.text == "") {
@@ -41,7 +45,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
     else if (txtTitle.text == "") {
       errmsg = "Please enter a Title";
     } else {
-          ApiResponse response = await updateNote(widget.id, txtTitle.text, txtBody.text);
+          ApiResponse response = await updateNote(widget.id, txtTitle.text, txtBody.text, txtInstruct.text, txtContact.text);
           if(response.error==null){
             ToastMessage().toastMsgDark('Note updated');    
             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => false);                    
@@ -59,6 +63,8 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
   void initState() {
     txtTitle.text = widget.keyTitle;
     txtBody.text = widget.keyNote;
+    txtInstruct.text = widget.keyInstruct;
+    txtContact.text = widget.keyContact;
     super.initState();
   }
 
@@ -144,7 +150,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
               child: Padding(
                 padding: EdgeInsets.all(15.0),
                 child: TextField(
-                  controller: txtTitle,
+                  controller: txtInstruct,
                   maxLines: 2,
                   maxLength: 150,
                   keyboardType: TextInputType.multiline,
@@ -165,7 +171,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
               child: Padding(
                 padding: EdgeInsets.all(15.0),
                 child: TextField(
-                  controller: txtTitle,
+                  controller: txtContact,
                   maxLines: 1,
                   maxLength: 50,
                   keyboardType: TextInputType.multiline,

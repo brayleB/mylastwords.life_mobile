@@ -39,12 +39,14 @@ class _BodyState extends State<Body> {
               data[index].id,
               data[index].title.toString(),
               data[index].body.toString(),
+              data[index].instructions.toString(),
+              data[index].contact.toString(),
               DateFormat('MMM dd, yyyy   hh:mm aa')
                   .format(data[index].dateUpdated));
         });
   }
 
-  ListTile _tile(int id, String title, String body, String dateUpdated) =>
+  ListTile _tile(int id, String title, String body, String instructions, String contact, String dateUpdated) =>
       ListTile(
         onTap: (){  Navigator.push(
                   context,
@@ -53,6 +55,8 @@ class _BodyState extends State<Body> {
                             id: id,
                             keyTitle: title,
                             keyNote: body,
+                            keyInstruct: instructions,
+                            keyContact: contact,
                           )));},
         leading: Icon(
               Icons.notes_outlined,
