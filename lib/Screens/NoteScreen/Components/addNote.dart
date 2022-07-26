@@ -38,7 +38,7 @@ class _AddNoteState extends State<AddNote> {
     else if (txtTitle.text == "") {
       errmsg = "Please enter a Title";
     } else {
-      ApiResponse response = await addNote(txtTitle.text, txtNote.text);
+      ApiResponse response = await addNote(txtTitle.text, txtNote.text, txtSpecialIns.text, txtContactInfo.text);
       if (response.error == null) {
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => false);       
       } else {
