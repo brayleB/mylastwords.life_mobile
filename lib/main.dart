@@ -4,13 +4,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/splash_screen.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  tz.initializeTimeZones();
   var initializationSettingsAndroid =
       AndroidInitializationSettings('codex_logo');
   var initializationSettingsIOS = IOSInitializationSettings(

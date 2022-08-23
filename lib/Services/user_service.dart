@@ -236,6 +236,7 @@ Future<ApiResponse> logoutUser() async {
     await pref.remove('userImage');
     await pref.remove('userId');
     await pref.remove('type');
+    await pref.setBool('isLoggedIn',false);
   EasyLoading.showInfo('Logout Successfull');
   return apiResponse;
 }

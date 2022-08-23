@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
 import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/Login/login_screen.dart';
 import 'package:mylastwords/Screens/Welcome/welcome_screen.dart';
@@ -71,7 +72,8 @@ class SplashScreenState extends State<SplashScreen> {
       await pref.setString('userImage', user.userImage ?? '');
       await pref.setInt('userId', user.id ?? 0);
       await pref.setString('type', user.type ?? '');
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => DashBoard()),(route) => false);
+      await pref.setBool('isLoggedIn', true);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AlarmScreen()),(route) => false);
     }    
   }
 
