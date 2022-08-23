@@ -1,5 +1,6 @@
 // ignore_for_file: unused_field, import_of_legacy_library_into_null_safe, deprecated_member_use
 
+import 'package:flutter/material.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/models/alarm_info.dart';
 import 'package:sqflite/sqflite.dart';
@@ -119,7 +120,33 @@ class AlarmHelper {
         android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.schedule(alarmInfo.id!, 'mylastwords.life', alarmInfo.title,
-        scheduledNotificationDateTime, platformChannelSpecifics);                        
+        scheduledNotificationDateTime, platformChannelSpecifics);                              
+  }
+
+  void scheduleAlarmRepeated(List<Day> days, Time time, AlarmInfo alarmInfo) async {   
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        alarmInfo.id.toString(),
+        alarmInfo.title.toString(),                  
+        playSound: true,     
+        sound: RawResourceAndroidNotificationSound(alarmInfo.sound),       
+        importance: Importance.max,
+        priority: Priority.high,   
+        enableVibration: true,
+        enableLights: true,          
+    );
+
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails(
+        sound: alarmInfo.sound! +'.wav',               
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,          
+    );
+
+    var platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(alarmInfo.id!, 'mylastwords.life', alarmInfo.title, (Day.monday), 
+        Time(0,0,0), platformChannelSpecifics);                              
   }
   
   
@@ -127,4 +154,5 @@ class AlarmHelper {
     await flutterLocalNotificationsPlugin.cancel(alarmInfo.id!);
     print('Unscheduled alarm: ' + alarmInfo.id.toString());
   }
+
 }

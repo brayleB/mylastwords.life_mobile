@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mylastwords/Screens/AlarmScreen/Components/alarm_helper.dart';
+import 'package:mylastwords/components/drawer.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/components/header_tab.dart';
@@ -136,20 +137,10 @@ class _BodyState extends State<Body> {
     Size size = MediaQuery.of(context).size;
    
     return Scaffold(
-      appBar: HeaderTab(
-        backgroundcolor: headerBackgroundColor,
-        title: 'Alarm',
-        iconbtn: Icons.info_outline,
-        press: () {
-         Fluttertoast.showToast(
-          msg: 'Do not forget to turn on notification',
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 4,
-          backgroundColor: lightBackground,
-          textColor: txtColorDark,
-          fontSize: 17.0);
-        },
+      drawer: DrawerScreen(),
+      appBar: AppBar(        
+        backgroundColor: headerBackgroundColor,
+        title: Text('Alarms'),         
       ),
       backgroundColor: darkBackground,
       body: Column(
@@ -671,25 +662,25 @@ class _BodyState extends State<Body> {
                             FlatButton(
                               onPressed: () async {
                                 var selectedTime = await showTimePicker(
-                                                                  context: context,
-                                                                  initialTime: TimeOfDay.now(),
-                                                                  builder: (context, child) {
-                                                                    return Theme(
-                                                                      data: Theme.of(context).copyWith(
-                                                                        // This uses the _timePickerTheme defined above
-                                                                        timePickerTheme: _timePickerTheme,
-                                                                        textButtonTheme: TextButtonThemeData(
-                                                                          style: ButtonStyle(
-                                                                            backgroundColor: MaterialStateColor.resolveWith((states) => darkBackground),
-                                                                            foregroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
-                                                                            overlayColor: MaterialStateColor.resolveWith((states) => Colors.deepOrange),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      child: child!,
-                                                                    );
-                                                                  },
-                                                                );
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                    builder: (context, child) {
+                                      return Theme(
+                                        data: Theme.of(context).copyWith(
+                                          // This uses the _timePickerTheme defined above
+                                          timePickerTheme: _timePickerTheme,
+                                          textButtonTheme: TextButtonThemeData(
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateColor.resolveWith((states) => darkBackground),
+                                              foregroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
+                                              overlayColor: MaterialStateColor.resolveWith((states) => Colors.deepOrange),
+                                            ),
+                                          ),
+                                        ),
+                                        child: child!,
+                                      );
+                                    },
+                                  );
                                 if (selectedTime != null) {
                                   final now = DateTime.now();
                                   var selectedDateTime = DateTime(
@@ -998,8 +989,7 @@ class _BodyState extends State<Body> {
             child: Icon(Icons.add, size: 30),
             backgroundColor: headerBackgroundColor,               
             ),
-          ),      
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+          ),            
     );
   }
 }
