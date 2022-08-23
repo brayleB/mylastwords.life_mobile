@@ -56,13 +56,13 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>This app requires access to music files</string>
+	<string>This app requires access to music files to set as your alarm ringtone</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>This app requires access to calendar </string>
+	<string>This app requires access to calendar</string>
 	<key>NSCameraUsageDescription</key>
-	<string>This app requires access to camera</string>
+	<string>This app requires access to camera to take an image and add into your journals</string>
 	<key>NSContactsUsageDescription</key>
-	<string>This app requires access to contacts </string>
+	<string>This app requires access to contacts</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app requires access to location services</string>
 	<key>NSMicrophoneUsageDescription</key>
@@ -70,7 +70,7 @@
 	<key>NSMotionUsageDescription</key>
 	<string>This app requires access to device motion data</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app requires access to image files</string>
+	<string>This app requires access to image files to add into your journals</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>This app requires to send user data to Apple speech recognition servers</string>
 	<key>UILaunchStoryboardName</key>

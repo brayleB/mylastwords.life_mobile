@@ -3,12 +3,17 @@ class Note {
   int? userId;
   String? title;
   String? body;
+  String? instructions;
+  String? contact;
+
 
   Note({
     this.id,
     this.userId,
     this.title,
     this.body,
+    this.instructions,
+    this.contact
   });
 
   //function to convrt json data to notes model
@@ -18,6 +23,8 @@ class Note {
       userId: json['notes']['userId'],
       title: json['notes']['title'],
       body: json['notes']['body'],
+      instructions: json['notes']['instructions'],
+      contact: json['notes']['contact']
     );
   }
 
@@ -35,12 +42,16 @@ class NoteList {
   final int? userId;
   final String? title;
   final String? body;
+  final String? instructions;
+  final String? contact;
 
   NoteList({
     this.id,
     this.userId,
     this.title,
     this.body,
+    this.instructions,
+    this.contact
   });
 
   //function to convrt json data to notes model
@@ -50,6 +61,8 @@ class NoteList {
       userId: json["userId"],
       title: json["title"],
       body: json["body"],
+      instructions: json["instructions"],
+      contact: json["contact"],
     );
   }
 
@@ -59,6 +72,8 @@ class NoteList {
       "userId": userId,
       "title": title,
       "body": body,
+      "instructions":instructions,
+      "contact":contact
     };
   }
 }
@@ -67,6 +82,8 @@ class NotesModel {
   final int? id;
   final String? title;
   final String? body;
+  final String? instructions;
+  final String? contact;
   final DateTime? dateUpdated;
   final List<NoteList> notelist;
 
@@ -75,48 +92,25 @@ class NotesModel {
       required this.id,
       required this.title,
       required this.body,
+      required this.instructions,
+      required this.contact,
       required this.dateUpdated});
 
-  factory NotesModel.fromJson(Map<String, dynamic> data) {
-    // cast to a nullable list as the reviews may be missing
-    final notesdata = data['notes'] as List<dynamic>?;
-    // if the reviews are not missing
-    final notelist = notesdata != null
-        // map each review to a Review object
+  factory NotesModel.fromJson(Map<String, dynamic> data) {    
+    final notesdata = data['notes'] as List<dynamic>?;   
+    final notelist = notesdata != null      
         ? notesdata
-            .map((notesdata) => NoteList.fromJson(notesdata))
-            // map() returns an Iterable so we convert it to a List
-            .toList()
-        // use an empty list as fallback value
-        : <NoteList>[];
-    // return result passing all the arguments
+            .map((notesdata) => NoteList.fromJson(notesdata))         
+            .toList()        
+        : <NoteList>[];  
     return NotesModel(
         notelist: notelist,
         id: data['id'],
         title: data['title'],
         body: data['body'],
+        instructions: data['instructions'],
+        contact: data['contact'],
         dateUpdated: DateTime.parse(data["updated_at"]));
   }
 }
 
-class Job {
-  final int id;
-  final String position;
-  final String company;
-  final String description;
-
-  Job(
-      {required this.id,
-      required this.position,
-      required this.company,
-      required this.description});
-
-  factory Job.fromJson(Map<String, dynamic> json) {
-    return Job(
-      id: json['id'],
-      position: json['position'],
-      company: json['company'],
-      description: json['description'],
-    );
-  }
-}

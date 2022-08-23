@@ -20,8 +20,10 @@ class PreviewEditNote extends StatefulWidget {
   final int id;
   final String keyTitle;
   final String keyNote;
+  final String keyInstruct;
+  final String keyContact;
   const PreviewEditNote(
-      {Key? key, required this.id, required this.keyTitle, required this.keyNote})
+      {Key? key, required this.id, required this.keyTitle, required this.keyNote, required this.keyInstruct, required this.keyContact})
       : super(
           key: key,
         );
@@ -33,6 +35,8 @@ class PreviewEditNote extends StatefulWidget {
 class _PreviewEditNoteState extends State<PreviewEditNote> {
   final TextEditingController txtBody = TextEditingController();
   final TextEditingController txtTitle = TextEditingController();
+  final TextEditingController txtInstruct = TextEditingController();
+  final TextEditingController txtContact = TextEditingController();
   void _validateAddNote() async {
     var errmsg = "";
     if (txtBody.text == "") {
@@ -41,17 +45,10 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
     else if (txtTitle.text == "") {
       errmsg = "Please enter a Title";
     } else {
-          ApiResponse response = await updateNote(widget.id, txtTitle.text, txtBody.text);
+          ApiResponse response = await updateNote(widget.id, txtTitle.text, txtBody.text, txtInstruct.text, txtContact.text);
           if(response.error==null){
             ToastMessage().toastMsgDark('Note updated');    
-               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return NoteScreen();
-                    },
-                  ),
-                );                    
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => false);                    
           }
           else{
             ToastMessage().toastMsgError('Note updating error');
@@ -66,6 +63,8 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
   void initState() {
     txtTitle.text = widget.keyTitle;
     txtBody.text = widget.keyNote;
+    txtInstruct.text = widget.keyInstruct;
+    txtContact.text = widget.keyContact;
     super.initState();
   }
 
@@ -94,14 +93,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
                             onPressed: () async {
                                   ApiResponse apiResponse = await deleteNote(widget.id);
                                   if(apiResponse.error==null){
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return NoteScreen();
-                                        },
-                                      ),
-                                    );
+                                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => false);
                                   }  
                             },
                             child: Text(
@@ -149,6 +141,48 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
               ),
             ),
           ),
+          //special instructions        
+            Card(
+              margin: EdgeInsets.only(top: 2, left: 15, right: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(1))),            
+              color: txtColorLight,
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: TextField(
+                  controller: txtInstruct,
+                  maxLines: 2,
+                  maxLength: 150,
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration.collapsed(hintText: "Special Instructions..."),
+                  style: TextStyle(
+                      color: txtColorDark,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+            ),
+  //contact info       
+            Card(
+              margin: EdgeInsets.only(top: 2, left: 15, right: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(1))),            
+              color: txtColorLight,
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: TextField(
+                  controller: txtContact,
+                  maxLines: 1,
+                  maxLength: 50,
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration.collapsed(hintText: "Contact Information..."),
+                  style: TextStyle(
+                      color: txtColorDark,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+            ),   
           Card(
             margin: EdgeInsets.only(top: 2, left: 15, right: 15),
             shape: RoundedRectangleBorder(

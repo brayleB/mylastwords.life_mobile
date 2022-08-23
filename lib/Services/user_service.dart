@@ -1,16 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:mylastwords/components/loader.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
 import 'package:mylastwords/models/apple.dart';
 import 'package:mylastwords/models/user.dart';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //login
@@ -131,11 +128,7 @@ Future<ApiResponse> updateUserCall(
         break;
       case 403:
         apiResponse.error = jsonDecode(response.body)['message'];
-        break;
-      case 302: 
-        EasyLoading.showInfo('Email provided already exist');        
-        apiResponse.error = jsonDecode(response.body)['message'];
-        break;
+        break;    
       default:    
         apiResponse.error = "Something went wrong";
     }
@@ -243,6 +236,7 @@ Future<ApiResponse> logoutUser() async {
     await pref.remove('userImage');
     await pref.remove('userId');
     await pref.remove('type');
+    await pref.setBool('isLoggedIn',false);
   EasyLoading.showInfo('Logout Successfull');
   return apiResponse;
 }
@@ -289,9 +283,9 @@ Future<ApiResponse> addAppleAccount(
     final response = await http.post(Uri.parse(addAppleUserURL),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'appleID': appleID,
-          'name': name,
-          'email': email,        
+          'appleID': appleID,          
+          'email': email,   
+          'name': name,     
         }));          
     switch (response.statusCode) {
       case 200:        

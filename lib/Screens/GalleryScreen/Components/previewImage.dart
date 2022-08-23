@@ -31,7 +31,7 @@ class PreviewImage extends StatelessWidget {
         saveFunc: () async {
           ApiResponse response = await uploadImage(fileImage!);   
           if(response.error==null){
-            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => GalleryScreen()),(route) => true);
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => GalleryScreen()),(route) => false);
           }
           else{
             ToastMessage().toastMsgError(response.error.toString());

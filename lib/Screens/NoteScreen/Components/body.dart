@@ -39,12 +39,14 @@ class _BodyState extends State<Body> {
               data[index].id,
               data[index].title.toString(),
               data[index].body.toString(),
+              data[index].instructions.toString(),
+              data[index].contact.toString(),
               DateFormat('MMM dd, yyyy   hh:mm aa')
                   .format(data[index].dateUpdated));
         });
   }
 
-  ListTile _tile(int id, String title, String body, String dateUpdated) =>
+  ListTile _tile(int id, String title, String body, String instructions, String contact, String dateUpdated) =>
       ListTile(
         onTap: (){  Navigator.push(
                   context,
@@ -53,6 +55,8 @@ class _BodyState extends State<Body> {
                             id: id,
                             keyTitle: title,
                             keyNote: body,
+                            keyInstruct: instructions,
+                            keyContact: contact,
                           )));},
         leading: Icon(
               Icons.notes_outlined,
@@ -70,20 +74,13 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: HeaderTab(
           backgroundcolor: headerBackgroundColor,
           title: 'Notes',
-          iconbtn: Icons.note_add_outlined,
-          press: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return AddNote();
-                },
-              ),
-            );
+          iconbtn: Icons.info_outline,
+          press: () {            
           }),
       backgroundColor: darkBackground,
       body: Column(
@@ -125,6 +122,26 @@ class _BodyState extends State<Body> {
           ),
         ],
       ),
+      floatingActionButton: Container(
+        height: size.height * 0.17,
+        width: size.width * 0.17, 
+        margin: EdgeInsets.only(right: size.width*0.05),      
+        child: FloatingActionButton(
+            onPressed: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return AddNote();
+                  },
+                ),
+              );
+            },
+            child: Icon(Icons.add, size: 30),
+            backgroundColor: headerBackgroundColor,               
+            ),
+          ),      
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

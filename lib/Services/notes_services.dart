@@ -6,10 +6,9 @@ import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
 import 'package:mylastwords/models/note.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 //addNote
-Future<ApiResponse> addNote(String title, String body) async {
+Future<ApiResponse> addNote(String title, String body, String instructions, String contact) async {
   EasyLoading.show();
   ApiResponse apiResponse = ApiResponse();
   String token = await getToken();
@@ -24,8 +23,10 @@ Future<ApiResponse> addNote(String title, String body) async {
           'userId': id,
           'title': title,
           'body': body,
+          'instructions': instructions,
+          'contact': contact,
         }));
-
+    print(response.body);
     switch (response.statusCode) {
       case 200:      
         apiResponse.data = Note.fromJson(jsonDecode(response.body));
@@ -90,7 +91,7 @@ Future<List<NotesModel>> fetchNotes() async {
     print(data);
     return data.map((note) => new NotesModel.fromJson(note)).toList();
   } else {
-    throw Exception('Failed to load jobs from API');
+    throw Exception('Failed to load notes from API');
   }
 }
 
@@ -152,7 +153,8 @@ Future<ApiResponse> deleteNote(int id) async {
   return apiResponse;
 }
 
-Future<ApiResponse> updateNote(int id, String title, String body) async {
+//update note
+Future<ApiResponse> updateNote(int id, String title, String body, String instruct, String contact) async {
   EasyLoading.show();
   ApiResponse apiResponse = ApiResponse();
   String token = await getToken();
@@ -166,6 +168,8 @@ Future<ApiResponse> updateNote(int id, String title, String body) async {
         body: json.encode({          
           'title': title,
           'body': body,
+          'instructions': instruct,
+          'contact': contact,
         }));    
       print(response.statusCode);
     switch (response.statusCode) {

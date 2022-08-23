@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
 import 'package:mylastwords/Screens/Login/components/appleEmail.dart';
 import 'package:mylastwords/Screens/Login/components/appleicon.dart';
 import 'package:mylastwords/Screens/Login/components/background.dart';
@@ -238,7 +239,8 @@ class _BodyState extends State<Body> {
       await pref.setString('userImage', user.userImage??'');
       await pref.setInt('userId', user.id ?? 0);
       await pref.setString('type', user.type ?? '');
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => DashBoard()),(route) => false);    
+      await pref.setBool('isLoggedIn', true);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AlarmScreen()),(route) => false);    
     }    
   }
   
