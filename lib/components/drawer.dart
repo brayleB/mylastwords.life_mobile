@@ -9,6 +9,7 @@ import 'package:mylastwords/Screens/NoteScreen/note_screen.dart';
 import 'package:mylastwords/Screens/ProfileScreen/profile_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/rounded_button.dart';
+import 'package:mylastwords/components/subscription.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
@@ -61,17 +62,29 @@ class _DrawerScreenState extends State<DrawerScreen> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
-          ),
+          ),          
           accountEmail: Text(
             userEmail,
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
+          ),         
+          currentAccountPicture: CircleAvatar(                          
+                          backgroundColor: Colors.transparent,
+                          backgroundImage: NetworkImage(
+                              userImage),
+                        ),                        
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.subscriptions,
           ),
-          currentAccountPicture: CircleAvatar(
-                    backgroundImage: NetworkImage(userImage),
-                    radius: 40,
-                  ), 
+          title: const Text('Subscription'),
+          onTap: () {
+            if(isLoggedIn==true){
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => SubscriptionScreen()),(route) => false);
+            }            
+          },
         ),
         ListTile(
           leading: Icon(
@@ -117,7 +130,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
         ),
         ListTile(
           leading: Icon(
-            Icons.contact_support
+            Icons.contact_phone
           ),
           title: const Text('Contact Us'),
           onTap: () async {

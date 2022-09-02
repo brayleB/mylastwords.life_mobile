@@ -141,7 +141,7 @@ class _BodyState extends State<Body> {
       drawer: DrawerScreen(),
       appBar: AppBar(        
         backgroundColor: headerBackgroundColor,
-        title: Text('Alarms'),         
+        title: Text('My Last Words'),         
       ),
       backgroundColor: darkBackground,
       body: Column(
@@ -640,13 +640,15 @@ class _BodyState extends State<Body> {
           ),
         ],
       ),
+//addalarm      
       floatingActionButton: Container(
         height: size.height * 0.17,
         width: size.width * 0.17, 
         margin: EdgeInsets.only(right: size.width*0.05),      
         child: FloatingActionButton(
             onPressed: () {
-              showModalBottomSheet(            
+              showModalBottomSheet(  
+                backgroundColor: lightBackground,                          
                 useRootNavigator: true,
                 context: context,
                 clipBehavior: Clip.antiAlias,
@@ -870,7 +872,7 @@ class _BodyState extends State<Body> {
                                                           setSoundState((){
                                                           txtSound = selectedValue!;
                                                           selectedValue = _alarmSoundList[0];
-                                                          txtSoundDisplay = "Sound";
+                                                          // txtSoundDisplay = "Sound";
                                                           });                                                   
                                                           player.stop();
                                                           Navigator.pop(context);
@@ -925,7 +927,7 @@ class _BodyState extends State<Body> {
                                                 setModalState(() {
                                                 if(txtInputTitle.text=="")
                                                 {
-                                                  title="Title";
+                                                  title="Hello";
                                                 }
                                                 else
                                                 {
@@ -972,9 +974,10 @@ class _BodyState extends State<Body> {
                                     Navigator.pop(context);                            
                                     loadAlarms();
                                     setState(() {
-                                      title = "Title";
-                                      txtRepeat = "Repeat";
-                                      txtSoundDisplay = "Sound";
+                                      title = "Hello";
+                                      txtRepeat = "No Repeat";
+                                      txtSoundDisplay = "Cold";
+                                      txtSound = "longcold";
                                     });
                                   },
                                   icon: Icon(Icons.alarm),
