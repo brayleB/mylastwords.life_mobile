@@ -9,7 +9,8 @@ import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/components/header_tab.dart';
 import 'package:mylastwords/models/alarm_info.dart';
 import 'package:intl/intl.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
+
 // import 'package:flutter_svg/svg.dart';
 
 class Body extends StatefulWidget {
@@ -385,7 +386,9 @@ class _BodyState extends State<Body> {
                                                                               groupValue: selectedValue,
                                                                               selected: selectedValue == alarmSoundFiles[index],
                                                                               onChanged: (val) async {                                                           
-                                                                                  await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
+                                                                                  final duration = await player.setAsset(ringToneBaseUrl + alarmSoundFiles[index] + '.wav');
+                                                                                  await player.setClip(end: Duration(seconds: 10));
+                                                                                  player.play();  
                                                                                     setSoundState(() {
                                                                                       selectedValue = val.toString();
                                                                                     });
@@ -835,20 +838,22 @@ class _BodyState extends State<Body> {
                                                                 value: alarmSoundFiles[index],
                                                                 groupValue: selectedValue,
                                                                 selected: selectedValue == alarmSoundFiles[index],
-                                                                onChanged: (val) async {                                                           
-                                                                    await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
+                                                                onChanged: (val) async {                                                                                                                                                                                                                                                                                                                      
+                                                                      await player.setAsset(ringToneBaseUrl + alarmSoundFiles[index] + '.wav');
+                                                                      await player.setClip(end: Duration(seconds: 10));
+                                                                      player.play();                                                                                                                                           
                                                                       setSoundState(() {
                                                                         selectedValue = val.toString();
                                                                       });
                                                                       setModalState((){                                                    
                                                                         txtSoundDisplay = _alarmSoundList[index];
                                                                       });
-                                                                      print('selected:' + selectedValue.toString());
+                                                                      print('selected:' + selectedValue.toString());                                                                      
                                                                   },
                                                               );
                                                             },
                                                           ),
-                                                        ]),
+                                                      ]),
                                                   ),
                                                 ],
                                               ),
@@ -946,7 +951,11 @@ class _BodyState extends State<Body> {
                               children: [
                                 FloatingActionButton.extended(
                                   backgroundColor: headerBackgroundColor,
-                                  onPressed: () async {                          
+                                  onPressed: () async {    
+
+                                    //testinmg
+                                    
+
                                     var idStr = DateFormat('MMddHHmmss')
                                             .format(DateTime.now());
                                     var alarmInfo = AlarmInfo(                              
