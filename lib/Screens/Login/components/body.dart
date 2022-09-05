@@ -96,7 +96,7 @@ class _BodyState extends State<Body> {
     EasyLoading.show(status: 'Apple Signing in...');  
     try{
       final appleUser = await SignInWithApple.getAppleIDCredential(scopes: 
-        [
+        [          
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,                       
         ],

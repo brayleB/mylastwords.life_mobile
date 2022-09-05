@@ -24,7 +24,7 @@ const ColorTheme10 = Color.fromARGB(255, 60, 60, 1);
 const ColorThemeBlueGray = Colors.blueGrey;
 
 
-const ringToneBaseUrl = "AlarmRingtones/";
+const ringToneBaseUrl = "assets/AlarmRingtones/";
 
 //User API Endpoints
 
