@@ -240,6 +240,7 @@ class _BodyState extends State<Body> {
       await pref.setInt('userId', user.id ?? 0);
       await pref.setString('type', user.type ?? '');
       await pref.setBool('isLoggedIn', true);
+      await pref.setString('subcription', user.subcription ?? '');
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AlarmScreen()),(route) => false);    
     }    
   }
