@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mylastwords/Background/tracker.dart';
 import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
 import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/Login/login_screen.dart';
 import 'package:mylastwords/Screens/Welcome/welcome_screen.dart';
+import 'package:mylastwords/Services/userLogs_services.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/models/api_response.dart';
 import 'package:mylastwords/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:new_version/new_version.dart';
 // import 'package:flutter_svg/svg.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,7 +27,7 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    checkToken();
+    checkToken();    
     super.initState();  
   }
 
@@ -63,7 +64,7 @@ class SplashScreenState extends State<SplashScreen> {
     else if(user.status==2){
       EasyLoading.showInfo("This account is previously removed. Contact mylastwords.life for account recovery");
     }
-    else{
+    else{      
       SharedPreferences pref = await SharedPreferences.getInstance();
       await pref.setString('name', user.name ?? '');    
       await pref.setString('email', user.email ?? '');
@@ -72,8 +73,9 @@ class SplashScreenState extends State<SplashScreen> {
       await pref.setString('userImage', user.userImage ?? '');
       await pref.setInt('userId', user.id ?? 0);
       await pref.setString('type', user.type ?? '');
+      await pref.setString('subcription', user.subcription ?? '');
       await pref.setBool('isLoggedIn', true);
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AlarmScreen()),(route) => false);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AlarmScreen()),(route) => false);      
     }    
   }
 
