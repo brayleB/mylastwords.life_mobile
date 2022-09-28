@@ -5,7 +5,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mylastwords/Screens/AboutScreen/Components/detail.dart';
 import 'package:mylastwords/components/header_tab_back.dart';
+import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/constants.dart';
+import 'package:just_audio/just_audio.dart';
 
 final details = [
   AllDetails(
@@ -70,7 +72,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   PageController? _controller;
   int currentPage = 0;
-
+  final player = AudioPlayer();
   @override
   void initState() {
     super.initState();
@@ -110,7 +112,7 @@ class _BodyState extends State<Body> {
                   onPageChanged: _onPageChange,
                 ),
               ),
-              _details(currentPage),
+              _details(currentPage),           
             ],
           ),
         ],

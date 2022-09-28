@@ -1,7 +1,9 @@
 // ignore_for_file: deprecated_member_use, unused_field, must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mylastwords/Background/tracker.dart';
 import 'package:mylastwords/Screens/AlarmScreen/Components/alarm_helper.dart';
 import 'package:mylastwords/components/drawer.dart';
 import 'package:mylastwords/components/toastmessage.dart';
@@ -9,7 +11,8 @@ import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/components/header_tab.dart';
 import 'package:mylastwords/models/alarm_info.dart';
 import 'package:intl/intl.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
+
 // import 'package:flutter_svg/svg.dart';
 
 class Body extends StatefulWidget {
@@ -24,39 +27,11 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   List<String> _days = [];
   List<bool> _isChecked = [false, false, false, false, false, false, false]; 
-  List<String> fileExtensions = ['.wav','.mp3'];
-  
-  List<String> _texts = [
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat",
-    "Sun",
-  ];
-  List<String> alarmSoundFiles = [
-    "longcold",
-    "rainyday",
-    "electronic",
-    "fantasy",
-    "niceday",
-    "latin",
-    "synergetic",
-    "wakeup",   
-    "positive",  
-  ];
-  List<String> _alarmSoundList = [
-    "Cold",
-    "Rainy Day",
-    "Electronic",
-    "Fantasy",
-    "Nice Day",
-    "Latin",
-    "Synergetic",   
-    "Wake Up",
-    "Positive",
-  ];
+  List<String> fileExtensions = ['.wav','.mp3'];  
+  List<String> _texts = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun",];
+  List<Day> _dayDates = [Day.monday,Day.tuesday,Day.wednesday,Day.thursday,Day.friday,Day.saturday,Day.sunday];
+  List<String> alarmSoundFiles = ["longcold","rainyday","electronic","fantasy","niceday","latin","synergetic","wakeup","positive"];
+  List<String> _alarmSoundList = ["Cold","Rainy Day","Electronic","Fantasy","Nice Day","Latin","Synergetic",    "Wake Up","Positive"];
   final TextEditingController txtInputTitle = TextEditingController();
   String title = "";
   String txtRepeat = "";
@@ -120,6 +95,7 @@ class _BodyState extends State<Body> {
       loadAlarms();
     });
     _alarmTimeString ??= DateFormat('hh:mm aa').format(DateTime.now());
+    UserTracker().sendUserLogData();
     super.initState();
   }
 
@@ -140,7 +116,7 @@ class _BodyState extends State<Body> {
       drawer: DrawerScreen(),
       appBar: AppBar(        
         backgroundColor: headerBackgroundColor,
-        title: Text('Alarms'),         
+        title: Text('My Last Words'),         
       ),
       backgroundColor: darkBackground,
       body: Column(
@@ -385,7 +361,9 @@ class _BodyState extends State<Body> {
                                                                               groupValue: selectedValue,
                                                                               selected: selectedValue == alarmSoundFiles[index],
                                                                               onChanged: (val) async {                                                           
-                                                                                  await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
+                                                                                  final duration = await player.setAsset(ringToneBaseUrl + alarmSoundFiles[index] + '.wav');
+                                                                                  await player.setClip(end: Duration(seconds: 10));
+                                                                                  player.play();  
                                                                                     setSoundState(() {
                                                                                       selectedValue = val.toString();
                                                                                     });
@@ -637,13 +615,15 @@ class _BodyState extends State<Body> {
           ),
         ],
       ),
+//addalarm      
       floatingActionButton: Container(
         height: size.height * 0.17,
         width: size.width * 0.17, 
         margin: EdgeInsets.only(right: size.width*0.05),      
         child: FloatingActionButton(
             onPressed: () {
-              showModalBottomSheet(            
+              showModalBottomSheet(  
+                backgroundColor: lightBackground,                          
                 useRootNavigator: true,
                 context: context,
                 clipBehavior: Clip.antiAlias,
@@ -723,7 +703,7 @@ class _BodyState extends State<Body> {
                                         context: context,
                                         builder: (context) {
                                           return StatefulBuilder(builder: (context, setChkState){
-                                            _days.clear();
+                                            _days.clear();                                         
                                             return AlertDialog(
                                             title: Text('Repeat'),
                                             content: Container(
@@ -773,6 +753,15 @@ class _BodyState extends State<Body> {
                                                         if(_days.isEmpty){
                                                           txtRepeat = "No Repeat";
                                                         }
+                                                        else if(_days.length>=7){
+                                                          txtRepeat = "Everyday";
+                                                        } 
+                                                        else if((_days.length==2)&&(_days[0]=="Sat")&&(_days[1]=="Sun")){
+                                                          txtRepeat = "Every Weekends";
+                                                        } 
+                                                        else if((_days.length==5)&&(_days[0]=="Mon")&&(_days[1]=="Tue")&&(_days[2]=="Wed")&&(_days[3]=="Thu")&&(_days[4]=="Fri")){
+                                                          txtRepeat = "Every Weekdays";
+                                                        }                                                         
                                                         else{
                                                           txtRepeat = _days.toString().replaceAll('[', '').replaceAll(']', '');
                                                         }
@@ -835,20 +824,22 @@ class _BodyState extends State<Body> {
                                                                 value: alarmSoundFiles[index],
                                                                 groupValue: selectedValue,
                                                                 selected: selectedValue == alarmSoundFiles[index],
-                                                                onChanged: (val) async {                                                           
-                                                                    await player.play(AssetSource(ringToneBaseUrl + alarmSoundFiles[index] + '.wav'));
+                                                                onChanged: (val) async {                                                                                                                                                                                                                                                                                                                      
+                                                                      await player.setAsset(ringToneBaseUrl + alarmSoundFiles[index] + '.wav');
+                                                                      await player.setClip(end: Duration(seconds: 10));
+                                                                      player.play();                                                                                                                                           
                                                                       setSoundState(() {
                                                                         selectedValue = val.toString();
                                                                       });
                                                                       setModalState((){                                                    
                                                                         txtSoundDisplay = _alarmSoundList[index];
                                                                       });
-                                                                      print('selected:' + selectedValue.toString());
+                                                                      print('selected:' + selectedValue.toString());                                                                      
                                                                   },
                                                               );
                                                             },
                                                           ),
-                                                        ]),
+                                                      ]),
                                                   ),
                                                 ],
                                               ),
@@ -865,7 +856,7 @@ class _BodyState extends State<Body> {
                                                           setSoundState((){
                                                           txtSound = selectedValue!;
                                                           selectedValue = _alarmSoundList[0];
-                                                          txtSoundDisplay = "Sound";
+                                                          // txtSoundDisplay = "Sound";
                                                           });                                                   
                                                           player.stop();
                                                           Navigator.pop(context);
@@ -920,7 +911,7 @@ class _BodyState extends State<Body> {
                                                 setModalState(() {
                                                 if(txtInputTitle.text=="")
                                                 {
-                                                  title="Title";
+                                                  title="Hello";
                                                 }
                                                 else
                                                 {
@@ -946,9 +937,10 @@ class _BodyState extends State<Body> {
                               children: [
                                 FloatingActionButton.extended(
                                   backgroundColor: headerBackgroundColor,
-                                  onPressed: () async {                          
+                                  onPressed: () async {    
+                                   
                                     var idStr = DateFormat('MMddHHmmss')
-                                            .format(DateTime.now());
+                                            .format(DateTime.now());                                    
                                     var alarmInfo = AlarmInfo(                              
                                         id: int.parse(idStr),
                                         title: title,
@@ -958,14 +950,36 @@ class _BodyState extends State<Body> {
                                         sound: txtSound);
 
                                     _alarmHelper.insertAlarm(alarmInfo);
-                                    _alarmHelper.scheduleAlarm(
-                                        _alarmTime!, alarmInfo);
+                                    if(alarmInfo.repeat=="No Repeat"){
+                                      _alarmHelper.scheduleAlarm(
+                                        _alarmTime!, alarmInfo);                                  
+                                    }
+                                    else{                                    
+                                      // for(var i = 0; i < _isChecked.length; i++)
+                                      // {
+                                      //   if(_isChecked[i]==true){
+                                      //     _alarmHelper.scheduleAlarmRepeated(
+                                      //     _dayDates[i],Time(_alarmTime!.hour,_alarmTime!.minute, _alarmTime!.second),alarmInfo);                                                                                     
+                                      //   }                                        
+                                      // }
+                                      _alarmHelper.scheduleAlarm(
+                                        _alarmTime!, alarmInfo); 
+                                    }
+                                    
                                     Navigator.pop(context);                            
                                     loadAlarms();
-                                    setState(() {
-                                      title = "Title";
-                                      txtRepeat = "Repeat";
-                                      txtSoundDisplay = "Sound";
+                                    setState(() {   
+                                      _alarmTimeString = DateFormat('hh:mm aa')
+                                        .format(DateTime.now());  
+                                      _alarmTime = DateTime.now();                            
+                                      title = "Hello";
+                                      txtRepeat = "No Repeat";
+                                      txtSoundDisplay = "Cold";
+                                      txtSound = "longcold";   
+                                      for(var i = 0; i < _isChecked.length; i++)
+                                      {
+                                        _isChecked[i]=false;
+                                      }                                                                                                    
                                     });
                                   },
                                   icon: Icon(Icons.alarm),

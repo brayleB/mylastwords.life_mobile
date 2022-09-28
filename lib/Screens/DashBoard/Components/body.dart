@@ -70,9 +70,14 @@ class _BodyState extends State<Body> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        CircleAvatar(
+                        Container(
+                          width: size.width * 0.5,
+                          height: size.height * 0.5,
+                          child: CircleAvatar(                          
+                          backgroundColor: Colors.red,
                           backgroundImage: NetworkImage(
                               userImage),
+                        ),
                         ),
                         SizedBox(width: 10),
                         Text(

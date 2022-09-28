@@ -123,7 +123,7 @@ class AlarmHelper {
         scheduledNotificationDateTime, platformChannelSpecifics);                              
   }
 
-  void scheduleAlarmRepeated(List<Day> days, Time time, AlarmInfo alarmInfo) async {   
+  void scheduleAlarmRepeated(Day day, Time time, AlarmInfo alarmInfo) async {   
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         alarmInfo.id.toString(),
         alarmInfo.title.toString(),                  
@@ -145,8 +145,10 @@ class AlarmHelper {
     var platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 
-    await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(alarmInfo.id!, 'mylastwords.life', alarmInfo.title, (Day.monday), 
-        Time(0,0,0), platformChannelSpecifics);                              
+    await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(alarmInfo.id!, 'mylastwords.life', alarmInfo.title, day, 
+        time, platformChannelSpecifics);      
+    print(day.value.toString());           
+                       
   }
   
   
