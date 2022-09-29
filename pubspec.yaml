@@ -43,7 +43,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   photo_view: ^0.14.0
   url_launcher: ^6.1.4
-  
+  just_audio: ^0.9.28
   
   
 

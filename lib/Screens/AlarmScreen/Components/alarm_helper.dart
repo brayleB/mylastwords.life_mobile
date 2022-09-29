@@ -146,9 +146,7 @@ class AlarmHelper {
         android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(alarmInfo.id!, 'mylastwords.life', alarmInfo.title, day, 
-        time, platformChannelSpecifics);      
-    print(day.value.toString());           
-                       
+        time, platformChannelSpecifics);                                        
   }
   
   
