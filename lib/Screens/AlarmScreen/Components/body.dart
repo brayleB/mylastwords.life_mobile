@@ -939,31 +939,39 @@ class _BodyState extends State<Body> {
                                   backgroundColor: headerBackgroundColor,
                                   onPressed: () async {    
                                    
-                                    var idStr = DateFormat('MMddHHmmss')
-                                            .format(DateTime.now());                                    
-                                    var alarmInfo = AlarmInfo(                              
+                                                                       
+                                                                        
+
+                                    if(txtRepeat=="No Repeat"){
+                                      var idStr = DateFormat('ddHHmmss').format(DateTime.now());
+                                      var alarmInfo = AlarmInfo(                              
                                         id: int.parse(idStr),
                                         title: title,
                                         alarmDateTime: _alarmTime,
                                         alarmOnOff: "true",
                                         repeat: txtRepeat,
                                         sound: txtSound);
+                                      _alarmHelper.insertAlarm(alarmInfo);
 
-                                    _alarmHelper.insertAlarm(alarmInfo);
-                                    if(alarmInfo.repeat=="No Repeat"){
-                                      _alarmHelper.scheduleAlarm(
-                                        _alarmTime!, alarmInfo);                                  
+                                      _alarmHelper.scheduleAlarm(_alarmTime!, alarmInfo);                                  
                                     }
-                                    else{                                    
-                                      // for(var i = 0; i < _isChecked.length; i++)
-                                      // {
-                                      //   if(_isChecked[i]==true){
-                                      //     _alarmHelper.scheduleAlarmRepeated(
-                                      //     _dayDates[i],Time(_alarmTime!.hour,_alarmTime!.minute, _alarmTime!.second),alarmInfo);                                                                                     
-                                      //   }                                        
-                                      // }
-                                      _alarmHelper.scheduleAlarm(
-                                        _alarmTime!, alarmInfo); 
+                                    else{                                                                            
+                                      for(var i = 0; i < _isChecked.length; i++)
+                                      {                                    
+                                        if(_isChecked[i]==true){   
+                                          var idStr = DateFormat('ddHHmmss').format(DateTime.now())+i.toString();                                         
+                                          var alarmInfo = AlarmInfo(                              
+                                            id: int.parse(idStr),
+                                            title: title,
+                                            alarmDateTime: _alarmTime,
+                                            alarmOnOff: "true",
+                                            repeat: txtRepeat,
+                                            sound: txtSound);
+                                          _alarmHelper.insertAlarm(alarmInfo);  
+                                          var time = Time(_alarmTime!.hour,_alarmTime!.minute, _alarmTime!.second);                                                                                  
+                                          _alarmHelper.scheduleAlarmRepeated(_dayDates[i],time,alarmInfo);                                                                                     
+                                        }                                        
+                                      }                                     
                                     }
                                     
                                     Navigator.pop(context);                            
