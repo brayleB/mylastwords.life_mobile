@@ -473,20 +473,21 @@ class _BodyState extends State<Body> {
                                             children: [
                                               FloatingActionButton.extended(
                                                 backgroundColor: headerBackgroundColor,
-                                                onPressed: () async {                                                                           
-                                                  var alarmInfo = AlarmInfo(  
-                                                      id: alarm.id,                                                                               
-                                                      title: txtEditTitle,
-                                                      alarmDateTime: _alarmTime,
-                                                      alarmOnOff: alarm.alarmOnOff,
-                                                      repeat: txtEditRepeat,
-                                                      sound: txtEditSound);
+                                                onPressed: () async {    
+                                                  ToastMessage().toastMsgDark('Under development');                                                                        
+                                                  // var alarmInfo = AlarmInfo(  
+                                                  //     id: alarm.id,                                                                               
+                                                  //     title: txtEditTitle,
+                                                  //     alarmDateTime: _alarmTime,
+                                                  //     alarmOnOff: alarm.alarmOnOff,
+                                                  //     repeat: txtEditRepeat,
+                                                  //     sound: txtEditSound);
 
-                                                  _alarmHelper.updateAlarm(alarmInfo);
-                                                  _alarmHelper.scheduleAlarm(
-                                                      _alarmTime!, alarmInfo);
-                                                  Navigator.pop(context);                            
-                                                  loadAlarms();                                              
+                                                  // _alarmHelper.updateAlarm(alarmInfo);
+                                                  // _alarmHelper.scheduleAlarm(
+                                                  //     _alarmTime!, alarmInfo);
+                                                  // Navigator.pop(context);                            
+                                                  // loadAlarms();                                              
                                                 },
                                                 icon: Icon(Icons.alarm),
                                                 label: Text('Update'),
@@ -592,7 +593,7 @@ class _BodyState extends State<Body> {
                                     icon: Icon(Icons.delete),
                                     color: txtColors,
                                     onPressed: () {
-                                      _alarmHelper.delete(alarm.id!);
+                                      _alarmHelper.delete(alarm.id!, alarm.repeat!);
                                       loadAlarms();
                                     }),],),                                                              
                               ],
@@ -955,23 +956,32 @@ class _BodyState extends State<Body> {
 
                                       _alarmHelper.scheduleAlarm(_alarmTime!, alarmInfo);                                  
                                     }
-                                    else{                                                                            
+                                    else{
+                                      var idStr = DateFormat('ddHHmmss').format(DateTime.now()).toString();                                         
+                                      var alarmInfo = AlarmInfo(                              
+                                        id: int.parse(idStr),
+                                        title: title,
+                                        alarmDateTime: _alarmTime,
+                                        alarmOnOff: "true",
+                                        repeat: txtRepeat,
+                                        sound: txtSound);
+
                                       for(var i = 0; i < _isChecked.length; i++)
                                       {                                    
                                         if(_isChecked[i]==true){   
-                                          var idStr = DateFormat('ddHHmmss').format(DateTime.now())+i.toString();                                         
-                                          var alarmInfo = AlarmInfo(                              
-                                            id: int.parse(idStr),
+                                          var idStrSched = DateFormat('ddHHmmss').format(DateTime.now())+i.toString();                                         
+                                          var alarmInfoSched = AlarmInfo(                              
+                                            id: int.parse(idStrSched),
                                             title: title,
                                             alarmDateTime: _alarmTime,
                                             alarmOnOff: "true",
                                             repeat: txtRepeat,
-                                            sound: txtSound);
-                                          _alarmHelper.insertAlarm(alarmInfo);  
+                                            sound: txtSound);                                                                                                                                
                                           var time = Time(_alarmTime!.hour,_alarmTime!.minute, _alarmTime!.second);                                                                                  
-                                          _alarmHelper.scheduleAlarmRepeated(_dayDates[i],time,alarmInfo);                                                                                     
+                                          _alarmHelper.scheduleAlarmRepeated(_dayDates[i],time,alarmInfoSched);                                                                                                                           
                                         }                                        
-                                      }                                     
+                                      }  
+                                       _alarmHelper.insertAlarm(alarmInfo);                                                                      
                                     }
                                     
                                     Navigator.pop(context);                            
