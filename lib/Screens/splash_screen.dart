@@ -47,6 +47,10 @@ class SplashScreenState extends State<SplashScreen> {
       {
          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => WelcomeScreen()),(route) => false);
       }
+      else if(response.error=="Something went wrong"){
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AdvisoryScreen()),(route) => false);
+        await prefs.setBool('error_server', true);
+      }
       else{
         ToastMessage().toastMsgError(response.error.toString());
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => WelcomeScreen()),(route) => false);
@@ -56,6 +60,7 @@ class SplashScreenState extends State<SplashScreen> {
       ApiResponse response = await getuserDetails();
       if(response.error=="Something went wrong"){
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AdvisoryScreen()),(route) => false);
+        await prefs.setBool('error_server', true);
       }
       else{
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => WelcomeScreen()),(route) => false); 
