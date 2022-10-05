@@ -31,7 +31,7 @@ Future<ApiResponse> login(String email, String password) async {
         apiResponse.error = jsonDecode(response.body)['message'];
         break;
       default:
-        apiResponse.error = "Something went wrong";
+        apiResponse.error = "Something went wrong";         
     }
   } catch (e) {
     apiResponse.error = "Server Error. Please check Internet Connection";

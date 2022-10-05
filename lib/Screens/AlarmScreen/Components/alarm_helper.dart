@@ -1,5 +1,7 @@
 // ignore_for_file: unused_field, import_of_legacy_library_into_null_safe, deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/models/alarm_info.dart';
@@ -79,10 +81,9 @@ class AlarmHelper {
     return _alarms;    
   }
 
-  Future<int> delete(int id) async {
-    var db = await this.database;
-    ToastMessage().toastMsgLight("Successfully Deleted Alarm");
-    unScheduleAlarm(AlarmInfo(id: id));
+  Future<int> delete(int id, String rep) async {
+    var db = await this.database;   
+    unScheduleAlarm(AlarmInfo(id: id, repeat: rep));    
     return await db!.delete(tblAlarm, where: '$colId=?',whereArgs: [id]);
     
   }
@@ -151,8 +152,27 @@ class AlarmHelper {
   
   
   void unScheduleAlarm(AlarmInfo alarmInfo)async{
-    await flutterLocalNotificationsPlugin.cancel(alarmInfo.id!);
-    print('Unscheduled alarm: ' + alarmInfo.id.toString());
+    
+    if(alarmInfo.repeat=="No Repeat"){      
+      await flutterLocalNotificationsPlugin.cancel(alarmInfo.id!);
+      print('Unscheduled alarm: ' + alarmInfo.id.toString());
+    }
+    else{         
+      int x=0;  
+      List<String> reps = alarmInfo.repeat!.split(", ");
+      List<String> days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+      for(var i=0;i<days.length;i++){
+        if(reps[x]==days[i]){          
+          String idToString = alarmInfo.id.toString();
+          String tempId = idToString+i.toString();
+          int legitId = int.parse(tempId);
+          await flutterLocalNotificationsPlugin.cancel(legitId);   
+          print('Unscheduled alarm: ' + legitId.toString());     
+          if(x<reps.length-1){
+            x++;
+          }
+        }
+      }      
+    }        
   }
-
 }

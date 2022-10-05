@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mylastwords/Background/tracker.dart';
 import 'package:mylastwords/Screens/AlarmScreen/Components/alarm_helper.dart';
+import 'package:mylastwords/Screens/advisory.dart';
 import 'package:mylastwords/components/drawer.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
@@ -12,6 +13,7 @@ import 'package:mylastwords/components/header_tab.dart';
 import 'package:mylastwords/models/alarm_info.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:flutter_svg/svg.dart';
 
@@ -44,7 +46,7 @@ class _BodyState extends State<Body> {
   List<AlarmInfo>? _currentAlarms;
   String? selectedValue;
   final player = AudioPlayer();
-
+  bool? hasUser;
 
   final _timePickerTheme = TimePickerThemeData(
   backgroundColor: darkBackground,
@@ -86,6 +88,7 @@ class _BodyState extends State<Body> {
 
   @override
   void initState() {
+    checkUser();
     title = "Hello";
     txtRepeat = "No Repeat";
     txtSoundDisplay = "Cold";
@@ -94,8 +97,7 @@ class _BodyState extends State<Body> {
     _alarmHelper.initializaDatabase().then((value) {      
       loadAlarms();
     });
-    _alarmTimeString ??= DateFormat('hh:mm aa').format(DateTime.now());
-    UserTracker().sendUserLogData();
+    _alarmTimeString ??= DateFormat('hh:mm aa').format(DateTime.now());        
     super.initState();
   }
 
@@ -104,19 +106,31 @@ class _BodyState extends State<Body> {
     if (mounted) setState(() {});
   }
 
-  
+  void checkUser() async{
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     bool? errorserver = prefs.getBool('error_server');
+     if(errorserver==true){
+       setState(() {
+         hasUser=false;
+       });
+     }
+     else{
+        setState(() {
+         hasUser=true;
+       });
+     }
+  }
 
   
   
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-   
+    Size size = MediaQuery.of(context).size;  
     return Scaffold(
-      drawer: DrawerScreen(),
+      drawer: hasUser == true ? DrawerScreen() : AdvisoryScreen(),
       appBar: AppBar(        
         backgroundColor: headerBackgroundColor,
-        title: Text('My Last Words'),         
+        title: Text('Alarms'),         
       ),
       backgroundColor: darkBackground,
       body: Column(
@@ -473,20 +487,21 @@ class _BodyState extends State<Body> {
                                             children: [
                                               FloatingActionButton.extended(
                                                 backgroundColor: headerBackgroundColor,
-                                                onPressed: () async {                                                                           
-                                                  var alarmInfo = AlarmInfo(  
-                                                      id: alarm.id,                                                                               
-                                                      title: txtEditTitle,
-                                                      alarmDateTime: _alarmTime,
-                                                      alarmOnOff: alarm.alarmOnOff,
-                                                      repeat: txtEditRepeat,
-                                                      sound: txtEditSound);
+                                                onPressed: () async {    
+                                                  ToastMessage().toastMsgDark('Under development');                                                                        
+                                                  // var alarmInfo = AlarmInfo(  
+                                                  //     id: alarm.id,                                                                               
+                                                  //     title: txtEditTitle,
+                                                  //     alarmDateTime: _alarmTime,
+                                                  //     alarmOnOff: alarm.alarmOnOff,
+                                                  //     repeat: txtEditRepeat,
+                                                  //     sound: txtEditSound);
 
-                                                  _alarmHelper.updateAlarm(alarmInfo);
-                                                  _alarmHelper.scheduleAlarm(
-                                                      _alarmTime!, alarmInfo);
-                                                  Navigator.pop(context);                            
-                                                  loadAlarms();                                              
+                                                  // _alarmHelper.updateAlarm(alarmInfo);
+                                                  // _alarmHelper.scheduleAlarm(
+                                                  //     _alarmTime!, alarmInfo);
+                                                  // Navigator.pop(context);                            
+                                                  // loadAlarms();                                              
                                                 },
                                                 icon: Icon(Icons.alarm),
                                                 label: Text('Update'),
@@ -592,7 +607,7 @@ class _BodyState extends State<Body> {
                                     icon: Icon(Icons.delete),
                                     color: txtColors,
                                     onPressed: () {
-                                      _alarmHelper.delete(alarm.id!);
+                                      _alarmHelper.delete(alarm.id!, alarm.repeat!);
                                       loadAlarms();
                                     }),],),                                                              
                               ],
@@ -955,23 +970,32 @@ class _BodyState extends State<Body> {
 
                                       _alarmHelper.scheduleAlarm(_alarmTime!, alarmInfo);                                  
                                     }
-                                    else{                                                                            
+                                    else{
+                                      var idStr = DateFormat('ddHHmmss').format(DateTime.now()).toString();                                         
+                                      var alarmInfo = AlarmInfo(                              
+                                        id: int.parse(idStr),
+                                        title: title,
+                                        alarmDateTime: _alarmTime,
+                                        alarmOnOff: "true",
+                                        repeat: txtRepeat,
+                                        sound: txtSound);
+
                                       for(var i = 0; i < _isChecked.length; i++)
                                       {                                    
                                         if(_isChecked[i]==true){   
-                                          var idStr = DateFormat('ddHHmmss').format(DateTime.now())+i.toString();                                         
-                                          var alarmInfo = AlarmInfo(                              
-                                            id: int.parse(idStr),
+                                          var idStrSched = DateFormat('ddHHmmss').format(DateTime.now())+i.toString();                                         
+                                          var alarmInfoSched = AlarmInfo(                              
+                                            id: int.parse(idStrSched),
                                             title: title,
                                             alarmDateTime: _alarmTime,
                                             alarmOnOff: "true",
                                             repeat: txtRepeat,
-                                            sound: txtSound);
-                                          _alarmHelper.insertAlarm(alarmInfo);  
+                                            sound: txtSound);                                                                                                                                
                                           var time = Time(_alarmTime!.hour,_alarmTime!.minute, _alarmTime!.second);                                                                                  
-                                          _alarmHelper.scheduleAlarmRepeated(_dayDates[i],time,alarmInfo);                                                                                     
+                                          _alarmHelper.scheduleAlarmRepeated(_dayDates[i],time,alarmInfoSched);                                                                                                                           
                                         }                                        
-                                      }                                     
+                                      }  
+                                       _alarmHelper.insertAlarm(alarmInfo);                                                                      
                                     }
                                     
                                     Navigator.pop(context);                            
