@@ -108,12 +108,16 @@ class _BodyState extends State<Body> {
 
   void checkUser() async{
      SharedPreferences prefs = await SharedPreferences.getInstance();
-     String? token = prefs.getString('token');
-     if(token==null||token==""){
-       hasUser = false;
+     bool? errorserver = prefs.getBool('error_server');
+     if(errorserver==true){
+       setState(() {
+         hasUser=false;
+       });
      }
      else{
-      hasUser = true;
+        setState(() {
+         hasUser=true;
+       });
      }
   }
 

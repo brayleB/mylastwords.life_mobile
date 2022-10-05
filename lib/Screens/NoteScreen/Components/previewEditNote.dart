@@ -39,12 +39,24 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
   final TextEditingController txtContact = TextEditingController();
   void _validateAddNote() async {
     var errmsg = "";
+    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(patttern);
     if (txtBody.text == "") {
       errmsg = "Please enter a note";
     }
     else if (txtTitle.text == "") {
       errmsg = "Please enter a Title";
-    } else {
+    }  
+    else if (txtInstruct.text == "") {
+      errmsg = "Please enter a instruction";
+    } 
+    else if (txtContact.text == "") {
+      errmsg = "Please enter contact number";      
+    } 
+    else if (!regExp.hasMatch(txtContact.text)) {
+      errmsg = "Contact number invalid";
+    }   
+    else {
           ApiResponse response = await updateNote(widget.id, txtTitle.text, txtBody.text, txtInstruct.text, txtContact.text);
           if(response.error==null){
             ToastMessage().toastMsgDark('Note updated');    
@@ -55,7 +67,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
           }
     }
     if (errmsg != "") {
-      ToastMessage().toastMsgDark(errmsg);
+      ToastMessage().toastMsgLight(errmsg);
     }
   }
 
