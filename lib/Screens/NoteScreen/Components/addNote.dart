@@ -32,11 +32,22 @@ class _AddNoteState extends State<AddNote> {
 
   void _validateAddNote() async {
     var errmsg = "";
+    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';   
+    RegExp regExp = new RegExp(patttern);
     if (txtNote.text == "") {
       errmsg = "Please enter a Note";
     }
     else if (txtTitle.text == "") {
       errmsg = "Please enter a Title";
+    }
+    else if (txtSpecialIns.text == "") {
+      errmsg = "Please enter a instruction";
+    } 
+    else if (txtContactInfo.text == "") {
+      errmsg = "Please enter contact number";
+    } 
+    else if (!regExp.hasMatch(txtContactInfo.text)) {
+      errmsg = "Contact number invalid";
     } else {
       ApiResponse response = await addNote(txtTitle.text, txtNote.text, txtSpecialIns.text, txtContactInfo.text);
       if (response.error == null) {
@@ -46,7 +57,7 @@ class _AddNoteState extends State<AddNote> {
       }
     }
     if (errmsg != "") {
-      ToastMessage().toastMsgLight(errmsg);
+      ToastMessage().toastMsgDark(errmsg);
     }
   }
 
