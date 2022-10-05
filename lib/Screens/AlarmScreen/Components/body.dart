@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mylastwords/Background/tracker.dart';
 import 'package:mylastwords/Screens/AlarmScreen/Components/alarm_helper.dart';
+import 'package:mylastwords/Screens/advisory.dart';
 import 'package:mylastwords/components/drawer.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
@@ -12,6 +13,7 @@ import 'package:mylastwords/components/header_tab.dart';
 import 'package:mylastwords/models/alarm_info.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:flutter_svg/svg.dart';
 
@@ -44,7 +46,7 @@ class _BodyState extends State<Body> {
   List<AlarmInfo>? _currentAlarms;
   String? selectedValue;
   final player = AudioPlayer();
-
+  bool? hasUser;
 
   final _timePickerTheme = TimePickerThemeData(
   backgroundColor: darkBackground,
@@ -86,6 +88,7 @@ class _BodyState extends State<Body> {
 
   @override
   void initState() {
+    checkUser();
     title = "Hello";
     txtRepeat = "No Repeat";
     txtSoundDisplay = "Cold";
@@ -94,8 +97,7 @@ class _BodyState extends State<Body> {
     _alarmHelper.initializaDatabase().then((value) {      
       loadAlarms();
     });
-    _alarmTimeString ??= DateFormat('hh:mm aa').format(DateTime.now());
-    UserTracker().sendUserLogData();
+    _alarmTimeString ??= DateFormat('hh:mm aa').format(DateTime.now());        
     super.initState();
   }
 
@@ -104,19 +106,27 @@ class _BodyState extends State<Body> {
     if (mounted) setState(() {});
   }
 
-  
+  void checkUser() async{
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     String? token = prefs.getString('token');
+     if(token==null||token==""){
+       hasUser = false;
+     }
+     else{
+      hasUser = true;
+     }
+  }
 
   
   
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-   
+    Size size = MediaQuery.of(context).size;  
     return Scaffold(
-      drawer: DrawerScreen(),
+      drawer: hasUser == true ? DrawerScreen() : AdvisoryScreen(),
       appBar: AppBar(        
         backgroundColor: headerBackgroundColor,
-        title: Text('My Last Words'),         
+        title: Text('Alarms'),         
       ),
       backgroundColor: darkBackground,
       body: Column(

@@ -5,6 +5,7 @@ import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
 import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/Login/login_screen.dart';
 import 'package:mylastwords/Screens/Welcome/welcome_screen.dart';
+import 'package:mylastwords/Screens/advisory.dart';
 import 'package:mylastwords/Services/userLogs_services.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/toastmessage.dart';
@@ -40,6 +41,7 @@ class SplashScreenState extends State<SplashScreen> {
       ApiResponse response = await getuserDetails();
       if(response.error==null){
         _saveAndRedirectToHome(response.data as User);
+        UserTracker().sendUserLogData();
       }  
       else if(response.error=="Unauthorized")      
       {
@@ -50,8 +52,17 @@ class SplashScreenState extends State<SplashScreen> {
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => WelcomeScreen()),(route) => false);
       }
     } 
+    else if(token==""){
+      ApiResponse response = await getuserDetails();
+      if(response.error=="Something went wrong"){
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AdvisoryScreen()),(route) => false);
+      }
+      else{
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => WelcomeScreen()),(route) => false); 
+      }
+    }
     else{
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => WelcomeScreen()),(route) => false);
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => WelcomeScreen()),(route) => false);        
     }   
   }
 
