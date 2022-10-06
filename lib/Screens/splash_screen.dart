@@ -34,6 +34,7 @@ class SplashScreenState extends State<SplashScreen> {
 
   checkToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('error_server', false);
     setState(() {
       token = (prefs.getString('token') ?? '');
     });
