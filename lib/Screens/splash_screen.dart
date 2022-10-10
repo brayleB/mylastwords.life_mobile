@@ -34,6 +34,7 @@ class SplashScreenState extends State<SplashScreen> {
 
   checkToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('error_server', false);
     setState(() {
       token = (prefs.getString('token') ?? '');
     });
@@ -41,6 +42,7 @@ class SplashScreenState extends State<SplashScreen> {
       ApiResponse response = await getuserDetails();
       if(response.error==null){
         _saveAndRedirectToHome(response.data as User);
+        print(token);
         UserTracker().sendUserLogData();
       }  
       else if(response.error=="Unauthorized")      

@@ -285,27 +285,27 @@ class _BodyState extends State<Body> {
               controller: txtPass,
               onChanged: (value) {},
             ),
-            //  SizedBox(height: size.height * 0.01),
-            //  GestureDetector(
-            //   onTap: (){
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) {
-            //           return ForgotPassScreen();
-            //         },
-            //       ),
-            //     );
-            //   },
-            //   child: Text(
-            //     "Forgot password?",
-            //     style: TextStyle(
-            //       color: txtColorDark,
-            //       fontWeight: FontWeight.bold,
-            //       fontSize: 16
-            //     ),
-            //   ),
-            // ),
+             SizedBox(height: size.height * 0.01),
+             GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ForgotPassScreen();
+                    },
+                  ),
+                );
+              },
+              child: Text(
+                "Forgot password?",
+                style: TextStyle(
+                  color: txtColorDark,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
+                ),
+              ),
+            ),
             SizedBox(height: size.height * 0.01),
             RoundedButton(
                 textColor: txtColorLight,

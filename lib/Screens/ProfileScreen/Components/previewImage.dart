@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
 import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/ProfileScreen/profile_screen.dart';
 
@@ -42,7 +43,7 @@ class PreviewImage extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DashBoard())); 
+                      builder: (context) => AlarmScreen())); 
             }  
             else{
               ToastMessage().toastMsgDark(resp.error.toString());
