@@ -42,6 +42,7 @@ class SplashScreenState extends State<SplashScreen> {
       ApiResponse response = await getuserDetails();
       if(response.error==null){
         _saveAndRedirectToHome(response.data as User);
+        print(token);
         UserTracker().sendUserLogData();
       }  
       else if(response.error=="Unauthorized")      

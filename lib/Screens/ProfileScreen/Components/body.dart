@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
 import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/ProfileScreen/Components/removeAccountScreen.dart';
 import 'package:mylastwords/Screens/ProfileScreen/Components/previewImage.dart';
@@ -137,7 +138,7 @@ class _BodyState extends State<Body> {
           await prefs.setString('name',txtName.text);
           await prefs.setString('contactNumber',txtContactNumber.text);
           await prefs.setString('address',txtAddress.text);  
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => DashBoard()),(route) => false);                
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AlarmScreen()),(route) => false);                
       }
       else{
         ToastMessage().toastMsgError(response.error.toString());
