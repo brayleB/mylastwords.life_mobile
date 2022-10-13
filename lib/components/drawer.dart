@@ -144,12 +144,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
             Icons.contact_phone
           ),
           title: const Text('Contact Us'),
-          onTap: () async {
-            final Uri url = Uri(
-                      scheme: 'https',
-                      host:'mylastwords.life',
-                      path: '/contact-us',                      
-                    );
+          onTap: () async {          
+            var url = Uri.parse("https://mylastwords.life/helpline-and-support");
                     await launchUrl(url);
           },
         ),
