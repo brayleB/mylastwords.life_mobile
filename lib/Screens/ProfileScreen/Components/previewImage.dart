@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
-import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/ProfileScreen/profile_screen.dart';
 
 import 'package:mylastwords/Services/gallery_services.dart';

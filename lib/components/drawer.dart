@@ -79,24 +79,24 @@ class _DrawerScreenState extends State<DrawerScreen> {
                               userImage),
                         ),                        
         ),
-        ListTile(
-          leading: Icon(
-            Icons.subscriptions,
-          ),
-          title: const Text('Subscription'),
-          onTap: () {          
-            if(isLoggedIn==true){         
-              if(subscription=="free")
-              {
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => SubscriptionScreen()),(route) => false);
-              }
-              else if(subscription=="subscribed"){
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => UnsubscribedScreen()),(route) => false);
-              }
+        // ListTile(
+        //   leading: Icon(
+        //     Icons.subscriptions,
+        //   ),
+        //   title: const Text('Subscription'),
+        //   onTap: () {          
+        //     if(isLoggedIn==true){         
+        //       if(subscription=="free")
+        //       {
+        //         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => SubscriptionScreen()),(route) => false);
+        //       }
+        //       else if(subscription=="subscribed"){
+        //         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => UnsubscribedScreen()),(route) => false);
+        //       }
               
-            }            
-          },
-        ),
+        //     }            
+        //   },
+        // ),
         ListTile(
           leading: Icon(
             Icons.person,
