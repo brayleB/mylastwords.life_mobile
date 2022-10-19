@@ -31,6 +31,31 @@ class _ForgotPassScreenState extends State<ForgotPassScreen> {
     super.initState();
   }
 
+  void validateForgotPass() async {
+    var errmsg = "";
+    bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(txtEmail.text);    
+    if (txtEmail.text == "") {
+      errmsg = "Please enter Email";
+    } else if (emailValid == false) {
+      errmsg = "Please enter valid Email";
+    } else {
+      ApiResponse response = await forgotPassword(txtEmail.text);   
+      if(response.error==null){                        
+        setState(() {
+          isSent = true;
+        });
+      }   
+      else{
+        errmsg=response.error.toString();
+      }
+    }
+    if (errmsg != "") {
+      ToastMessage().toastMsgDark(errmsg);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -84,17 +109,9 @@ class _ForgotPassScreenState extends State<ForgotPassScreen> {
                     textColor: Colors.white,
                     bgcolor: headerBackgroundColor,
                     text: "Submit",
-                    press: () async {            
-                      ApiResponse response = await forgotPassword(txtEmail.text);   
-                      if(response.error==null){                        
-                        setState(() {
-                          isSent = true;
-                        });
-                      }  
-                      else{
-                        ToastMessage().toastMsgLight(response.error.toString());
-                      }                        
-                    },
+                    press: ()  {            
+                     validateForgotPass();     
+                     },
                   ),      
               ],
               ),

@@ -3,7 +3,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/GalleryScreen/gallery_screen.dart';
 import 'package:mylastwords/Services/gallery_services.dart';
 

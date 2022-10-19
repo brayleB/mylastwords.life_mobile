@@ -38,19 +38,13 @@ class _BodyState extends State<Body> {
     var errmsg = "";
     bool emailValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(txtEmail.text);
-    bool passValid =
-        RegExp(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\.$&*~_]).{8,}$")
-            .hasMatch(txtPass.text);
+        .hasMatch(txtEmail.text);    
     if (txtEmail.text == "") {
       errmsg = "Please enter Email";
     } else if (emailValid == false) {
       errmsg = "Please enter valid Email";
     } else if (txtPass.text == "") {
       errmsg = "Please enter Password";
-    } else if (passValid == false) {
-      errmsg =
-          "Password must contain atleast 1 uppercase, lowercase, number and a special character";
     } else {
       ApiResponse response = await register('New User',txtEmail.text, txtPass.text,  'https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png','','','basic',);
       print("Reponse Data: " +

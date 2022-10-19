@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/Login/login_screen.dart';
 import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
 import 'package:mylastwords/Screens/Signup/signup_screen.dart';

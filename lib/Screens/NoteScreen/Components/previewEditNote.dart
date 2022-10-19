@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/NoteScreen/note_screen.dart';
 import 'package:mylastwords/Services/notes_services.dart';
 import 'package:mylastwords/Services/user_service.dart';
@@ -38,9 +37,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
   final TextEditingController txtInstruct = TextEditingController();
   final TextEditingController txtContact = TextEditingController();
   void _validateAddNote() async {
-    var errmsg = "";
-    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    RegExp regExp = new RegExp(patttern);
+    var errmsg = "";  
     if (txtBody.text == "") {
       errmsg = "Please enter a note";
     }
@@ -52,10 +49,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
     } 
     else if (txtContact.text == "") {
       errmsg = "Please enter contact number";      
-    } 
-    else if (!regExp.hasMatch(txtContact.text)) {
-      errmsg = "Contact number invalid";
-    }   
+    }        
     else {
           ApiResponse response = await updateNote(widget.id, txtTitle.text, txtBody.text, txtInstruct.text, txtContact.text);
           if(response.error==null){

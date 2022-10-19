@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
-import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Services/gallery_services.dart';
 import 'package:mylastwords/components/confirmation_dialogue.dart';
 import 'package:mylastwords/components/header_tab.dart';

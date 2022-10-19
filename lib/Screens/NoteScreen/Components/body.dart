@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:mylastwords/Screens/DashBoard/dashboard.dart';
 import 'package:mylastwords/Screens/GalleryScreen/Components/previewImage.dart';
 import 'package:mylastwords/Screens/NoteScreen/Components/addNote.dart';
 import 'package:mylastwords/Screens/NoteScreen/Components/previewEditNote.dart';
