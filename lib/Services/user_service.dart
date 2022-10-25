@@ -54,10 +54,12 @@ Future<ApiResponse> register(
 ) async {
   EasyLoading.show(status: 'Signing Up');
   ApiResponse apiResponse = ApiResponse();
+  int? status;
   if(img==""){
     img="https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png";
   }
   try {
+     if(type=="basic"){ status= 0; }else{ status=1; }
     final response = await http.post(Uri.parse(registerURL),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
