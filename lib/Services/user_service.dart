@@ -68,7 +68,7 @@ Future<ApiResponse> register(
           'password': password,
           'type': type,
           'subcription': "free",
-          'status': 1,
+          'status': status,
           'userImage':img,
           'contactNumber':contactnumber,
           'address':address,
