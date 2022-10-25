@@ -4,6 +4,7 @@ import 'package:mylastwords/Screens/Login/login_screen.dart';
 import 'package:mylastwords/Screens/Signup/components/background.dart';
 import 'package:mylastwords/Screens/Login/components/or_divider.dart';
 import 'package:mylastwords/Screens/Login/components/social_icon.dart';
+import 'package:mylastwords/Screens/Signup/components/email_sent.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/already_have_an_account_acheck.dart';
 import 'package:mylastwords/components/rounded_button.dart';
@@ -52,14 +53,7 @@ class _BodyState extends State<Body> {
           " Reponse Error: " +
           '${response.error}');
       if (response.error == null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return LoginScreen();
-            },
-          ),
-        );
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => EmailSentScreen()),(route) => false);
         EasyLoading.showInfo('Successfully Signed Up '+txtEmail.text);
       } else {
         ToastMessage().toastMsgDark('${response.error}');
@@ -140,7 +134,7 @@ class _BodyState extends State<Body> {
               textColor: txtColorLight,
               bgcolor: txtColorDark,
               text: "SIGNUP",
-              press: () {
+              press: () {                
                 validateSignup();
               },
             ),
