@@ -59,7 +59,7 @@ class _EmailSentScreenState extends State<EmailSentScreen> {
                  ),),
                  SizedBox(height: size.height * 0.01), 
                  Text(
-                    'Please verify your email first.',
+                    'Please verify your email first to activate your account.',
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: size.height*0.025),
                     textAlign: TextAlign.center,
                  ),   
