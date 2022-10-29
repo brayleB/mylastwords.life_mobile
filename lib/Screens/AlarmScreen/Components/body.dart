@@ -632,7 +632,7 @@ class _BodyState extends State<Body> {
       ),
 //addalarm      
       floatingActionButton: Container(
-        height: size.height * 0.17,
+        height: size.height * 0.18,
         width: size.width * 0.17, 
         margin: EdgeInsets.only(right: size.width*0.05),      
         child: FloatingActionButton(
@@ -651,10 +651,10 @@ class _BodyState extends State<Body> {
                   return StatefulBuilder(
                     builder: (context, setModalState) {
                       return Container(
-                        padding: const EdgeInsets.all(30),
+                        padding: const EdgeInsets.only(left:20,right:20,top:15),                    
                         child: Column(
                           children: [
-                            FlatButton(
+                            FlatButton(                              
                               onPressed: () async {
                                 var selectedTime = await showTimePicker(
                                     context: context,
@@ -698,7 +698,7 @@ class _BodyState extends State<Body> {
                             ),
                             ListTile(
                                 leading:  Text(
-                                      'Repeat - ',
+                                      'Repeat  - ',
                                       style: TextStyle(
                                           color: txtColorDark,
                                           fontSize: 20,
@@ -799,7 +799,7 @@ class _BodyState extends State<Body> {
                             ),
                             ListTile(
                               leading:  Text(
-                                      'Sound  - ',
+                                      'Sound   - ',
                                       style: TextStyle(
                                           color: txtColorDark,
                                           fontSize: 20,
@@ -890,6 +890,25 @@ class _BodyState extends State<Body> {
                                       );                         
                               },
                             ),
+                              ListTile(
+                              leading:  Text(
+                                      'Snooze - ',
+                                      style: TextStyle(
+                                          color: txtColorDark,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                              title: Text(
+                                      '5 minutes',
+                                      style: TextStyle(
+                                          color: txtColorDark,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                              trailing: Icon(Icons.arrow_forward_ios),
+                              onTap: () {                                                                                                                                                               
+                              },
+                            ),
                             ListTile(
                               leading:  Text(
                                       'Label    - ',
@@ -947,16 +966,13 @@ class _BodyState extends State<Body> {
                               );
                               },
                             ),   
+                            SizedBox(height: size.height * 0.02),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,                              
                               children: [
                                 FloatingActionButton.extended(
                                   backgroundColor: headerBackgroundColor,
-                                  onPressed: () async {    
-                                   
-                                                                       
-                                                                        
-
+                                  onPressed: () async {                                                                                                                                                                                      
                                     if(txtRepeat=="No Repeat"){
                                       var idStr = DateFormat('ddHHmmss').format(DateTime.now());
                                       var alarmInfo = AlarmInfo(                              

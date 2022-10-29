@@ -86,16 +86,17 @@ class _AddNoteState extends State<AddNote> {
               ),
               color: txtColorLight,
               child: Padding(
-                padding: EdgeInsets.all(15.0),
-                child: TextField(                 
+                padding: EdgeInsets.all(10.0),
+                child: TextField( 
+                  textCapitalization: TextCapitalization.sentences,                
                   controller: txtTitle,
                   maxLines: 1,
                   maxLength: 100,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration.collapsed(hintText: "To whom or Title..."),
+                  decoration: InputDecoration.collapsed(hintText: "To whom / Title"),
                   style: TextStyle(
                       color: txtColorDark,
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w400),
                 ),
               ),
@@ -104,19 +105,20 @@ class _AddNoteState extends State<AddNote> {
             Card(
               margin: EdgeInsets.only(top: 2, left: 15, right: 15),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(1))),            
+              borderRadius: BorderRadius.all(Radius.circular(1))),            
               color: txtColorLight,
               child: Padding(
-                padding: EdgeInsets.all(15.0),
+                 padding: EdgeInsets.all(10.0),
                 child: TextField(
+                   textCapitalization: TextCapitalization.sentences, 
                   controller: txtSpecialIns,
                   maxLines: 2,
                   maxLength: 150,
                   keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration.collapsed(hintText: "Special Instructions..."),
+                  decoration: InputDecoration.collapsed(hintText: "Special Instruction"),
                   style: TextStyle(
                       color: txtColorDark,
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w400),
                 ),
               ),
@@ -128,16 +130,16 @@ class _AddNoteState extends State<AddNote> {
                 borderRadius: BorderRadius.all(Radius.circular(1))),            
               color: txtColorLight,
               child: Padding(
-                padding: EdgeInsets.all(15.0),
+                 padding: EdgeInsets.all(10.0),
                 child: TextField(
                   controller: txtContactInfo,
                   maxLines: 1,
                   maxLength: 50,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration.collapsed(hintText: "Contact Information..."),
+                  decoration: InputDecoration.collapsed(hintText: "Email or Phone No."),
                   style: TextStyle(
                       color: txtColorDark,
-                      fontSize: 18,
+                     fontSize: 16,
                       fontWeight: FontWeight.w400),
                 ),
               ),
@@ -152,7 +154,7 @@ class _AddNoteState extends State<AddNote> {
               ),
               color: txtColorLight,
               child: Padding(
-                padding: EdgeInsets.all(15.0),
+                  padding: EdgeInsets.all(10.0),
                 child: TextField(                             
                   textCapitalization: TextCapitalization.sentences,
                   controller: txtNote,
@@ -162,7 +164,7 @@ class _AddNoteState extends State<AddNote> {
                   decoration: InputDecoration.collapsed(hintText: "Body..."),
                   style: TextStyle(
                       color: txtColorDark,
-                      fontSize: 17,
+                    fontSize: 15,
                       fontWeight: FontWeight.w400),
                 ),
               ),

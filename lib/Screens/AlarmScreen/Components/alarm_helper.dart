@@ -82,7 +82,7 @@ class AlarmHelper {
   }
 
   Future<int> delete(int id, String rep) async {
-    var db = await this.database;   
+    var db = await this.database;       
     unScheduleAlarm(AlarmInfo(id: id, repeat: rep));    
     return await db!.delete(tblAlarm, where: '$colId=?',whereArgs: [id]);
     
