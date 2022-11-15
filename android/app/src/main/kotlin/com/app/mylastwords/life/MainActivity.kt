@@ -1,4 +1,4 @@
-package com.mylastwords.life
+package com.app.mylastwords.life
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
