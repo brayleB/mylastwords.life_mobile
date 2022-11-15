@@ -29,7 +29,7 @@ const ringToneBaseUrl = "assets/AlarmRingtones/";
 //User API Endpoints
 
 //base URL
-const baseURL = "https://mylastwordsadmin.online/";
+const baseURL = "https://mylastwordsadmin.online/api/";
 // const baseURL = "http://127.0.0.1:8000";
 
 //User
