@@ -123,7 +123,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
       },
       ),
       backgroundColor: darkBackground,
-      body: Column(
+      body: SingleChildScrollView(child: Column(
         children: <Widget>[
           Card(
             margin: EdgeInsets.only(top: 10, left: 15, right: 15),
@@ -213,7 +213,7 @@ class _PreviewEditNoteState extends State<PreviewEditNote> {
             ),
           ),
         ],
-      ),
+      ),)
     );
   }
 }

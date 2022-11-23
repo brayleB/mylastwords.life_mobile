@@ -29,36 +29,36 @@ const ringToneBaseUrl = "assets/AlarmRingtones/";
 //User API Endpoints
 
 //base URL
-const baseURL = "https://mylastwordsadmin.online/api/route";
+const baseURL = "https://mylastwordsadmin.online/";
 // const baseURL = "http://127.0.0.1:8000";
 
 //User
-const loginOthersURL = baseURL + '/loginOthers';
-const registerOthersURL = baseURL + '/registerOthers';
-const loginURL = baseURL + '/login';
-const registerURL = baseURL + '/register';
-const updateUserURL = baseURL + '/edit-user';
-const logoutURL = baseURL + '/logout';
-const userURL = baseURL + '/user';
-const forgotPasswordURL = baseURL + '/password/email';
-const resetPasswordURL = baseURL + '/password/reset';
-const addAppleUserURL = baseURL + '/addAppleAccount';
-const getAppleUserURL = baseURL + '/getAppleAccount';
-const updateAppleAccountEmailURL = baseURL + '/updateAppleAccountEmail';
-const changeProfilePhoto = baseURL + '/changePhoto';
-const requestAccountRemovalURL = baseURL + '/requestAccountRemoval';
+const loginOthersURL = baseURL + 'api/route/loginOthers';
+const registerOthersURL = baseURL + 'api/route/registerOthers';
+const loginURL = baseURL + 'api/route/login';
+const registerURL = baseURL + 'api/route/register';
+const updateUserURL = baseURL + 'api/route/edit-user';
+const logoutURL = baseURL + 'api/route/logout';
+const userURL = baseURL + 'api/route/user';
+const forgotPasswordURL = baseURL + 'api/route/password/email';
+const resetPasswordURL = baseURL + 'api/route/password/reset';
+const addAppleUserURL = baseURL + 'api/route/addAppleAccount';
+const getAppleUserURL = baseURL + 'api/route/getAppleAccount';
+const updateAppleAccountEmailURL = baseURL + 'api/route/updateAppleAccountEmail';
+const changeProfilePhoto = baseURL + 'api/route/changePhoto';
+const requestAccountRemovalURL = baseURL + 'api/route/requestAccountRemoval';
 
 //Notes API Endpoints
-const addNoteURL = baseURL + '/addnote';
-const getNotesURL = baseURL + '/getnotes';
-const updateNotesURL = baseURL + '/editnote';
-const deleteNotesUrl = baseURL + '/deletenote';
+const addNoteURL = baseURL + 'api/route/addnote';
+const getNotesURL = baseURL + 'api/route/getnotes';
+const updateNotesURL = baseURL + 'api/route/editnote';
+const deleteNotesUrl = baseURL + 'api/route/deletenote';
 
 //Logs API Endpoints
-const addUserLogURL = baseURL + '/addlog';
+const addUserLogURL = baseURL + 'api/route/addlog';
 
 //Gallery API Endpoints
-const uploadImageURL = baseURL + '/store-file';
-const getImagesURL = baseURL + '/view-file';
-const deleteImagesURL = baseURL + '/delete-file';
+const uploadImageURL = baseURL + 'api/route/store-file';
+const getImagesURL = baseURL + 'api/route/view-file';
+const deleteImagesURL = baseURL + 'api/route/delete-file';
 
