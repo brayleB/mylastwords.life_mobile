@@ -82,23 +82,34 @@ class _AddNoteState extends State<AddNote> {
               margin: EdgeInsets.only(top: 10, left: 15, right: 15),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               ),
               color: txtColorLight,
-              child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: TextField( 
-                  textCapitalization: TextCapitalization.sentences,                
-                  controller: txtTitle,
-                  maxLines: 1,
-                  maxLength: 100,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration.collapsed(hintText: "To whom / Title"),
-                  style: TextStyle(
-                      color: txtColorDark,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                  image: DecorationImage(            
+                    image: AssetImage("assets/images/oldpaper.jpg"),
+                    fit: BoxFit.cover,
+                    alignment: Alignment.topCenter,
+                  ),
                 ),
+                child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: TextField( 
+                          textCapitalization: TextCapitalization.sentences,                
+                          controller: txtTitle,
+                          maxLines: 1,
+                          maxLength: 100,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration.collapsed(hintText: "To whom / Title"),
+                          style: TextStyle(
+                              color: txtColorDark,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
               ),
             ),
   //special instructions        
@@ -107,19 +118,29 @@ class _AddNoteState extends State<AddNote> {
               shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(1))),            
               color: txtColorLight,
-              child: Padding(
+              child: Container(
+                decoration: BoxDecoration(
+              
+                  image: DecorationImage(            
+                    image: AssetImage("assets/images/oldpaper.jpg"),
+                    fit: BoxFit.cover,
+                    alignment: Alignment.topCenter,
+                  ),
+                ),
+                child: Padding(
                  padding: EdgeInsets.all(10.0),
-                child: TextField(
-                   textCapitalization: TextCapitalization.sentences, 
-                  controller: txtSpecialIns,
-                  maxLines: 2,
-                  maxLength: 150,
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration.collapsed(hintText: "Special Instruction"),
-                  style: TextStyle(
-                      color: txtColorDark,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400),
+                  child: TextField(
+                    textCapitalization: TextCapitalization.sentences, 
+                    controller: txtSpecialIns,
+                    maxLines: 2,
+                    maxLength: 150,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration.collapsed(hintText: "Special Instruction"),
+                    style: TextStyle(
+                        color: txtColorDark,
+                        fontSize: 16,
+                    fontWeight: FontWeight.w500),
+                  ),
                 ),
               ),
             ),
@@ -129,7 +150,16 @@ class _AddNoteState extends State<AddNote> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(1))),            
               color: txtColorLight,
-              child: Padding(
+              child: Container(
+                decoration: BoxDecoration(
+                 
+                  image: DecorationImage(            
+                    image: AssetImage("assets/images/oldpaper.jpg"),
+                    fit: BoxFit.cover,
+                    alignment: Alignment.topCenter,
+                  ),
+                ),
+                child: Padding(
                  padding: EdgeInsets.all(10.0),
                 child: TextField(
                   controller: txtContactInfo,
@@ -140,8 +170,9 @@ class _AddNoteState extends State<AddNote> {
                   style: TextStyle(
                       color: txtColorDark,
                      fontSize: 16,
-                      fontWeight: FontWeight.w400),
+                 fontWeight: FontWeight.w500),
                 ),
+              ),
               ),
             ),          
   //body          
@@ -153,7 +184,16 @@ class _AddNoteState extends State<AddNote> {
                     bottomRight: Radius.circular(10)),
               ),
               color: txtColorLight,
-              child: Padding(
+              child: Container(
+                decoration: BoxDecoration(
+                 
+                  image: DecorationImage(            
+                    image: AssetImage("assets/images/oldpaper.jpg"),
+                    fit: BoxFit.cover,
+                    alignment: Alignment.topCenter,
+                  ),
+                ),
+                child: Padding(
                   padding: EdgeInsets.all(10.0),
                 child: TextField(                             
                   textCapitalization: TextCapitalization.sentences,
@@ -165,8 +205,9 @@ class _AddNoteState extends State<AddNote> {
                   style: TextStyle(
                       color: txtColorDark,
                     fontSize: 15,
-                      fontWeight: FontWeight.w400),
+                     fontWeight: FontWeight.w500),
                 ),
+              ),
               ),
             ),
           ],
