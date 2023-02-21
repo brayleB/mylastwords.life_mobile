@@ -62,3 +62,18 @@ const uploadImageURL = baseURL + 'api/route/store-file';
 const getImagesURL = baseURL + 'api/route/view-file';
 const deleteImagesURL = baseURL + 'api/route/delete-file';
 
+const entitlementID = 'subscribed';
+
+//TO DO: add your subscription terms and conditions
+const footerText =
+    "You will have an access to all of your journals (lastwords) and pictures at any time.";
+
+//TO DO: add the Apple API key for your app from the RevenueCat dashboard: https://app.revenuecat.com
+const appleApiKey = 'appl_ZwNTODEADdtIVZEOKMsMWogJoWt';
+
+//TO DO: add the Google API key for your app from the RevenueCat dashboard: https://app.revenuecat.com
+const googleApiKey = 'googl_api_key';
+
+//TO DO: add the Amazon API key for your app from the RevenueCat dashboard: https://app.revenuecat.com
+const amazonApiKey = 'amazon_api_key';
+

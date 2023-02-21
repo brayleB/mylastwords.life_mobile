@@ -6,6 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mylastwords/Background/tracker.dart';
 import 'package:mylastwords/Screens/AlarmScreen/Components/alarm_helper.dart';
 import 'package:mylastwords/Screens/advisory.dart';
+import 'package:mylastwords/Screens/singletons_data.dart';
+import 'package:mylastwords/Screens/store_config.dart';
 import 'package:mylastwords/components/drawer.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
@@ -13,6 +15,7 @@ import 'package:mylastwords/components/header_tab.dart';
 import 'package:mylastwords/models/alarm_info.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:flutter_svg/svg.dart';
@@ -130,6 +133,7 @@ class _BodyState extends State<Body> {
 
   @override
   void initState() {
+    initPlatformState();
     checkUser();
     title = "Hello";
     txtRepeat = "No Repeat";
@@ -141,6 +145,43 @@ class _BodyState extends State<Body> {
     });
     _alarmTimeString ??= DateFormat('hh:mm aa').format(DateTime.now());
     super.initState();
+  }
+
+  Future<void> initPlatformState() async {
+   
+    // Enable debug logs before calling `configure`.
+    await Purchases.setLogLevel(LogLevel.debug);
+
+    /*
+    - appUserID is nil, so an anonymous ID will be generated automatically by the Purchases SDK. Read more about Identifying Users here: https://docs.revenuecat.com/docs/user-ids
+
+    - observerMode is false, so Purchases will automatically handle finishing transactions. Read more about Observer Mode here: https://docs.revenuecat.com/docs/observer-mode
+    */
+    PurchasesConfiguration configuration;
+    if (StoreConfig.isForAmazonAppstore()) {
+      configuration = AmazonConfiguration(StoreConfig.instance.apiKey)
+        ..appUserID = null
+        ..observerMode = false;
+    } else {
+      configuration = PurchasesConfiguration(StoreConfig.instance.apiKey)
+        ..appUserID = null
+        ..observerMode = false;
+    }
+    await Purchases.configure(configuration);  
+    appData.appUserID = await Purchases.appUserID;    
+    Purchases.addCustomerInfoUpdateListener((customerInfo) async {
+      appData.appUserID = await Purchases.appUserID;
+
+      CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+      (customerInfo.entitlements.all[entitlementID] != null &&
+              customerInfo.entitlements.all[entitlementID]!.isActive)
+          ? appData.entitlementIsActive = true
+          : appData.entitlementIsActive = false;
+
+      setState(() {});
+      
+    });
+    
   }
 
   void loadAlarms() {
@@ -161,6 +202,8 @@ class _BodyState extends State<Body> {
       });
     }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
