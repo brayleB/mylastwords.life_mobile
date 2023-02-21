@@ -39,7 +39,7 @@ class _PaywallState extends State<Paywall> {
                   EdgeInsets.only(top: 32, bottom: 16, left: 16.0, right: 16.0),
               child: SizedBox(
                 child: Text(
-                  'Mylastwords Access',
+                  'Mylastwords Full Access',
                   style: TextStyle(
   color: txtColorDark,
   fontWeight: FontWeight.normal,
@@ -54,7 +54,7 @@ class _PaywallState extends State<Paywall> {
               itemBuilder: (BuildContext context, int index) {
                 var myProductList = widget.offering.availablePackages;
                 return Card(
-                  color: Colors.black,
+                  color: ColorTheme7,
                   child: ListTile(
                       onTap: () async {
                         try {
