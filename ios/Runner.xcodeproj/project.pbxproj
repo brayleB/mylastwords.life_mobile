@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		5A39C76E285871B100D28B1D /* rainyday.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5A39C76D285871B100D28B1D /* rainyday.wav */; };
 		5A39C7822858761500D28B1D /* longcold.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5A39C7812858761500D28B1D /* longcold.wav */; };
+		5A68340D29A46B6100E9E81C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A68340C29A46B6100E9E81C /* StoreKit.framework */; };
 		5A85D36928614A6B00059249 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A85D36828614A6B00059249 /* GoogleService-Info.plist */; };
 		5A94670628588F1A00470479 /* electronic.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5A94670528588F1A00470479 /* electronic.wav */; };
 		5A94670D2858918A00470479 /* fantasy.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5A9467072858917600470479 /* fantasy.wav */; };
@@ -46,6 +47,7 @@
 		44EA0E03067329A9FB389970 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		5A39C76D285871B100D28B1D /* rainyday.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = rainyday.wav; path = ../../../Downloads/rainyday.wav; sourceTree = "<group>"; };
 		5A39C7812858761500D28B1D /* longcold.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = longcold.wav; path = ../../alarmringtones/longcold.wav; sourceTree = "<group>"; };
+		5A68340C29A46B6100E9E81C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		5A85D36828614A6B00059249 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5A94670528588F1A00470479 /* electronic.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = electronic.wav; sourceTree = "<group>"; };
 		5A9467072858917600470479 /* fantasy.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = fantasy.wav; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9E3214E3204E48BA2DD15C4 /* Pods_Runner.framework in Frameworks */,
+				5A68340D29A46B6100E9E81C /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,6 +162,7 @@
 		A88EEF8C7B4B6A41BC249166 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5A68340C29A46B6100E9E81C /* StoreKit.framework */,
 				76E1DCCFD23F7DE1234B1970 /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
@@ -264,6 +268,8 @@
 				"${BUILT_PRODUCTS_DIR}/GTMAppAuth/GTMAppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleSignIn/GoogleSignIn.framework",
+				"${BUILT_PRODUCTS_DIR}/PurchasesHybridCommon/PurchasesHybridCommon.framework",
+				"${BUILT_PRODUCTS_DIR}/RevenueCat/RevenueCat.framework",
 				"${BUILT_PRODUCTS_DIR}/Toast/Toast.framework",
 				"${BUILT_PRODUCTS_DIR}/audio_session/audio_session.framework",
 				"${BUILT_PRODUCTS_DIR}/audioplayers_darwin/audioplayers_darwin.framework",
@@ -276,6 +282,7 @@
 				"${BUILT_PRODUCTS_DIR}/package_info/package_info.framework",
 				"${BUILT_PRODUCTS_DIR}/package_info_plus/package_info_plus.framework",
 				"${BUILT_PRODUCTS_DIR}/path_provider_ios/path_provider_ios.framework",
+				"${BUILT_PRODUCTS_DIR}/purchases_flutter/purchases_flutter.framework",
 				"${BUILT_PRODUCTS_DIR}/shared_preferences_ios/shared_preferences_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/sign_in_with_apple/sign_in_with_apple.framework",
 				"${BUILT_PRODUCTS_DIR}/sqflite/sqflite.framework",
@@ -292,6 +299,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMAppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleSignIn.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PurchasesHybridCommon.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RevenueCat.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/audio_session.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/audioplayers_darwin.framework",
@@ -304,6 +313,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/package_info.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/package_info_plus.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/path_provider_ios.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/purchases_flutter.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/shared_preferences_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/sign_in_with_apple.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/sqflite.framework",
@@ -463,7 +473,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = M64X4722S4;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -471,13 +481,13 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2.0.8;
+				MARKETING_VERSION = 2.0.11;
 				OTHER_LDFLAGS = (
 					"-lc++",
 					"$(inherited)",
@@ -687,7 +697,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = M64X4722S4;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -695,13 +705,13 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2.0.8;
+				MARKETING_VERSION = 2.0.11;
 				OTHER_LDFLAGS = (
 					"-lc++",
 					"$(inherited)",
@@ -803,7 +813,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = M64X4722S4;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -811,13 +821,13 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2.0.8;
+				MARKETING_VERSION = 2.0.11;
 				OTHER_LDFLAGS = (
 					"-lc++",
 					"$(inherited)",

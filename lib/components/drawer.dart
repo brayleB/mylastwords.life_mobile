@@ -2,12 +2,16 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Background/tracker.dart';
 import 'package:mylastwords/Screens/AboutScreen/about_screen.dart';
 import 'package:mylastwords/Screens/GalleryScreen/gallery_screen.dart';
 import 'package:mylastwords/Screens/Login/login_screen.dart';
 import 'package:mylastwords/Screens/NoteScreen/note_screen.dart';
 import 'package:mylastwords/Screens/ProfileScreen/profile_screen.dart';
+import 'package:mylastwords/Screens/paywall.dart';
+import 'package:mylastwords/Screens/singletons_data.dart';
 import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/components/rounded_button.dart';
 import 'package:mylastwords/components/subscribed_screen.dart';
@@ -15,8 +19,10 @@ import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/components/unsubscribed_screen.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:purchases_flutter/models/offerings_wrapper.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({
@@ -39,6 +45,55 @@ class _DrawerScreenState extends State<DrawerScreen> {
     loadData();
     super.initState();
   }
+  
+
+    void payWall(int path) async {
+     if(isLoggedIn==true){                         
+               CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+                if (customerInfo.entitlements.all[entitlementID] != null &&
+                  customerInfo.entitlements.all[entitlementID]!.isActive == true) {
+                    if(path==1){
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => false);
+                    }    
+                    else if(path==2){
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => GalleryScreen()),(route) => false);
+                    }                                
+                  }
+                  else{            
+                    Offerings? offerings;
+                    try {
+                        offerings = await Purchases.getOfferings();                  
+                      } on PlatformException catch (e) {          
+                        print(e.message);
+                      }
+                      if (offerings == null || offerings.current == null) {
+                        EasyLoading.showInfo('Offerings are empty');
+                      }
+                    else{                    
+                      await showModalBottomSheet(
+                        useRootNavigator: true,
+                        isDismissible: true,
+                        isScrollControlled: true,      
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+                        ),
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(
+                              builder: (BuildContext context, StateSetter setModalState) {
+                        
+                            return Paywall(
+                              offering: offerings!.current!,
+                            );
+                          });
+                        },
+                      );
+                    }
+              
+              } 
+            } 
+          }
+
 
   loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -50,8 +105,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
       subscription = (prefs.getString('subcription')??'');
     });    
   }
+
+  
+
    @override
   Widget build(BuildContext context) {
+  
     Size size = MediaQuery.of(context).size;
     return Drawer(
     backgroundColor: lightBackground,
@@ -113,22 +172,14 @@ class _DrawerScreenState extends State<DrawerScreen> {
             Icons.note_alt_rounded,
           ),
           title: const Text('Last Words'),
-          onTap: () {
-            if(isLoggedIn==true){
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => false);
-            } 
-          },
+          onTap: () => payWall(1)
         ),
         ListTile(
           leading: Icon(
             Icons.photo,
           ),
-          title: const Text('Photos'),
-          onTap: () {
-            if(isLoggedIn==true){
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => GalleryScreen()),(route) => false);
-            }
-          },
+          title: const Text('Last Photos'),
+          onTap: ()  => payWall(2)          
         ),
         ListTile(
           leading: Icon(
