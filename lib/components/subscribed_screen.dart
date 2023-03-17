@@ -1,6 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
 import 'package:mylastwords/Screens/AlarmScreen/alarm_screen.dart';
 import 'package:mylastwords/Screens/Login/login_screen.dart';
 import 'package:mylastwords/Services/user_service.dart';
@@ -11,6 +14,8 @@ import 'package:mylastwords/components/rounded_password_field.dart';
 import 'package:mylastwords/components/toastmessage.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:mylastwords/models/api_response.dart';
+import 'package:purchases_flutter/models/customer_info_wrapper.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // import 'package:flutter_svg/svg.dart';
@@ -25,10 +30,20 @@ class SubscriptionScreen extends StatefulWidget {
 }
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
-
+  String txt1 = '';
   @override
   void initState() {   
+    getSubscriptionDetails();
     super.initState();
+  }
+
+  getSubscriptionDetails() async {
+    CustomerInfo customerInfo = await Purchases.getCustomerInfo();   
+    DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(customerInfo.entitlements.all[entitlementID]!.expirationDate.toString());
+    String tmp = DateFormat.yMMMEd().format(tempDate);
+    setState(() {      
+      txt1 =  tmp ;
+    });        
   }
 
   @override
@@ -52,17 +67,22 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   ),   
                  SizedBox(height: size.height * 0.015),                 
                  Text(
-                    'You are not yet subscribed',
+                    'You are subscribed',
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: size.height*0.03),
                     textAlign: TextAlign.center,
                  ), 
                  SizedBox(height: size.height * 0.02),  
                  Padding(padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
                  child: Text(
-                    'For US dollars 11.15 per annual. Add your journals and pictures to it. It will be encrypt and only when you had stopped using the app we will give you a call to follow up with you. In case you are uncontactable after several attempts, we will extract your journals and follow up with your recipients. Only upon confirmation from them of your pre-mature demise then our management will be contacting them with your upmost last quotation.',
-                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: size.height*0.02),
+                    'Your date of Expiration:',
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: size.height*0.025),
                     textAlign: TextAlign.center,
                  ),),
+                 Text(
+                    txt1,
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: size.height*0.30),
+                    textAlign: TextAlign.center,
+                 ),
                  SizedBox(height: size.height * 0.01), 
                  Text(
                     'For more info. Visit our official website',

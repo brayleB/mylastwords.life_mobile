@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/singletons_data.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -57,6 +58,7 @@ class _PaywallState extends State<Paywall> {
                   color: ColorTheme9,
                   child: ListTile(
                       onTap: () async {
+                        EasyLoading.show(status: 'Please wait');
                         try {
                           CustomerInfo customerInfo =
                               await Purchases.purchasePackage(
@@ -69,6 +71,7 @@ class _PaywallState extends State<Paywall> {
 
                         setState(() {});
                         Navigator.pop(context);
+                        EasyLoading.dismiss();
                       },
                       title: Text(
                         myProductList[index].storeProduct.title,

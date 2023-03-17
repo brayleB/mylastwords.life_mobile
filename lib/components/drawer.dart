@@ -51,14 +51,17 @@ class _DrawerScreenState extends State<DrawerScreen> {
      if(isLoggedIn==true){                         
                CustomerInfo customerInfo = await Purchases.getCustomerInfo();   
                 if (customerInfo.entitlements.all[entitlementID] != null &&
-                  customerInfo.entitlements.all[entitlementID]!.isActive == true) {  
+                  customerInfo.entitlements.all[entitlementID]!.isActive == true) {                       
                     print(customerInfo)               ;
                     if(path==1){
                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => false);
                     }    
                     else if(path==2){
                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => GalleryScreen()),(route) => false);
-                    }                                
+                    }     
+                    else if(path==3){
+                     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => SubscriptionScreen()),(route) => false);
+                    }                             
                   }
                   else{                                
                     Offerings? offerings;
@@ -145,16 +148,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
           ),
           title: const Text('Subscription'),
           onTap: () {          
-            if(isLoggedIn==true){         
-              if(subscription=="free")
-              {
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => SubscriptionScreen()),(route) => false);
-              }
-              else if(subscription=="subscribed"){
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => UnsubscribedScreen()),(route) => false);
-              }
-              
-            }            
+            payWall(3)    ;        
           },
         ),
         ListTile(          
