@@ -1,0 +1,52 @@
+{
+  "identifier" : "156D7F9A",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "4EE6255A",
+      "localizations" : [
+
+      ],
+      "name" : "My Last Words Subscription",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "0.98",
+          "familyShareable" : true,
+          "groupNumber" : 1,
+          "internalID" : "8C5AC7BF",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "",
+              "displayName" : "",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "mlw_subscription_0.98_1y",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "My Last Words Subscription",
+          "subscriptionGroupID" : "4EE6255A",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 1,
+    "minor" : 2
+  }
+}
