@@ -48,6 +48,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   
 
     void payWall(int path) async {
+      EasyLoading.show(status: 'Loading...');
      if(isLoggedIn==true){                         
                CustomerInfo customerInfo = await Purchases.getCustomerInfo();   
                 if (customerInfo.entitlements.all[entitlementID] != null &&
@@ -63,7 +64,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => SubscriptionScreen()),(route) => false);
                     }                             
                   }
-                  else{                                
+                  else{      
+                    EasyLoading.dismiss()                          ;
                     Offerings? offerings;
                     try {
                         offerings = await Purchases.getOfferings();                  
@@ -96,6 +98,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               
               } 
             } 
+           
           }
 
 

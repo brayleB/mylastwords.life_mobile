@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/singletons_data.dart';
 import 'package:mylastwords/constants.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Paywall extends StatefulWidget {
   final Offering offering;
@@ -16,6 +17,7 @@ class Paywall extends StatefulWidget {
 class _PaywallState extends State<Paywall> {
   @override
   Widget build(BuildContext context) {
+      Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: SafeArea(
         child: Wrap(
@@ -58,7 +60,7 @@ class _PaywallState extends State<Paywall> {
                   color: ColorTheme9,
                   child: ListTile(
                       onTap: () async {
-                        EasyLoading.show(status: 'Please wait');
+                        EasyLoading.show(status: 'Loading...');
                         try {
                           CustomerInfo customerInfo =
                               await Purchases.purchasePackage(
@@ -116,10 +118,48 @@ class _PaywallState extends State<Paywall> {
                 ),
                 width: double.infinity,
               ),
+              
             ),
+             SizedBox(height: size.height * 0.04),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [GestureDetector(
+              onTap: () async { final Uri url = Uri(
+                      scheme: 'https',
+                      host:'mylastwords.life',
+                      path: '/terms-and-conditions',                      
+                    );
+                    await launchUrl(url); },
+              child: Text(
+                "Terms and Conditions",
+                style: TextStyle(
+                  color: txtColorDark,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
+                ),
+              ),
+            ), Icon(Icons.arrow_forward_ios, size: 15, color: kPrimaryColor,),],),
+             SizedBox(height: size.height * 0.04),
+            Row(mainAxisAlignment: MainAxisAlignment.center,children: [GestureDetector(
+              onTap: () async { final Uri url = Uri(
+                      scheme: 'https',
+                      host:'mylastwords.life',
+                      path: '/privacy-policy',                      
+                    );
+                    await launchUrl(url); },
+              child: Text(
+                "Privacy Policy",
+                style: TextStyle(
+                  color: txtColorDark,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
+                ),
+              ),
+            ), Icon(Icons.arrow_forward_ios, size: 15, color: kPrimaryColor,),],), 
           ],
+          
         ),
       ),
+      
     );
+    
   }
 }

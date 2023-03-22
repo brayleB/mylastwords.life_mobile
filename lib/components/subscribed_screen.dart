@@ -80,7 +80,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                  ),),
                  Text(
                     txt1,
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: size.height*0.30),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: size.height*0.03),
                     textAlign: TextAlign.center,
                  ),
                  SizedBox(height: size.height * 0.01), 
