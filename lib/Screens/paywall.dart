@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mylastwords/Screens/singletons_data.dart';
+import 'package:mylastwords/Services/user_service.dart';
 import 'package:mylastwords/constants.dart';
+import 'package:mylastwords/models/api_response.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../components/toastmessage.dart';
 
 class Paywall extends StatefulWidget {
   final Offering offering;
@@ -12,6 +16,15 @@ class Paywall extends StatefulWidget {
 
   @override
   _PaywallState createState() => _PaywallState();
+}
+
+updateSubcriptionFunct(String entitlement) async {
+   ApiResponse response = await updateSubscription(entitlement);
+   if (response.error == null) {       
+        EasyLoading.showInfo('Successfull');
+      } else {
+        ToastMessage().toastMsgDark('${response.error}');
+      }
 }
 
 class _PaywallState extends State<Paywall> {
@@ -67,6 +80,7 @@ class _PaywallState extends State<Paywall> {
                                   myProductList[index]);
                           appData.entitlementIsActive = customerInfo
                               .entitlements.all[entitlementID]!.isActive;
+                              updateSubcriptionFunct(entitlementID);
                         } catch (e) {
                           print(e);
                         }

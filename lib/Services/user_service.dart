@@ -425,3 +425,40 @@ Future<ApiResponse> updateProfilePicture(File img) async {
   EasyLoading.dismiss();
   return apiResponse;
 }
+
+//Edit
+Future<ApiResponse> updateSubscription(String subcription) async {
+  EasyLoading.show(status: 'Updating');
+  String token = await getToken();
+  int id = await getuserId();
+  ApiResponse apiResponse = ApiResponse();
+  try {
+    final response = await http.post(Uri.parse(updateSubcriptionURL),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'id': id,
+          'name': subcription,                    
+        }));           
+    switch (response.statusCode) {
+      case 200:        
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['error'];
+        apiResponse.error = errors[errors.keys.elementAt(0)[0]];
+        break;
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;    
+      default:    
+        apiResponse.error = "Something went wrong";
+    }
+  } catch (e) {
+    print(e.toString());
+    apiResponse.error = "Server Error";
+  }
+  EasyLoading.dismiss();
+  return apiResponse;
+}
