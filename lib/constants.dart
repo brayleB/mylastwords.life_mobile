@@ -38,6 +38,7 @@ const registerOthersURL = baseURL + 'api/route/registerOthers';
 const loginURL = baseURL + 'api/route/login';
 const registerURL = baseURL + 'api/route/register';
 const updateUserURL = baseURL + 'api/route/edit-user';
+const updateSubcriptionURL = baseURL + 'api/route/update-subscription';
 const logoutURL = baseURL + 'api/route/logout';
 const userURL = baseURL + 'api/route/user';
 const forgotPasswordURL = baseURL + 'api/route/password/email';

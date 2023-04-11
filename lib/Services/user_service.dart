@@ -433,7 +433,7 @@ Future<ApiResponse> updateSubscription(String subcription) async {
   int id = await getuserId();
   ApiResponse apiResponse = ApiResponse();
   try {
-    final response = await http.post(Uri.parse(updateSubcriptionURL),
+    final response = await http.post(Uri.parse('https://mylastwordsadmin.online/api/route/update-subscription'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'

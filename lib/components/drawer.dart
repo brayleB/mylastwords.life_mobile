@@ -52,7 +52,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
      if(isLoggedIn==true){                         
                CustomerInfo customerInfo = await Purchases.getCustomerInfo();   
                 if (customerInfo.entitlements.all[entitlementID] != null &&
-                  customerInfo.entitlements.all[entitlementID]!.isActive == true) {                       
+                  customerInfo.entitlements.all[entitlementID]!.isActive == true) {
+                    EasyLoading.dismiss();                       
                     print(customerInfo)               ;
                     if(path==1){
                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => NoteScreen()),(route) => false);
@@ -65,7 +66,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     }                             
                   }
                   else{      
-                    EasyLoading.dismiss()                          ;
+                    EasyLoading.dismiss();
                     Offerings? offerings;
                     try {
                         offerings = await Purchases.getOfferings();                  

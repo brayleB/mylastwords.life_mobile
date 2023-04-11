@@ -73,21 +73,21 @@ class _PaywallState extends State<Paywall> {
                   color: ColorTheme9,
                   child: ListTile(
                       onTap: () async {
-                        EasyLoading.show(status: 'Loading...');
+                      
                         try {
                           CustomerInfo customerInfo =
                               await Purchases.purchasePackage(
                                   myProductList[index]);
                           appData.entitlementIsActive = customerInfo
                               .entitlements.all[entitlementID]!.isActive;
-                              updateSubcriptionFunct(entitlementID);
+                              updateSubcriptionFunct(customerInfo
+                              .entitlements.all[entitlementID]!.identifier);
                         } catch (e) {
                           print(e);
                         }
 
                         setState(() {});
-                        Navigator.pop(context);
-                        EasyLoading.dismiss();
+                        Navigator.pop(context);                   
                       },
                       title: Text(
                         myProductList[index].storeProduct.title,
@@ -138,36 +138,20 @@ class _PaywallState extends State<Paywall> {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [GestureDetector(
               onTap: () async { final Uri url = Uri(
                       scheme: 'https',
-                      host:'mylastwords.life',
-                      path: '/terms-and-conditions',                      
+                      host:'termsofusegenerator.net',
+                      path: '/live.php',                    
+                      queryParameters: {'token':'jmQDXeXJTMwQqyqeFwMAlHOJJDZETYJA'}                     
                     );
                     await launchUrl(url); },
               child: Text(
-                "Terms and Conditions",
+                "Terms of use",
                 style: TextStyle(
                   color: txtColorDark,
                   fontWeight: FontWeight.bold,
                   fontSize: 16
                 ),
               ),
-            ), Icon(Icons.arrow_forward_ios, size: 15, color: kPrimaryColor,),],),
-             SizedBox(height: size.height * 0.04),
-            Row(mainAxisAlignment: MainAxisAlignment.center,children: [GestureDetector(
-              onTap: () async { final Uri url = Uri(
-                      scheme: 'https',
-                      host:'mylastwords.life',
-                      path: '/privacy-policy',                      
-                    );
-                    await launchUrl(url); },
-              child: Text(
-                "Privacy Policy",
-                style: TextStyle(
-                  color: txtColorDark,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16
-                ),
-              ),
-            ), Icon(Icons.arrow_forward_ios, size: 15, color: kPrimaryColor,),],), 
+            ), Icon(Icons.arrow_forward_ios, size: 15, color: kPrimaryColor,),],),          
           ],
           
         ),
